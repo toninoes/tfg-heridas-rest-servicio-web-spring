@@ -1,4 +1,4 @@
-package ini;
+package rest.modelos;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
