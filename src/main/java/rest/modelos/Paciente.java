@@ -1,5 +1,7 @@
 package rest.modelos;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,8 +16,15 @@ public class Paciente {
 
 	@Column(unique = true, length = 9)
 	private String dni;
+	
+	@Column(nullable = false)
 	private String nombre;
+	
+	@Column(nullable = false)
 	private String apellidos;
+	
+	@Column(nullable = false)
+	private Date fnac;
 	
 	public String getDni() {
 		return dni;
@@ -43,6 +52,14 @@ public class Paciente {
 	
 	public long getId() {
 		return id;
+	}
+
+	public Date getFnac() {
+		return fnac;
+	}
+
+	public void setFnac(Date fnac) {
+		this.fnac = fnac;
 	}
 	
 	
