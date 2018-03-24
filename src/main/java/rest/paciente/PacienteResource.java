@@ -12,21 +12,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import rest.exception.RecursoNoEncontradoException;
 
+
 @RestController
-@RequestMapping("/rest")
 public class PacienteResource {
 
 	@Autowired
 	private PacienteRepository pacienteRepository;
 	
 	/* 
-	 * Obtiene todos los Pacientes
-	 * GET /rest/pacientes
+	 * Obtiene todos los Pacientes 
+	 * GET /pacientes
 	 */
 	@GetMapping("/pacientes")
 	public List<Paciente> obtenerTodosPacientes() {
@@ -35,7 +34,7 @@ public class PacienteResource {
 	
 	/* 
 	 * Obtiene un Paciente según su id
-	 * GET /rest/pacientes/{id}
+	 * GET /pacientes/{id}
 	 */
 	@GetMapping("/pacientes/{id}")
 	public Paciente obtenerUnPaciente(@PathVariable long id) {
@@ -45,7 +44,7 @@ public class PacienteResource {
 	
 	/* 
 	 * Crea un nuevo Paciente
-	 * POST /rest/pacientes
+	 * POST /pacientes
 	 */
 	@PostMapping("/pacientes")
 	public Paciente crearPaciente(@Valid @RequestBody Paciente paciente) {
@@ -54,7 +53,7 @@ public class PacienteResource {
 	
 	/*
 	 * Actualiza los datos de un Paciente dado su id
-	 * PUT /rest/pacientes/{id}
+	 * PUT /pacientes/{id}
 	 */
 	@PutMapping("/pacientes/{id}")
 	public Paciente actualizarPaciente(@PathVariable(value = "id") Long id, 
@@ -74,7 +73,7 @@ public class PacienteResource {
 	
 	/*
 	 * Borra un Paciente dado su id
-	 * DELETE /rest/pacientes/{id}
+	 * DELETE /pacientes/{id}
 	 */
 	@DeleteMapping("/pacientes/{id}")
 	public ResponseEntity<?> borrarPaciente(@PathVariable(value = "id") Long id) {

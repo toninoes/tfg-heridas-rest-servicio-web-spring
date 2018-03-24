@@ -3,7 +3,7 @@ package rest.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
+@ResponseStatus(value = HttpStatus.NOT_FOUND) // éste es un error 404
 public class RecursoNoEncontradoException extends RuntimeException {
  
 	private static final long serialVersionUID = -8262049727466664556L;
