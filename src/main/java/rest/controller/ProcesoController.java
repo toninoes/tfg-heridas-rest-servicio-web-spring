@@ -1,18 +1,22 @@
-package rest.proceso;
+package rest.controller;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import rest.exception.RecursoNoEncontradoException;
-import rest.paciente.Paciente;
-import rest.paciente.PacienteRepository;
+import rest.model.Paciente;
+import rest.model.Proceso;
+import rest.repository.PacienteRepository;
+import rest.repository.ProcesoRepository;
 
 @RestController
-public class ProcesoResource {
+@RequestMapping("/api/procesos")
+public class ProcesoController {
 	
 	@Autowired
 	private ProcesoRepository procesoRepository;
@@ -20,33 +24,21 @@ public class ProcesoResource {
 	@Autowired
 	private PacienteRepository pacienteRepository;
 	
-	/* 
-	 * Obtiene todos los Procesos
-	 * GET /procesos
-	 */
-	@GetMapping("/procesos")
-	public List<Proceso> obtenerTodosProcesos() {
+	@GetMapping
+	public List<Proceso> findAll() {
 		return procesoRepository.findAll();
 	}
-	
-	/* 
-	 * Obtiene todos los Procesos de un Paciente
-	 * GET /procesos/paciente/{id}
-	 */
-	@GetMapping("/procesos/paciente/{id}")
-	public List<Proceso> obtenerTodosProcesosByPaciente(@PathVariable long id) {
+
+	@GetMapping("/paciente/{id}")
+	public List<Proceso> findAllByPacienteId(@PathVariable long id) {
 		Paciente paciente = pacienteRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 				
 		return procesoRepository.findByPaciente(paciente);
 	}
 	
-	/* 
-	 * Obtiene un Proceso según su id
-	 * GET /procesos/{id}
-	 */
-	@GetMapping("/procesos/{id}")
-	public Proceso obtenerUnProceso(@PathVariable long id) {
+	@GetMapping("/{id}")
+	public Proceso findById(@PathVariable long id) {
 		return procesoRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Proceso", "id", id));
 	}

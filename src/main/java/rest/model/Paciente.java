@@ -1,4 +1,4 @@
-package rest.proceso;
+package rest.model;
 
 import java.util.Date;
 
@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,25 +17,26 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import rest.paciente.Paciente;
 
 @Entity
-@Table(name = "procesos")
+@Table(name = "pacientes")
 @JsonIgnoreProperties(value = {"creacion", "actualizacion"}, allowGetters = true)
-public class Proceso {
+public class Paciente  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
-	private String anamnesis;
+
+	@Column(unique = true, length = 9)
+	private String dni;
 	
 	@NotBlank
-	private String diagnostico;
+	private String nombre;
 	
-	private String tipo;
+	@NotBlank
+	private String apellidos;
 	
-	@ManyToOne
-	private Paciente paciente;
+	@Column(nullable = false)
+	private Date nacimiento;
 	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -47,29 +47,43 @@ public class Proceso {
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date actualizacion;
-
-	public String getAnamnesis() {
-		return anamnesis;
+    
+    //Getters y Setters
+	
+	public String getDni() {
+		return dni;
+	}
+	
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public String getApellidos() {
+		return apellidos;
+	}
+	
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+	
+	public long getId() {
+		return id;
 	}
 
-	public void setAnamnesis(String anamnesis) {
-		this.anamnesis = anamnesis;
+	public Date getNacimiento() {
+		return nacimiento;
 	}
 
-	public String getDiagnostico() {
-		return diagnostico;
-	}
-
-	public void setDiagnostico(String diagnostico) {
-		this.diagnostico = diagnostico;
-	}
-
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setNacimiento(Date nacimiento) {
+		this.nacimiento = nacimiento;
 	}
 
 	public Date getCreacion() {
@@ -86,20 +100,7 @@ public class Proceso {
 
 	public void setActualizacion(Date actualizacion) {
 		this.actualizacion = actualizacion;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public Paciente getPaciente() {
-		return paciente;
-	}
-
-	public void setPaciente(Paciente paciente) {
-		this.paciente = paciente;
-	}
+	}	
 	
 	
-
 }
