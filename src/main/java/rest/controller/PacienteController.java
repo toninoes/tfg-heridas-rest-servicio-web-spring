@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,21 +24,19 @@ import rest.repository.PacienteRepository;
 
 
 @RestController
-@RequestMapping("/api/pacientes")
+@RequestMapping("/custom/pacientes")
 public class PacienteController {
 
+	private final PacienteRepository pacienteRepository;
+	
 	@Autowired
-	private PacienteRepository pacienteRepository;
+	public PacienteController(PacienteRepository pacienteRepository) { 
+		this.pacienteRepository = pacienteRepository;
+	}
 	
 	@GetMapping
 	public List<Paciente> findAll() {
 		return pacienteRepository.findAll();
-	}
-	
-	@GetMapping("/dni/{dni}")
-	public Paciente findByDni(@PathVariable String dni) {
-		return pacienteRepository.findByDni(dni)
-	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "dni", dni));
 	}
 	
 	@GetMapping("/{id}")
@@ -46,10 +45,18 @@ public class PacienteController {
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 	}
 	
+	@GetMapping("/dni/{dni}")
+	public Paciente findByDni(@PathVariable String dni) {
+		return pacienteRepository.findByDni(dni)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "dni", dni));
+	}
+	
 	@PostMapping
-	public Paciente save(@Valid @RequestBody Paciente p) {
-		Paciente paciente = null;
+	public ResponseEntity<Paciente> create(@Valid @RequestBody Paciente p) {
 		
+		Paciente paciente = new Paciente();
+		
+		// control unicidad de dni
 		if(pacienteRepository.findByDni(p.getDni()).isPresent())
 			throw new CampoUnicoException("Paciente", "dni", p.getDni());
 		
@@ -59,16 +66,17 @@ public class PacienteController {
 			throw new ErrorInternoServidorException("Guardar", "Paciente", p.getId(), e.getMessage());
 		}
 		
-		return paciente;
-	}
+        return new ResponseEntity<Paciente>(paciente, HttpStatus.CREATED);
+    }
 	
-	@PutMapping("/{id}")
-	public Paciente update(@PathVariable(value = "id") Long id, @Valid @RequestBody Paciente p) {
+	@PutMapping("/{id}")	
+	public ResponseEntity<Paciente> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Paciente p) {
 
 		Paciente paciente = pacienteRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 
-		if(pacienteRepository.findByDni(p.getDni()).isPresent())
+		// control unicidad de dni
+		if(pacienteRepository.findByDni(p.getDni()).isPresent()  && paciente.getId() == p.getId())
 			throw new CampoUnicoException("Paciente", "dni", p.getDni());
 
 		try {
@@ -81,7 +89,7 @@ public class PacienteController {
 			throw new ErrorInternoServidorException("Actualizar", "Paciente", id, e.getMessage());
 		}
 		
-		return paciente;
+		return new ResponseEntity<Paciente>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")

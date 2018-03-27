@@ -1,13 +1,16 @@
 package rest.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,7 +37,11 @@ public class Proceso {
 	private String tipo;
 	
 	@ManyToOne
+	@JoinColumn(name="paciente_id", nullable = false)
 	private Paciente paciente;
+	
+	@OneToMany(mappedBy = "proceso")
+    private List<Cura> curas;
 	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -97,7 +104,13 @@ public class Proceso {
 	public void setPaciente(Paciente paciente) {
 		this.paciente = paciente;
 	}
-	
-	
+
+	public List<Cura> getCuras() {
+		return curas;
+	}
+
+	public void setCuras(List<Cura> curas) {
+		this.curas = curas;
+	}	
 
 }
