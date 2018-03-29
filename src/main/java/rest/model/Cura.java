@@ -33,6 +33,7 @@ public class Cura  {
     
     private String recomendaciones;
     
+    @Column(unique = true)
     private String foto;
     
     @ManyToOne

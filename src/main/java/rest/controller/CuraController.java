@@ -1,8 +1,10 @@
 package rest.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import rest.exception.CampoUnicoException;
 import rest.exception.ErrorInternoServidorException;
 import rest.exception.RecursoNoEncontradoException;
 import rest.model.Cura;
-import rest.model.Paciente;
 import rest.repository.CuraRepository;
 import rest.storage.StorageService;
 
@@ -30,35 +32,37 @@ public class CuraController {
 		this.storageService = storageService;
 	}
 	
-	/*@GetMapping
-	public List<Cura> findAll() {
-		return curaRepository.findAll();
+	@GetMapping("/foto/{id}")
+	public ResponseEntity<Resource> fotoByCuraId(@PathVariable long id) {
+		
+		String foto = curaRepository.fotoByCuraId(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Fotografia", " Cura.id", id));
+		
+		FicheroController fichero = new FicheroController(storageService);
+		
+		return fichero.bajarFichero(foto);
 	}
 	
-	@GetMapping("/{id}")
-	public Cura findById(@PathVariable long id) {
-		return curaRepository.findById(id)
-	            .orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
-	}*/
-	
 	@PutMapping("/{id}")	
-	public ResponseEntity<Paciente> update(@PathVariable(value = "id") Long id, 
+	public ResponseEntity<Cura> update(@PathVariable(value = "id") Long id, 
 			@RequestParam("file") MultipartFile mpf) {
 		
 		FicheroController fichero = new FicheroController(storageService);
 		Cura cura = curaRepository.findById(id)
-				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
+				.orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
+		
+		// control unicidad de dni
+		if(curaRepository.findByFoto(mpf.getName()).isPresent())
+			throw new CampoUnicoException("Cura", "foto", mpf.getName());
 
 		try {
 			cura.setFoto(fichero.subirFichero(mpf));
 			curaRepository.save(cura);
 		} catch (Exception e) {
-			throw new ErrorInternoServidorException("Actualizar", "Paciente", id, e.getMessage());
+			throw new ErrorInternoServidorException("Actualizar", "Cura", id, e.getMessage());
 		}
 		
-		return new ResponseEntity<Paciente>(HttpStatus.OK);
+		return new ResponseEntity<Cura>(HttpStatus.OK);
 	}
 	
-	
-
 }

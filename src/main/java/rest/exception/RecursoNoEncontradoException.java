@@ -12,7 +12,7 @@ public class RecursoNoEncontradoException extends RuntimeException {
     private Object valorCampo;
 
     public RecursoNoEncontradoException( String nombreRecurso, String nombreCampo, Object valorCampo) {
-        super(String.format("%s no encontrado con %s : '%s'", nombreRecurso, nombreCampo, valorCampo));
+        super(String.format("%s no existe con %s : '%s'", nombreRecurso, nombreCampo, valorCampo));
         this.nombreRecurso = nombreRecurso;
         this.nombreCampo = nombreCampo;
         this.valorCampo = valorCampo;
