@@ -15,5 +15,6 @@ public interface CuraRepository extends JpaRepository<Cura, Long> {
 	@Query("SELECT c.foto FROM Cura c WHERE c.id = :id")
 	Optional<String> fotoByCuraId(@Param("id") Long id);
 
-	Optional<String> findByFoto(@Param("foto") String foto);
+	//Optional<String> findByFoto(@Param("foto") String foto);
+	Optional<Cura> findByFoto(@Param("foto") String foto);
 }

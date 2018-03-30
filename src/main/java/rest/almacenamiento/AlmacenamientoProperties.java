@@ -1,14 +1,14 @@
-package rest.storage;
+package rest.almacenamiento;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("storage")
-public class StorageProperties {
+public class AlmacenamientoProperties {
 
     /**
-     * Folder location for storing files
+     * Localización de las imágenes
      */
-    private String location = "upload-dir";
+    private String location = "src/main/resources/static/img";
 
     public String getLocation() {
         return location;

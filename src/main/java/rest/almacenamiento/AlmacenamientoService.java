@@ -1,4 +1,4 @@
-package rest.storage;
+package rest.almacenamiento;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public interface StorageService {
+public interface AlmacenamientoService {
 
     void init();
 
@@ -17,6 +17,8 @@ public interface StorageService {
     Path load(String filename);
 
     Resource loadAsResource(String filename);
+    
+    void delete(String filename);
 
     void deleteAll();
 

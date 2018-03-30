@@ -63,7 +63,7 @@ public class PacienteController {
 		try {
 			paciente = pacienteRepository.save(p);
 		} catch (ErrorInternoServidorException e) {
-			throw new ErrorInternoServidorException("Guardar", "Paciente", p.getId(), e.getMessage());
+			throw new ErrorInternoServidorException("guardar", "Paciente", p.getId(), e.getMessage());
 		}
 		
         return new ResponseEntity<Paciente>(paciente, HttpStatus.CREATED);
@@ -76,7 +76,7 @@ public class PacienteController {
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 
 		// control unicidad de dni
-		if(pacienteRepository.findByDni(p.getDni()).isPresent()  && paciente.getId() == p.getId())
+		if(pacienteRepository.findByDni(p.getDni()).isPresent() && paciente.getId() == p.getId())
 			throw new CampoUnicoException("Paciente", "dni", p.getDni());
 
 		try {
@@ -86,7 +86,7 @@ public class PacienteController {
 			paciente.setNacimiento(p.getNacimiento());
 			pacienteRepository.save(paciente);
 		} catch (Exception e) {
-			throw new ErrorInternoServidorException("Actualizar", "Paciente", id, e.getMessage());
+			throw new ErrorInternoServidorException("actualizar", "Paciente", id, e.getMessage());
 		}
 		
 		return new ResponseEntity<Paciente>(HttpStatus.OK);
@@ -100,7 +100,7 @@ public class PacienteController {
 	    try {
 	    	pacienteRepository.delete(paciente);
 		} catch (Exception e) {
-			throw new ErrorInternoServidorException("Borrar", "Paciente", id, e.getMessage());
+			throw new ErrorInternoServidorException("borrar", "Paciente", id, e.getMessage());
 		}
 
 	    return ResponseEntity.ok().build();

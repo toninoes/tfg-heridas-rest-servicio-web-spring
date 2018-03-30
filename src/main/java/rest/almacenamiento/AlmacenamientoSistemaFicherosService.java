@@ -1,4 +1,4 @@
-package rest.storage;
+package rest.almacenamiento;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,13 +16,16 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import rest.exception.AlmacenamientoException;
+import rest.exception.AlmacenamientoFicheroNoEncontradoException;
+
 @Service
-public class FileSystemStorageService implements StorageService {
+public class AlmacenamientoSistemaFicherosService implements AlmacenamientoService {
 
     private final Path rootLocation;
 
     @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
+    public AlmacenamientoSistemaFicherosService(AlmacenamientoProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
@@ -31,19 +34,19 @@ public class FileSystemStorageService implements StorageService {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file " + filename);
+                throw new AlmacenamientoException("Error al guardar el fichero vacío " + filename);
             }
             if (filename.contains("..")) {
                 // This is a security check
-                throw new StorageException(
-                        "Cannot store file with relative path outside current directory "
+                throw new AlmacenamientoException(
+                        "No se puede almacenar el fichero con una ruta relativa fuera del directorio actual "
                                 + filename);
             }
             Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
                     StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e) {
-            throw new StorageException("Failed to store file " + filename, e);
+            throw new AlmacenamientoException("Error al almacenar el fichero " + filename, e);
         }
     }
 
@@ -55,7 +58,7 @@ public class FileSystemStorageService implements StorageService {
                     .map(path -> this.rootLocation.relativize(path));
         }
         catch (IOException e) {
-            throw new StorageException("Failed to read stored files", e);
+            throw new AlmacenamientoException("Error al leer los ficheros almacenados", e);
         }
 
     }
@@ -74,16 +77,26 @@ public class FileSystemStorageService implements StorageService {
                 return resource;
             }
             else {
-                throw new StorageFileNotFoundException(
-                        "Could not read file: " + filename);
+                throw new AlmacenamientoFicheroNoEncontradoException(
+                        "No se pudo leer el fichero: " + filename);
 
             }
         }
         catch (MalformedURLException e) {
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+            throw new AlmacenamientoFicheroNoEncontradoException("No se pudo leer el fichero: " + filename, e);
         }
     }
 
+    @Override
+    public void delete(String filename) {
+        try {
+			FileSystemUtils.deleteRecursively(rootLocation.resolve(filename));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
@@ -95,7 +108,7 @@ public class FileSystemStorageService implements StorageService {
             Files.createDirectories(rootLocation);
         }
         catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
+            throw new AlmacenamientoException("No se pudo inicializar el almacenamiento", e);
         }
     }
 }

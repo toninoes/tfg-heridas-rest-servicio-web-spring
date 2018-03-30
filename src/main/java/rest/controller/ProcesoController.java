@@ -67,7 +67,7 @@ public class ProcesoController {
 		try {
 			proceso = procesoRepository.save(p);
 		} catch (ErrorInternoServidorException e) {
-			throw new ErrorInternoServidorException("Guardar", "Proceso", p.getId(), e.getMessage());
+			throw new ErrorInternoServidorException("guardar", "Proceso", p.getId(), e.getMessage());
 		}
 		
 		return new ResponseEntity<Proceso>(proceso, HttpStatus.CREATED);
@@ -85,7 +85,7 @@ public class ProcesoController {
 			proceso.setTipo(p.getTipo());
 			procesoRepository.save(proceso);
 		} catch (Exception e) {
-			throw new ErrorInternoServidorException("Actualizar", "Proceso", id, e.getMessage());
+			throw new ErrorInternoServidorException("actualizar", "Proceso", id, e.getMessage());
 		}
 		
 		return new ResponseEntity<Proceso>(HttpStatus.OK);
@@ -99,7 +99,7 @@ public class ProcesoController {
 	    try {
 	    	procesoRepository.delete(proceso);
 		} catch (Exception e) {
-			throw new ErrorInternoServidorException("Borrar", "Proceso", id, e.getMessage());
+			throw new ErrorInternoServidorException("borrar", "Proceso", id, e.getMessage());
 		}
 
 	    return ResponseEntity.ok().build();
