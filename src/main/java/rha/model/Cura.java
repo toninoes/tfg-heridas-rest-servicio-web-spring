@@ -1,6 +1,7 @@
-package rest.model;
+package rha.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -16,12 +18,15 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "curas")
 @JsonIgnoreProperties(value = {"creacion", "actualizacion"}, allowGetters = true)
-public class Cura  {
+public class Cura {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
@@ -32,13 +37,14 @@ public class Cura  {
     private String tratamiento;
     
     private String recomendaciones;
-    
-    @Column(unique = true)
-    private String foto;
-    
+      
     @ManyToOne
 	@JoinColumn(name="proceso_id", nullable = false)
 	private Proceso proceso;
+    
+    @JsonIgnore
+	@OneToMany(mappedBy = "cura")
+    private List<Imagen> imagenes;
    
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -49,6 +55,18 @@ public class Cura  {
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date actualizacion;
+
+	public Cura() {
+		super();
+	}
+	
+	public Cura(String evolucion, @NotBlank String tratamiento, String recomendaciones, Proceso proceso) {
+		super();
+		this.evolucion = evolucion;
+		this.tratamiento = tratamiento;
+		this.recomendaciones = recomendaciones;
+		this.proceso = proceso;
+	}
 
 	public String getEvolucion() {
 		return evolucion;
@@ -86,12 +104,14 @@ public class Cura  {
 		return id;
 	}
 
-	public String getFoto() {
-		return foto;
+	public List<Imagen> getImagenes() {
+		return imagenes;
 	}
 
-	public void setFoto(String foto) {
-		this.foto = foto;
-	}    
+	public void setImagenes(List<Imagen> imagenes) {
+		this.imagenes = imagenes;
+	} 
+	
+	
 
 }

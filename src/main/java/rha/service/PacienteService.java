@@ -1,4 +1,4 @@
-package rest.controller;
+package rha.service;
 
 import java.util.List;
 
@@ -7,51 +7,36 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import rest.exception.CampoUnicoException;
-import rest.exception.ErrorInternoServidorException;
-import rest.exception.RecursoNoEncontradoException;
-import rest.model.Paciente;
-import rest.repository.PacienteRepository;
+import rha.exception.CampoUnicoException;
+import rha.exception.ErrorInternoServidorException;
+import rha.exception.RecursoNoEncontradoException;
+import rha.model.Paciente;
+import rha.repository.PacienteRepository;
 
+@Service
+public class PacienteService {
 
-@RestController
-@RequestMapping("/custom/pacientes")
-public class PacienteController {
-
-	private final PacienteRepository pacienteRepository;
-	
 	@Autowired
-	public PacienteController(PacienteRepository pacienteRepository) { 
-		this.pacienteRepository = pacienteRepository;
-	}
+	private PacienteRepository pacienteRepository;
 	
-	@GetMapping
 	public List<Paciente> findAll() {
 		return pacienteRepository.findAll();
 	}
 	
-	@GetMapping("/{id}")
 	public Paciente findById(@PathVariable long id) {
 		return pacienteRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 	}
 	
-	@GetMapping("/dni/{dni}")
 	public Paciente findByDni(@PathVariable String dni) {
 		return pacienteRepository.findByDni(dni)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "dni", dni));
 	}
 	
-	@PostMapping
 	public ResponseEntity<Paciente> create(@Valid @RequestBody Paciente p) {
 		
 		Paciente paciente = new Paciente();
@@ -69,7 +54,6 @@ public class PacienteController {
         return new ResponseEntity<Paciente>(paciente, HttpStatus.CREATED);
     }
 	
-	@PutMapping("/{id}")	
 	public ResponseEntity<Paciente> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Paciente p) {
 
 		Paciente paciente = pacienteRepository.findById(id)
@@ -92,7 +76,6 @@ public class PacienteController {
 		return new ResponseEntity<Paciente>(HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 	    Paciente paciente = pacienteRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
@@ -105,5 +88,4 @@ public class PacienteController {
 
 	    return ResponseEntity.ok().build();
 	}
-
 }

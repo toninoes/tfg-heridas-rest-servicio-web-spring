@@ -1,4 +1,4 @@
-package rest.model;
+package rha.model;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -40,6 +41,7 @@ public class Paciente  {
 	@Column(nullable = false)
 	private Date nacimiento;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "paciente")
     private List<Proceso> procesos;
 	
@@ -113,9 +115,8 @@ public class Paciente  {
 
 	public void setProcesos(List<Proceso> procesos) {
 		this.procesos = procesos;
-	}	
+	}
 	
 	
-	
-	
+
 }

@@ -1,39 +1,60 @@
-package rest.controller;
+package rha.controller.api;
 
-import java.util.Optional;
+import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import rest.almacenamiento.Almacenamiento;
-import rest.almacenamiento.AlmacenamientoService;
-import rest.exception.CampoUnicoException;
-import rest.exception.ErrorInternoServidorException;
-import rest.exception.RecursoNoEncontradoException;
-import rest.model.Cura;
-import rest.repository.CuraRepository;
+import rha.model.Cura;
+import rha.service.CuraService;
 
 @RestController
-@RequestMapping("/custom/curas")
-public class CuraController {
-	
-	private final CuraRepository curaRepository;
-	private final AlmacenamientoService almacenamientoService;
+@RequestMapping("/api/curas")
+public class CuraRestController {
 	
 	@Autowired
-	public CuraController(CuraRepository curaRepository, AlmacenamientoService almacenamientoService) {
-		this.curaRepository = curaRepository;
-		this.almacenamientoService = almacenamientoService;
+	private CuraService curaService;
+	
+	@GetMapping
+	public List<Cura> findAll() {
+		return curaService.findAll();
 	}
+	
+	@GetMapping("/{id}")
+	public Cura findById(@PathVariable long id) {
+		return curaService.findById(id);
+	}
+
+	@PostMapping
+	public ResponseEntity<Cura> create(@Valid @RequestBody Cura c) {
+		return curaService.create(c);
+    }
+
+
+	@PutMapping("/{id}")	
+	public ResponseEntity<Cura> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Cura c) {
+		return curaService.update(id, c);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+	    return curaService.delete(id);
+	}
+	
+	/*
+	@Autowired
+	private CuraRepository curaRepository;
+		
 	
 	@GetMapping("/foto/{id}")
 	public ResponseEntity<Resource> fotoByCuraId(@PathVariable long id) {
@@ -41,16 +62,16 @@ public class CuraController {
 		String foto = curaRepository.fotoByCuraId(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Fotografia", " Cura.id", id));
 		
-		Almacenamiento fichero = new Almacenamiento(almacenamientoService);
+		ImagenService fichero = new ImagenService();
 		
-		return fichero.bajarFichero(foto);
+		return fichero.descargar(foto);
 	}
 	
 	@PutMapping("/{id}")	
 	public ResponseEntity<Cura> update(@PathVariable(value = "id") Long id,
 			@RequestParam("file") MultipartFile mpf) {
 		
-		Almacenamiento fichero = new Almacenamiento(almacenamientoService);
+		ImagenService fichero = new ImagenService(almacenamientoService);
 		Cura curaDeId = curaRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
 		
@@ -61,8 +82,8 @@ public class CuraController {
 			throw new CampoUnicoException("Cura", "foto", mpf.getName());
 
 		try {
-			fichero.borrarFichero(curaDeId.getFoto());
-			curaDeId.setFoto(fichero.subirFichero(mpf));
+			fichero.borrar(curaDeId.getFoto());
+			curaDeId.setFoto(fichero.subir(mpf));
 			curaRepository.save(curaDeId);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Cura", id, e.getMessage());
@@ -70,5 +91,6 @@ public class CuraController {
 		
 		return new ResponseEntity<Cura>(HttpStatus.OK);
 	}
+	*/
 	
 }

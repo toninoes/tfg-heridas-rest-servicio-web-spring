@@ -1,4 +1,4 @@
-package rest;
+package rha;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -7,11 +7,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
-import rest.almacenamiento.AlmacenamientoProperties;
-import rest.almacenamiento.AlmacenamientoService;
+import rha.config.ImagenLocationConfig;
+import rha.service.AlmacenamientoService;
 
 @SpringBootApplication
-@EnableConfigurationProperties(AlmacenamientoProperties.class)
+@EnableConfigurationProperties(ImagenLocationConfig.class)
 public class Application extends SpringBootServletInitializer {
 	
 	public static void main(String[] args) throws Exception {
@@ -21,7 +21,6 @@ public class Application extends SpringBootServletInitializer {
 	@Bean
     CommandLineRunner init(AlmacenamientoService almacenamientoService) {
         return (args) -> {
-            //storageService.deleteAll();
             almacenamientoService.init();
         };
     }

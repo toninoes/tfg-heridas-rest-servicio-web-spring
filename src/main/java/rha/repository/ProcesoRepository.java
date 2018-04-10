@@ -1,13 +1,17 @@
-package rest.repository;
+package rha.repository;
 
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import rest.model.Paciente;
-import rest.model.Proceso;
+import org.springframework.hateoas.Resource;
+
+import rha.model.Paciente;
+import rha.model.Proceso;
 
 
 @RepositoryRestResource(collectionResourceRel = "procesos", path = "procesos")

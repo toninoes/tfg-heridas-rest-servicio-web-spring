@@ -1,35 +1,35 @@
-package rest.almacenamiento;
+package rha.service;
+
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import rha.config.ImagenLocationConfig;
+import rha.exception.AlmacenamientoException;
+import rha.exception.AlmacenamientoFicheroNoEncontradoException;
+
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-import rest.exception.AlmacenamientoException;
-import rest.exception.AlmacenamientoFicheroNoEncontradoException;
 
 @Service
-public class AlmacenamientoSistemaFicherosService implements AlmacenamientoService {
-
-    private final Path rootLocation;
+public class AlmacenamientoService {
+	private Path rootLocation;
 
     @Autowired
-    public AlmacenamientoSistemaFicherosService(AlmacenamientoProperties properties) {
+    public AlmacenamientoService(ImagenLocationConfig properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    @Override
     public void store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
@@ -50,7 +50,6 @@ public class AlmacenamientoSistemaFicherosService implements AlmacenamientoServi
         }
     }
 
-    @Override
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.rootLocation, 1)
@@ -63,12 +62,10 @@ public class AlmacenamientoSistemaFicherosService implements AlmacenamientoServi
 
     }
 
-    @Override
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }
 
-    @Override
     public Resource loadAsResource(String filename) {
         try {
             Path file = load(filename);
@@ -87,7 +84,6 @@ public class AlmacenamientoSistemaFicherosService implements AlmacenamientoServi
         }
     }
 
-    @Override
     public void delete(String filename) {
         try {
 			FileSystemUtils.deleteRecursively(rootLocation.resolve(filename));
@@ -97,12 +93,10 @@ public class AlmacenamientoSistemaFicherosService implements AlmacenamientoServi
 		}
     }
     
-    @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
-    @Override
     public void init() {
         try {
             Files.createDirectories(rootLocation);

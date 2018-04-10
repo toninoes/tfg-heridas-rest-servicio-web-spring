@@ -1,4 +1,4 @@
-package rest.model;
+package rha.model;
 
 import java.util.Date;
 import java.util.List;
@@ -19,7 +19,9 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "procesos")
@@ -40,6 +42,7 @@ public class Proceso {
 	@JoinColumn(name="paciente_id", nullable = false)
 	private Paciente paciente;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "proceso")
     private List<Cura> curas;
 	
@@ -52,6 +55,10 @@ public class Proceso {
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date actualizacion;
+
+	public Proceso() {
+		super();
+	}
 
 	public String getAnamnesis() {
 		return anamnesis;
@@ -111,6 +118,9 @@ public class Proceso {
 
 	public void setCuras(List<Cura> curas) {
 		this.curas = curas;
-	}	
+	}
+	
+	
+
 
 }

@@ -1,4 +1,4 @@
-package rest.controller;
+package rha.service;
 
 import java.util.List;
 
@@ -7,57 +7,41 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import rha.exception.ErrorInternoServidorException;
+import rha.exception.RecursoNoEncontradoException;
+import rha.model.Paciente;
+import rha.model.Proceso;
+import rha.repository.PacienteRepository;
+import rha.repository.ProcesoRepository;
 
-import rest.exception.ErrorInternoServidorException;
-import rest.exception.RecursoNoEncontradoException;
-import rest.model.Paciente;
-import rest.model.Proceso;
-import rest.repository.PacienteRepository;
-import rest.repository.ProcesoRepository;
+@Service
+public class ProcesoService {
 
-@RestController
-@RequestMapping("/custom/procesos")
-public class ProcesoController {
-	
-	
-	private final ProcesoRepository procesoRepository;
-	private final PacienteRepository pacienteRepository;
+	@Autowired
+	private ProcesoRepository procesoRepository;
 	
 	@Autowired
-	public ProcesoController(ProcesoRepository procesoRepository, PacienteRepository pacienteRepository) { 
-		this.procesoRepository = procesoRepository;
-		this.pacienteRepository = pacienteRepository;
-	}
+	private PacienteRepository pacienteRepository;
 	
-	@GetMapping
 	public List<Proceso> findAll() {
 		return procesoRepository.findAll();
 	}
 	
-	@GetMapping("/{id}")
 	public Proceso findById(@PathVariable long id) {
 		return procesoRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Proceso", "id", id));
 	}
 	
-	@GetMapping("/paciente/{id}")
 	public List<Proceso> findAllByPacienteId(@PathVariable long id) {
 		Paciente paciente = pacienteRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 				
 		return procesoRepository.findByPaciente(paciente);
 	}
-	
-	
-	@PostMapping
+
 	public ResponseEntity<Proceso> create(@Valid @RequestBody Proceso p) {
 		pacienteRepository.findById(p.getPaciente().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", p.getPaciente().getId()));
@@ -72,8 +56,7 @@ public class ProcesoController {
 		
 		return new ResponseEntity<Proceso>(proceso, HttpStatus.CREATED);
 	}
-	
-	@PutMapping("/{id}")
+
 	public ResponseEntity<Proceso> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Proceso p) {
 
 		Proceso proceso = procesoRepository.findById(id)
@@ -91,7 +74,6 @@ public class ProcesoController {
 		return new ResponseEntity<Proceso>(HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 	    Proceso proceso = procesoRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Proceso", "id", id));

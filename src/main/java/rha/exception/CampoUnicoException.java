@@ -1,4 +1,4 @@
-package rest.exception;
+package rha.exception;
 
 public class CampoUnicoException extends RuntimeException {
 

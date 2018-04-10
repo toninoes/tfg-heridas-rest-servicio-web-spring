@@ -1,9 +1,9 @@
-package rest.almacenamiento;
+package rha.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("storage")
-public class AlmacenamientoProperties {
+public class ImagenLocationConfig {
 
     /**
      * Localización de las imágenes
