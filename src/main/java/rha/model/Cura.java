@@ -38,6 +38,7 @@ public class Cura {
     
     private String recomendaciones;
       
+    @JsonIgnore
     @ManyToOne
 	@JoinColumn(name="proceso_id", nullable = false)
 	private Proceso proceso;
@@ -110,6 +111,14 @@ public class Cura {
 
 	public void setImagenes(List<Imagen> imagenes) {
 		this.imagenes = imagenes;
+	}
+
+	public Date getCreacion() {
+		return creacion;
+	}
+
+	public Date getActualizacion() {
+		return actualizacion;
 	} 
 	
 	

@@ -2,14 +2,10 @@ package rha.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
@@ -26,12 +22,12 @@ public class CuraService {
 		return curaRepository.findAll();
 	}
 	
-	public Cura findById(@PathVariable long id) {
+	public Cura findById(long id) {
 		return curaRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
 	}
 	
-	public ResponseEntity<Cura> create(@Valid @RequestBody Cura c) {
+	public ResponseEntity<Cura> create(Cura c) {
 		Cura cura = new Cura();
 		
 		try {
@@ -43,7 +39,7 @@ public class CuraService {
         return new ResponseEntity<Cura>(cura, HttpStatus.CREATED);
     }
 	
-	public ResponseEntity<Cura> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Cura c) {
+	public ResponseEntity<Cura> update(long id, Cura c) {
 		Cura cura = curaRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
 
@@ -57,10 +53,10 @@ public class CuraService {
 			throw new ErrorInternoServidorException("actualizar", "Cura", id, e.getMessage());
 		}
 		
-		return new ResponseEntity<Cura>(HttpStatus.OK);
+		return new ResponseEntity<Cura>(cura, HttpStatus.OK);
 	}
 	
-	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> delete(long id) {
 	    Cura cura = curaRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
 
@@ -70,7 +66,7 @@ public class CuraService {
 			throw new ErrorInternoServidorException("borrar", "Cura", id, e.getMessage());
 		}
 
-	    return ResponseEntity.ok().build();
+	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 	

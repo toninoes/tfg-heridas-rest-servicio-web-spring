@@ -38,6 +38,7 @@ public class Proceso {
 	
 	private String tipo;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="paciente_id", nullable = false)
 	private Paciente paciente;
@@ -88,16 +89,8 @@ public class Proceso {
 		return creacion;
 	}
 
-	public void setCreacion(Date creacion) {
-		this.creacion = creacion;
-	}
-
 	public Date getActualizacion() {
 		return actualizacion;
-	}
-
-	public void setActualizacion(Date actualizacion) {
-		this.actualizacion = actualizacion;
 	}
 
 	public long getId() {

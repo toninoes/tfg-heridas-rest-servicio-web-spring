@@ -12,6 +12,7 @@ import rha.model.Paciente;
 
 @RepositoryRestResource(collectionResourceRel = "pacientes", path = "pacientes")
 public interface PacienteRepository extends JpaRepository<Paciente, Long>{
+	
 	List<Paciente> findByNombre(@Param("nombre") String nombre);
 	
 	Optional<Paciente> findByDni(@Param("dni") String dni);	

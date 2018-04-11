@@ -40,7 +40,6 @@ public class CuraRestController {
 		return curaService.create(c);
     }
 
-
 	@PutMapping("/{id}")	
 	public ResponseEntity<Cura> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Cura c) {
 		return curaService.update(id, c);

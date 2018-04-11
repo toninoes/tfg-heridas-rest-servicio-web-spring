@@ -17,6 +17,8 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name = "imagenes")
@@ -28,6 +30,7 @@ public class Imagen {
 	@NotBlank
 	private String nombre;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="cura_id", nullable = false)
 	private Cura cura;

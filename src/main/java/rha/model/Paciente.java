@@ -97,16 +97,8 @@ public class Paciente  {
 		return creacion;
 	}
 
-	public void setCreacion(Date creacion) {
-		this.creacion = creacion;
-	}
-
 	public Date getActualizacion() {
 		return actualizacion;
-	}
-
-	public void setActualizacion(Date actualizacion) {
-		this.actualizacion = actualizacion;
 	}
 
 	public List<Proceso> getProcesos() {

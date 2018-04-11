@@ -2,14 +2,10 @@ package rha.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import rha.exception.CampoUnicoException;
 import rha.exception.ErrorInternoServidorException;
@@ -27,23 +23,22 @@ public class PacienteService {
 		return pacienteRepository.findAll();
 	}
 	
-	public Paciente findById(@PathVariable long id) {
+	public Paciente findById(long id) {
 		return pacienteRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 	}
 	
-	public Paciente findByDni(@PathVariable String dni) {
+	public Paciente findByDni(String dni) {
 		return pacienteRepository.findByDni(dni)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "dni", dni));
 	}
 	
-	public ResponseEntity<Paciente> create(@Valid @RequestBody Paciente p) {
-		
-		Paciente paciente = new Paciente();
-		
+	public ResponseEntity<Paciente> create(Paciente p) {		
 		// control unicidad de dni
 		if(pacienteRepository.findByDni(p.getDni()).isPresent())
 			throw new CampoUnicoException("Paciente", "dni", p.getDni());
+		
+		Paciente paciente = new Paciente();
 		
 		try {
 			paciente = pacienteRepository.save(p);
@@ -54,7 +49,7 @@ public class PacienteService {
         return new ResponseEntity<Paciente>(paciente, HttpStatus.CREATED);
     }
 	
-	public ResponseEntity<Paciente> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Paciente p) {
+	public ResponseEntity<Paciente> update(long id, Paciente p) {
 
 		Paciente paciente = pacienteRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
@@ -76,7 +71,7 @@ public class PacienteService {
 		return new ResponseEntity<Paciente>(HttpStatus.OK);
 	}
 	
-	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> delete(long id) {
 	    Paciente paciente = pacienteRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 
@@ -86,6 +81,6 @@ public class PacienteService {
 			throw new ErrorInternoServidorException("borrar", "Paciente", id, e.getMessage());
 		}
 
-	    return ResponseEntity.ok().build();
+	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

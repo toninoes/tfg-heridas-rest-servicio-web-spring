@@ -2,14 +2,11 @@ package rha.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Paciente;
@@ -30,19 +27,19 @@ public class ProcesoService {
 		return procesoRepository.findAll();
 	}
 	
-	public Proceso findById(@PathVariable long id) {
+	public Proceso findById(long id) {
 		return procesoRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Proceso", "id", id));
 	}
 	
-	public List<Proceso> findAllByPacienteId(@PathVariable long id) {
+	public List<Proceso> findAllByPacienteId(long id) {
 		Paciente paciente = pacienteRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
 				
 		return procesoRepository.findByPaciente(paciente);
 	}
 
-	public ResponseEntity<Proceso> create(@Valid @RequestBody Proceso p) {
+	public ResponseEntity<Proceso> create(Proceso p) {
 		pacienteRepository.findById(p.getPaciente().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", p.getPaciente().getId()));
 		
@@ -57,7 +54,7 @@ public class ProcesoService {
 		return new ResponseEntity<Proceso>(proceso, HttpStatus.CREATED);
 	}
 
-	public ResponseEntity<Proceso> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Proceso p) {
+	public ResponseEntity<Proceso> update(long id, Proceso p) {
 
 		Proceso proceso = procesoRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
@@ -74,7 +71,7 @@ public class ProcesoService {
 		return new ResponseEntity<Proceso>(HttpStatus.OK);
 	}
 	
-	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> delete(long id) {
 	    Proceso proceso = procesoRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Proceso", "id", id));
 
@@ -84,7 +81,7 @@ public class ProcesoService {
 			throw new ErrorInternoServidorException("borrar", "Proceso", id, e.getMessage());
 		}
 
-	    return ResponseEntity.ok().build();
+	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }
