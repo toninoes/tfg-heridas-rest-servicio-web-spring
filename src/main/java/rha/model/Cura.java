@@ -43,7 +43,6 @@ public class Cura {
 	@JoinColumn(name="proceso_id", nullable = false)
 	private Proceso proceso;
     
-    @JsonIgnore
 	@OneToMany(mappedBy = "cura")
     private List<Imagen> imagenes;
    
@@ -55,6 +54,7 @@ public class Cura {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
+    @JsonIgnore
     private Date actualizacion;
 
 	public Cura() {

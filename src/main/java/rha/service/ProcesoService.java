@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
+import rha.model.Cura;
 import rha.model.Paciente;
 import rha.model.Proceso;
 import rha.repository.PacienteRepository;
@@ -25,6 +26,12 @@ public class ProcesoService {
 	
 	public List<Proceso> findAll() {
 		return procesoRepository.findAll();
+	}
+	
+	public List<Cura> findByProceso(long id) {
+		Proceso proceso = procesoRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Proceso", "id", id));
+		return proceso.getCuras();
 	}
 	
 	public Proceso findById(long id) {

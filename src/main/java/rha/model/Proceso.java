@@ -38,7 +38,6 @@ public class Proceso {
 	
 	private String tipo;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="paciente_id", nullable = false)
 	private Paciente paciente;
@@ -46,6 +45,8 @@ public class Proceso {
 	@JsonIgnore
 	@OneToMany(mappedBy = "proceso")
     private List<Cura> curas;
+	
+	private String observaciones;
 	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -55,6 +56,7 @@ public class Proceso {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
+    @JsonIgnore
     private Date actualizacion;
 
 	public Proceso() {
@@ -111,6 +113,14 @@ public class Proceso {
 
 	public void setCuras(List<Cura> curas) {
 		this.curas = curas;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 	
 	

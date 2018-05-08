@@ -38,11 +38,13 @@ public class Imagen {
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @JsonIgnore
     private Date creacion;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
+    @JsonIgnore
     private Date actualizacion;
 
 	public Imagen() {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import rha.model.Cura;
 import rha.model.Proceso;
 import rha.service.ProcesoService;
 
@@ -34,6 +35,12 @@ public class ProcesoRestController {
 	public Proceso findById(@PathVariable long id) {
 		return procesoService.findById(id);
 	}
+	
+	@GetMapping("/{id}/curas")
+	public List<Cura> findByProceso(@PathVariable long id) {
+		return procesoService.findByProceso(id);
+	}
+	
 	
 	@GetMapping("/paciente/{id}")
 	public List<Proceso> findAllByPacienteId(@PathVariable long id) {			
