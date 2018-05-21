@@ -31,10 +31,9 @@ public class Proceso {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@NotBlank(message = "Introduzca la anamnesis")
 	private String anamnesis;
 	
-	@NotBlank(message = "Introduzca un diagnostico")
+	@NotBlank(message = "Introduzca un diagnóstico")
 	private String diagnostico;
 	
 	private String tipo;

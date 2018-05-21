@@ -70,12 +70,13 @@ public class ProcesoService {
 			proceso.setAnamnesis(p.getAnamnesis());
 			proceso.setDiagnostico(p.getDiagnostico());
 			proceso.setTipo(p.getTipo());
+			proceso.setObservaciones(p.getObservaciones());
 			procesoRepository.save(proceso);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Proceso", id, e.getMessage());
 		}
 		
-		return new ResponseEntity<Proceso>(HttpStatus.OK);
+		return new ResponseEntity<Proceso>(proceso, HttpStatus.OK);
 	}
 	
 	public ResponseEntity<?> delete(long id) {

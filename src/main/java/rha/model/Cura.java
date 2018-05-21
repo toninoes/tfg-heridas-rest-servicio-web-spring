@@ -33,12 +33,11 @@ public class Cura {
 	
 	private String evolucion;
     
-    @NotBlank
+    @NotBlank(message = "Introduzca un tratamiento")
     private String tratamiento;
     
     private String recomendaciones;
       
-    @JsonIgnore
     @ManyToOne
 	@JoinColumn(name="proceso_id", nullable = false)
 	private Proceso proceso;
