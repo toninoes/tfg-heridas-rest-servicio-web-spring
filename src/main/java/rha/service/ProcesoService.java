@@ -47,18 +47,17 @@ public class ProcesoService {
 	}
 
 	public ResponseEntity<Proceso> create(Proceso p) {
-		pacienteRepository.findById(p.getPaciente().getId())
+		Paciente paciente = pacienteRepository.findById(p.getPaciente().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", p.getPaciente().getId()));
 		
-		Proceso proceso = new Proceso();
+		p.setPaciente(paciente);
 		
 		try {
-			proceso = procesoRepository.save(p);
+			return new ResponseEntity<Proceso>(procesoRepository.save(p), HttpStatus.CREATED);
 		} catch (ErrorInternoServidorException e) {
 			throw new ErrorInternoServidorException("guardar", "Proceso", p.getId(), e.getMessage());
 		}
 		
-		return new ResponseEntity<Proceso>(proceso, HttpStatus.CREATED);
 	}
 
 	public ResponseEntity<Proceso> update(long id, Proceso p) {

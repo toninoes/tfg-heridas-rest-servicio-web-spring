@@ -7,11 +7,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
-import rha.config.ImagenLocationConfig;
+import rha.config.ImagenConfig;
 import rha.service.AlmacenamientoService;
 
 @SpringBootApplication
-@EnableConfigurationProperties(ImagenLocationConfig.class)
+@EnableConfigurationProperties(ImagenConfig.class)
 public class Application extends SpringBootServletInitializer {
 	
 	public static void main(String[] args) throws Exception {

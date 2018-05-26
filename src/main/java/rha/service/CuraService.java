@@ -10,13 +10,18 @@ import org.springframework.stereotype.Service;
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Cura;
+import rha.model.Proceso;
 import rha.repository.CuraRepository;
+import rha.repository.ProcesoRepository;
 
 @Service
 public class CuraService {
 	
 	@Autowired
 	private CuraRepository curaRepository;
+	
+	@Autowired
+	private ProcesoRepository procesoRepository;
 		
 	public List<Cura> findAll() {
 		return curaRepository.findAll();
@@ -28,15 +33,18 @@ public class CuraService {
 	}
 	
 	public ResponseEntity<Cura> create(Cura c) {
-		Cura cura = new Cura();
+		Proceso proceso = procesoRepository.findById(c.getProceso().getId())
+				.orElseThrow(() -> new RecursoNoEncontradoException("Proceso", "id", c.getProceso().getId()));
+		
+		c.setProceso(proceso);
 		
 		try {
-			cura = curaRepository.save(c);
+			return new ResponseEntity<Cura>(curaRepository.save(c), HttpStatus.CREATED);
 		} catch (ErrorInternoServidorException e) {
 			throw new ErrorInternoServidorException("guardar", "Cura", c.getId(), e.getMessage());
 		}
 		
-        return new ResponseEntity<Cura>(cura, HttpStatus.CREATED);
+        
     }
 	
 	public ResponseEntity<Cura> update(long id, Cura c) {
@@ -45,15 +53,13 @@ public class CuraService {
 
 		try {
 			cura.setEvolucion(c.getEvolucion());
-			cura.setProceso(c.getProceso());
 			cura.setRecomendaciones(c.getRecomendaciones());
 			cura.setTratamiento(c.getTratamiento());
-			curaRepository.save(cura);
+			return new ResponseEntity<Cura>(curaRepository.save(cura), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Cura", id, e.getMessage());
 		}
 		
-		return new ResponseEntity<Cura>(cura, HttpStatus.OK);
 	}
 	
 	public ResponseEntity<?> delete(long id) {

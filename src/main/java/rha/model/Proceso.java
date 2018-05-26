@@ -63,6 +63,13 @@ public class Proceso {
 		super();
 	}
 
+	public Proceso(Paciente paciente) {
+		super();
+		this.paciente = paciente;
+	}
+
+
+
 	public String getAnamnesis() {
 		return anamnesis;
 	}

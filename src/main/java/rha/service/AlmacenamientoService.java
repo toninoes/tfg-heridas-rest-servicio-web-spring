@@ -4,7 +4,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import rha.config.ImagenLocationConfig;
+import rha.config.ImagenConfig;
 import rha.exception.AlmacenamientoException;
 import rha.exception.AlmacenamientoFicheroNoEncontradoException;
 
@@ -24,10 +24,14 @@ import org.springframework.util.StringUtils;
 @Service
 public class AlmacenamientoService {
 	private Path rootLocation;
+	
+	private long tam_max_img;
+	private double MibToB = 1048576; //1024 x 1024
 
     @Autowired
-    public AlmacenamientoService(ImagenLocationConfig properties) {
+    public AlmacenamientoService(ImagenConfig properties) {
         this.rootLocation = Paths.get(properties.getLocation());
+        this.tam_max_img = properties.getTamMaxImagen();
     }
 
     public void store(MultipartFile file) {
@@ -41,6 +45,31 @@ public class AlmacenamientoService {
                 throw new AlmacenamientoException(
                         "No se puede almacenar el fichero con una ruta relativa fuera del directorio actual "
                                 + filename);
+            }
+            Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
+                    StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (IOException e) {
+            throw new AlmacenamientoException("Error al almacenar el fichero " + filename, e);
+        }
+    }
+    
+    public void store(MultipartFile file, String name) {
+        String filename = StringUtils.cleanPath(name);
+        try {
+            if (file.isEmpty()) {
+                throw new AlmacenamientoException("Error al guardar el fichero vacío " + filename);
+            }
+            if (filename.contains("..")) {
+                // This is a security check
+                throw new AlmacenamientoException(
+                        "No se puede almacenar el fichero con una ruta relativa fuera del directorio actual "
+                                + filename);
+            }
+            
+            if (file.getSize() > tam_max_img) {
+            	throw new AlmacenamientoException(String.format("ERROR: la imagen supera los %.2f MiB", 
+            			(tam_max_img/MibToB)));
             }
             Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
                     StandardCopyOption.REPLACE_EXISTING);

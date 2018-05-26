@@ -30,9 +30,9 @@ public class Imagen {
 	@NotBlank
 	private String nombre;
 	
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="cura_id", nullable = false)
+	//@JoinColumn(name="cura_id", nullable = false)
+	@JoinColumn(name="cura_id")
 	private Cura cura;
 
 	@Column(nullable = false, updatable = false)
@@ -49,6 +49,11 @@ public class Imagen {
 
 	public Imagen() {
 		super();
+	}
+
+	public Imagen(@NotBlank String nombre) {
+		super();
+		this.nombre = nombre;
 	}
 
 	public Imagen(@NotBlank String nombre, Cura cura) {

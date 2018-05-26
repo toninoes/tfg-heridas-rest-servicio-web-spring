@@ -42,6 +42,7 @@ public class Cura {
 	@JoinColumn(name="proceso_id", nullable = false)
 	private Proceso proceso;
     
+    @JsonIgnore
 	@OneToMany(mappedBy = "cura")
     private List<Imagen> imagenes;
    

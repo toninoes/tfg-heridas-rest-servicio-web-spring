@@ -1,5 +1,6 @@
 package rha.service;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -58,6 +59,22 @@ public class ImagenService {
     	} 
     }
     
+    public ResponseEntity<?> subirsinCura(MultipartFile img)  {
+    	if(esImagen(img)) {
+    		
+    		Imagen imagen = new Imagen(img.getOriginalFilename());
+    		imagenRepository.save(imagen);
+    		String nuevoNombre = imagen.getId() + "." + obtenerExtension(img);
+    		imagen.setNombre(nuevoNombre);    	
+			imagenRepository.save(imagen);    		
+        	almacenamientoService.store(img, nuevoNombre);
+        	
+        	return new ResponseEntity<Imagen>(imagen, HttpStatus.CREATED);
+    	}else {
+    		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    	}
+    }
+    
     public void borrar(@PathVariable String filename) {
         almacenamientoService.delete(filename);
     }
@@ -82,5 +99,9 @@ public class ImagenService {
 		
 		return res;
 	}
+    
+    private String obtenerExtension (MultipartFile file) {
+    	return FilenameUtils.getExtension(file.getOriginalFilename());
+    }
 
 }

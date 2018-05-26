@@ -27,9 +27,19 @@ public class ImagenRestController {
     	return imagenService.descargar(id);
     }
 	
-	@PostMapping
+	/*@PostMapping
     public ResponseEntity<?> subir(@RequestParam("imagen") MultipartFile img, @RequestParam("curaId") long id) {
         return imagenService.subir(img, id);
+    }*/
+	
+	@PostMapping
+    public ResponseEntity<?> subir(@RequestParam("imagen") MultipartFile img) {
+        return imagenService.subirsinCura(img);
+    }
+	
+	@PostMapping("/{CuraId}")
+    public ResponseEntity<?> subirByCuraId(@RequestParam("imagen") MultipartFile img, @PathVariable long CuraId) {
+        return imagenService.subir(img, CuraId);
     }
 
 }
