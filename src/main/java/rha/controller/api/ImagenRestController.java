@@ -41,5 +41,6 @@ public class ImagenRestController {
     public ResponseEntity<?> subirByCuraId(@RequestParam("imagen") MultipartFile img, @PathVariable long CuraId) {
         return imagenService.subir(img, CuraId);
     }
+	
 
 }
