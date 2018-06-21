@@ -20,7 +20,7 @@ public class ActivacionUsuario {
 	private static final int EXPIRACION = 60 * 24;
 	 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
      
     private String tokenActivacion;
