@@ -1,0 +1,42 @@
+{"properties": [
+  {
+    "name": "jwt.header",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.header'"
+  },
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.secret'"
+  },
+  {
+    "name": "jwt.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.expiration'"
+  },
+  {
+    "name": "jwt.route.authentication.path",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.route.authentication.path'"
+  },
+  {
+    "name": "jwt.route.authentication.refresh",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.route.authentication.refresh'"
+  },
+  {
+    "name": "protocolo",
+    "type": "java.lang.String",
+    "description": "A description for 'protocolo'"
+  },
+  {
+    "name": "dominio",
+    "type": "java.lang.String",
+    "description": "A description for 'dominio'"
+  },
+  {
+    "name": "puerto",
+    "type": "java.lang.String",
+    "description": "A description for 'puerto'"
+  }
+]}
