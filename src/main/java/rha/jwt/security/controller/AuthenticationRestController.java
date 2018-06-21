@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import rha.exception.AuthenticationException;
 import rha.jwt.security.JwtAuthenticationRequest;
 import rha.jwt.security.JwtTokenUtil;
 import rha.jwt.security.JwtUser;

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import rha.exception.CampoUnicoException;
+import rha.exception.RegistroException;
 import rha.jwt.model.security.ActivacionUsuario;
 import rha.jwt.model.security.Authority;
 import rha.jwt.model.security.AuthorityName;

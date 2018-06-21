@@ -1,4 +1,4 @@
-package rha.jwt.security.controller;
+package rha.exception;
 
 public class RegistroException extends RuntimeException {
     /**
