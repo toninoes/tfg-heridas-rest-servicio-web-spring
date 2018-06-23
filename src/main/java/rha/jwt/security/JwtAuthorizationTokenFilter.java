@@ -32,7 +32,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        logger.debug("processing authentication for '{}'", request.getRequestURL());
+        logger.debug("procesando autenticación para '{}'", request.getRequestURL());
 
         final String requestHeader = request.getHeader(this.tokenHeader);
 
@@ -43,28 +43,32 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(authToken);
             } catch (IllegalArgumentException e) {
-                logger.error("an error occured during getting username from token", e);
+                logger.error("Se produjo un error al obtener el nombre de usuario de token", e);
             } catch (ExpiredJwtException e) {
-                logger.warn("the token is expired and not valid anymore", e);
+                logger.warn("el token ha expirado y ya no es válido", e);
             }
         } else {
-            logger.warn("couldn't find bearer string, will ignore the header");
+            logger.warn("no se pudo encontrar la cadena portadora (Bearer), se ignorará el encabezado");
         }
 
-        logger.debug("checking authentication for user '{}'", username);
+        logger.debug("comprobación de autenticación para el usuario '{}'", username);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            logger.debug("security context was null, so authorizating user");
+            logger.debug("el contexto de seguridad era nulo, así que autorizando al usuario");
 
-            // It is not compelling necessary to load the use details from the database. You could also store the information
-            // in the token and read it from it. It's up to you ;)
+            /*
+             * No es obligatorio cargar los detalles de uso de la base de datos. También puede 
+             * almacenar la información en el token y leerlo desde allí.
+             */
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            // For simple validation it is completely sufficient to just check the token integrity. You don't have to call
-            // the database compellingly. Again it's up to you ;)
+            /*
+             * Por simple validación es suficiente simplemente verificar la integridad del token.
+             * No es necesario que llamar a la BBDD
+             */
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                logger.info("authorizated user '{}', setting security context", username);
+                logger.info("autorizado usuario '{}', estableciendo el contexto de seguridad", username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

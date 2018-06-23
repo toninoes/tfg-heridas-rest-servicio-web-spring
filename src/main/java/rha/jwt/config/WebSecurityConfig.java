@@ -63,38 +63,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-            // we don't need CSRF because our token is invulnerable
+            // No necesitamos CSRF debido a que nuestro token es invulnerable a este tipo de ataques.
             .csrf().disable()
 
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 
-            // don't create session
+            // no crear sesiones. Nuestro sistema es sin estado.
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
             .authorizeRequests()
-
-            // Un-secure H2 Database
+            
+            // Para H2 Database
             .antMatchers("/h2-console/**/**").permitAll()
 
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/activacion/**").permitAll()
             .anyRequest().authenticated();
 
-        // Custom JWT based security filter
         JwtAuthorizationTokenFilter authenticationTokenFilter = new JwtAuthorizationTokenFilter(userDetailsService(), jwtTokenUtil, tokenHeader);
         httpSecurity
             .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // disable page caching
+        // Deshabilitar cacheo de páginas
         httpSecurity
             .headers()
-            .frameOptions().sameOrigin()  // required to set for H2 else H2 Console will be blank.
+            .frameOptions().sameOrigin()  // Requerido para la consola H2
             .cacheControl();
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        // AuthenticationTokenFilter will ignore the below paths
+        // AuthenticationTokenFilter ignorará las siguientes rutas
         web
             .ignoring()
             .antMatchers(
@@ -102,7 +101,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 authenticationPath
             )
 
-            // allow anonymous resource requests
+            // permitir peticiones anónimas en los siguientes recursos
             .and()
             .ignoring()
             .antMatchers(
@@ -115,7 +114,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/**/*.js"
             )
 
-            // Un-secure H2 Database (for testing purposes, H2 console shouldn't be unprotected in production)
+            // Consola H2 Database (sólo en modo test. no permitir en producción)
             .and()
             .ignoring()
             .antMatchers("/h2-console/**/**");

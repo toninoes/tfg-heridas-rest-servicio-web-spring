@@ -68,8 +68,6 @@ public class Proceso {
 		this.paciente = paciente;
 	}
 
-
-
 	public String getAnamnesis() {
 		return anamnesis;
 	}

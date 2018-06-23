@@ -2,8 +2,6 @@ package rha;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +18,9 @@ import rha.jwt.model.security.User;
 import rha.jwt.security.JwtUserFactory;
 import rha.jwt.security.repository.AuthorityRepository;
 import rha.jwt.security.repository.UserRepository;
+import rha.model.Paciente;
+import rha.model.Sanitario;
+import rha.repository.PacienteRepository;
 import rha.service.AlmacenamientoService;
 
 @SpringBootApplication
@@ -39,7 +40,7 @@ public class Application extends SpringBootServletInitializer {
 	
 	@Bean
     CommandLineRunner init(AlmacenamientoService almacenamientoService, 
-    		UserRepository userRepository) {
+    		UserRepository userRepository, PacienteRepository pacienteRepository) {
         return (args) -> {
             almacenamientoService.init();
             
@@ -51,24 +52,28 @@ public class Application extends SpringBootServletInitializer {
         		authRep.save(rolAdmin);
         		authRep.save(rolSanitario);
         		authRep.save(rolPaciente);
-        		
-        		List<Authority> roles = new ArrayList<Authority>();
-        		
-        		roles.add(rolPaciente);
-        		User paciente = new User("paciente@user.es", pass.encode("paciente"), "Paciente", "Paciente", 
-        				"paciente@user.es", true, new Date(), roles);
-        		userRepository.save(paciente);
+
+        		Paciente paciente = new Paciente("paciente@user.es", pass.encode("paciente"), "Paciente", "Paciente", 
+        				"paciente@user.es", new ArrayList<Authority>(), new Date());
+        		paciente.setEnabled(true);
+        		paciente.addAuthority(rolPaciente);
+        		pacienteRepository.save(paciente);
+        		paciente.setHistoria(paciente.getId());
+        		pacienteRepository.save(paciente);
         		JwtUserFactory.create(paciente);
-        		
-        		roles.add(rolSanitario);
-        		User sanitario = new User("sanitario@user.es", pass.encode("sanitario"), "Sanitario", "Sanitario", 
-        				"sanitario@user.es", true, new Date(), roles);
+
+        		Sanitario sanitario = new Sanitario("sanitario@user.es", pass.encode("sanitario"), "Sanitario", "Sanitario", 
+        				"sanitario@user.es", new ArrayList<Authority>(), new Date(),
+        				"52929190A", (long) 7699);
+        		sanitario.setEnabled(true);
+        		sanitario.addAuthority(rolSanitario);
         		userRepository.save(sanitario);
         		JwtUserFactory.create(sanitario);
-        		
-        		roles.add(rolAdmin);
+
         		User admin = new User("admin@user.es", pass.encode("admin"), "Admin", "Admin", 
-        				"admin@user.es", true, new Date(), roles);
+        				"admin@user.es", new ArrayList<Authority>());
+        		admin.setEnabled(true);
+        		admin.addAuthority(rolAdmin);
         		userRepository.save(admin);
         		JwtUserFactory.create(admin);     		
         	}

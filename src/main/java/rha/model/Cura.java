@@ -42,9 +42,15 @@ public class Cura {
 	@JoinColumn(name="proceso_id", nullable = false)
 	private Proceso proceso;
     
-    @JsonIgnore
+    @ManyToOne
+	@JoinColumn(name="sanitario_id", nullable = false)
+	private Sanitario sanitario;
+    
+	@JsonIgnore
 	@OneToMany(mappedBy = "cura")
     private List<Imagen> imagenes;
+	
+	private Boolean valorada = false;
    
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -100,6 +106,14 @@ public class Cura {
 	public void setProceso(Proceso proceso) {
 		this.proceso = proceso;
 	}
+	
+	public Sanitario getSanitario() {
+		return sanitario;
+	}
+
+	public void setSanitario(Sanitario sanitario) {
+		this.sanitario = sanitario;
+	}
 
 	public long getId() {
 		return id;
@@ -111,6 +125,14 @@ public class Cura {
 
 	public void setImagenes(List<Imagen> imagenes) {
 		this.imagenes = imagenes;
+	}
+	
+	public Boolean getValorada() {
+		return valorada;
+	}
+
+	public void setValorada(Boolean valorada) {
+		this.valorada = valorada;
 	}
 
 	public Date getCreacion() {

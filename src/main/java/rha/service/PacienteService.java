@@ -60,8 +60,8 @@ public class PacienteService {
 
 		try {
 			paciente.setDni(p.getDni());
-			paciente.setNombre(p.getNombre());
-			paciente.setApellidos(p.getApellidos());
+			paciente.setFirstname(p.getFirstname());
+			paciente.setLastname(p.getLastname());
 			paciente.setNacimiento(p.getNacimiento());
 			pacienteRepository.save(paciente);
 		} catch (Exception e) {

@@ -47,11 +47,10 @@ public class AuthenticationRestController {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        // Reload password post-security so we can generate the token
+        // Volver a cargar la contraseña para que podamos generar el token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
@@ -76,7 +75,7 @@ public class AuthenticationRestController {
     }
 
     /**
-     * Authenticates the user. If something is wrong, an {@link AuthenticationException} will be thrown
+     * Autentica al usuario Si algo está mal, se lanzará una excepción de tipo AuthenticationException
      */
     private void authenticate(String username, String password) {
         Objects.requireNonNull(username);
@@ -85,9 +84,9 @@ public class AuthenticationRestController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new AuthenticationException("User is disabled!", e);
+            throw new AuthenticationException("Usuario deshabilitado!", e);
         } catch (BadCredentialsException e) {
-            throw new AuthenticationException("Bad credentials!", e);
+            throw new AuthenticationException("Credenciales incorrectas!", e);
         }
     }
 }

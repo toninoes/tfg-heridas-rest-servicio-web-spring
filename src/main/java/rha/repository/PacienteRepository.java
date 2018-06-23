@@ -13,7 +13,7 @@ import rha.model.Paciente;
 @RepositoryRestResource(collectionResourceRel = "pacientes", path = "pacientes")
 public interface PacienteRepository extends JpaRepository<Paciente, Long>{
 	
-	List<Paciente> findByNombre(@Param("nombre") String nombre);
+	List<Paciente> findByFirstname(@Param("firstname") String firstname);
 	
 	Optional<Paciente> findByDni(@Param("dni") String dni);	
 }

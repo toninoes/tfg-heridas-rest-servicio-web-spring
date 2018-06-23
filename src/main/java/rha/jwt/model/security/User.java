@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -19,8 +21,11 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "USER")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id
@@ -31,48 +36,61 @@ public class User {
     @Column(name = "USERNAME", length = 100, unique = true)
     @NotNull(message = "Introduzca un username")
     @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100")
-    private String username;
+	protected String username;
 
     @Column(name = "PASSWORD", length = 100)
     @NotNull(message = "Introduzca una contraseña")
     @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100")
-    private String password;
+	protected String password;
 
     @Column(name = "FIRSTNAME", length = 50)
     @NotNull(message = "Introduzca un nombre")
     @Size(min = 3, max = 50, message = "el tamaño tiene que estar entre 3 y 50")
-    private String firstname;
+	protected String firstname;
 
     @Column(name = "LASTNAME", length = 100)
     @NotNull(message = "Introduzca los apellidos")
     @Size(min = 3, max = 100, message = "el tamaño tiene que estar entre 3 y 100")
-    private String lastname;
+	protected String lastname;
 
     @Column(name = "EMAIL", length = 100, unique = true)
     @NotNull(message = "Introduzca un email")
     @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100")
-    private String email;
+	protected String email;
 
     @Column(name = "ENABLED")
     @NotNull(message = "Diga si está habilitado o no")
-    private Boolean enabled;
+	protected Boolean enabled = false;
 
     @Column(name = "LASTPASSWORDRESETDATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull(message = "Introduzca una fecha")
-    private Date lastPasswordResetDate;
+    @CreationTimestamp
+	protected Date lastPasswordResetDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
-    private List<Authority> authorities;
+	protected List<Authority> authorities;
     
-    private ArrayList<Boolean> permisos = new ArrayList <>(3);
+    protected ArrayList<Boolean> permisos = new ArrayList <>(3);
     
     public User() {
 		super();
+	}
+    
+    public User(@NotNull @Size(min = 4, max = 50) String username,
+			@NotNull @Size(min = 4, max = 100) String password, @NotNull @Size(min = 4, max = 50) String firstname,
+			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String email,
+			List<Authority> authorities) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.authorities = authorities;
 	}
 
 	public User(@NotNull @Size(min = 4, max = 50) String username,
@@ -174,6 +192,10 @@ public class User {
 
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
+    }
+    
+    public void addAuthority(Authority authority) {
+    	this.authorities.add(authority);
     }
 
     public Date getLastPasswordResetDate() {
