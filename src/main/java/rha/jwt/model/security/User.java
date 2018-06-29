@@ -2,7 +2,9 @@ package rha.jwt.model.security;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +17,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,6 +25,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import rha.model.UserCentro;
 
 @Entity
 @Table(name = "USER")
@@ -76,6 +83,10 @@ public class User {
     
     protected ArrayList<Boolean> permisos = new ArrayList <>(3);
     
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<UserCentro> userCentros = new HashSet<UserCentro>();
+    
     public User() {
 		super();
 	}
@@ -108,8 +119,6 @@ public class User {
 		this.authorities = authorities;
 	}
 	
-	
-
 	public User(@NotNull @Size(min = 4, max = 50) String username, @NotNull @Size(min = 4, max = 100) String password,
 			@NotNull @Size(min = 4, max = 50) String firstname, @NotNull @Size(min = 4, max = 50) String lastname,
 			@NotNull @Size(min = 4, max = 50) String email, @NotNull Boolean enabled,
@@ -178,7 +187,7 @@ public class User {
         this.email = email;
     }
 
-    public Boolean getEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
 
@@ -220,6 +229,18 @@ public class User {
 	public void setPermisos(ArrayList<Boolean> permisos) {
 		this.permisos = permisos;
 	}
+
+	public Set<UserCentro> getUserCentros() {
+		return userCentros;
+	}
+
+	public void setUserCentros(Set<UserCentro> userCentros) {
+		this.userCentros = userCentros;
+	}
+	
+	public void addUserCentro(UserCentro userCentro) {
+        this.userCentros.add(userCentro);
+    }  
     
     
 }

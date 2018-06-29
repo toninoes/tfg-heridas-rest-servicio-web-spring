@@ -2,7 +2,9 @@ package rha.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,6 +41,10 @@ public class Paciente extends User  {
 	@JsonIgnore
 	@OneToMany(mappedBy = "paciente")
     private List<Proceso> procesos;
+	
+	@JsonIgnore
+    @OneToMany(mappedBy = "paciente")
+    private Set<Cita> citas = new HashSet<Cita>();
 	
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -165,7 +171,17 @@ public class Paciente extends User  {
 	public void setProcesos(List<Proceso> procesos) {
 		this.procesos = procesos;
 	}
+
+	public Set<Cita> getCitas() {
+		return citas;
+	}
+
+	public void setCitas(Set<Cita> citas) {
+		this.citas = citas;
+	}
 	
-	
+	public void addCita(Cita cita) {
+        this.citas.add(cita);
+    } 
 
 }

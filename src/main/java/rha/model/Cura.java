@@ -127,7 +127,7 @@ public class Cura {
 		this.imagenes = imagenes;
 	}
 	
-	public Boolean getValorada() {
+	public Boolean estaValorada() {
 		return valorada;
 	}
 

@@ -68,7 +68,6 @@ public class ProcesoService {
 		try {
 			proceso.setAnamnesis(p.getAnamnesis());
 			proceso.setDiagnostico(p.getDiagnostico());
-			proceso.setTipo(p.getTipo());
 			proceso.setObservaciones(p.getObservaciones());
 			procesoRepository.save(proceso);
 		} catch (Exception e) {

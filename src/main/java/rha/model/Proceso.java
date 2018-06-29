@@ -14,8 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -33,10 +31,13 @@ public class Proceso {
 	
 	private String anamnesis;
 	
-	@NotBlank(message = "Introduzca un diagnóstico")
-	private String diagnostico;
+	@ManyToOne
+	@JoinColumn(name="diagnostico_id", nullable = false)
+	private Diagnostico diagnostico;
 	
-	private String tipo;
+	@ManyToOne
+	@JoinColumn(name="procedimiento_id", nullable = false)
+	private Procedimiento procedimiento;
 	
 	@ManyToOne
 	@JoinColumn(name="paciente_id", nullable = false)
@@ -76,20 +77,12 @@ public class Proceso {
 		this.anamnesis = anamnesis;
 	}
 
-	public String getDiagnostico() {
+	public Diagnostico getDiagnostico() {
 		return diagnostico;
 	}
 
-	public void setDiagnostico(String diagnostico) {
+	public void setDiagnostico(Diagnostico diagnostico) {
 		this.diagnostico = diagnostico;
-	}
-
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
 	}
 
 	public Date getCreacion() {
@@ -126,6 +119,14 @@ public class Proceso {
 
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	public Procedimiento getProcedimiento() {
+		return procedimiento;
+	}
+
+	public void setProcedimiento(Procedimiento procedimiento) {
+		this.procedimiento = procedimiento;
 	}
 	
 	
