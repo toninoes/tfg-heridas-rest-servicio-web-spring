@@ -23,7 +23,7 @@ public class Diagnostico {
 	private long id;
 	
 	@NotBlank(message = "Introduzca el código CIE-10 para el diagnóstico.")
-	private String cie10;
+	private String codigo;
 	
 	@Column(unique = true)
 	@NotBlank(message = "Introduzca el nombre del diagnóstico.")
@@ -41,19 +41,19 @@ public class Diagnostico {
 		super();
 	}
 
-	public Diagnostico(@NotBlank(message = "Introduzca el código CIE-10 para el diagnóstico.") String cie10,
+	public Diagnostico(@NotBlank(message = "Introduzca el código CIE-10 para el diagnóstico.") String codigo,
 			@NotBlank(message = "Introduzca el nombre del diagnóstico.") String nombre) {
 		super();
-		this.cie10 = cie10;
+		this.codigo = codigo;
 		this.nombre = nombre;
 	}
 
-	public String getCie10() {
-		return cie10;
+	public String getCodigo() {
+		return codigo;
 	}
 
-	public void setCie10(String cie10) {
-		this.cie10 = cie10;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getNombre() {

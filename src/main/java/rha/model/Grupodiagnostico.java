@@ -1,6 +1,7 @@
 package rha.model;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,14 +35,14 @@ public class Grupodiagnostico {
     @JoinTable(name = "grupo_procedimiento",
             joinColumns = { @JoinColumn(name = "grupo_id") },
             inverseJoinColumns = { @JoinColumn(name = "procedimiento_id") })
-    private List<Procedimiento> procedimientos;
+    private Set<Procedimiento> procedimientos;
 	
 	public Grupodiagnostico() {
 		super();
 	}
 	
 	public Grupodiagnostico(@NotBlank(message = "Introduzca el nombre del grupo diagnóstico.") String nombre,
-			List<Diagnostico> diagnosticos, List<Procedimiento> procedimientos) {
+			List<Diagnostico> diagnosticos, Set<Procedimiento> procedimientos) {
 		super();
 		this.nombre = nombre;
 		this.diagnosticos = diagnosticos;
@@ -68,11 +69,11 @@ public class Grupodiagnostico {
 		this.diagnosticos = diagnosticos;
 	}
 
-	public List<Procedimiento> getProcedimientos() {
+	public Set<Procedimiento> getProcedimientos() {
 		return procedimientos;
 	}
 
-	public void setProcedimientos(List<Procedimiento> procedimientos) {
+	public void setProcedimientos(Set<Procedimiento> procedimientos) {
 		this.procedimientos = procedimientos;
 	}		
 

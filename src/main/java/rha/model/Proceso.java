@@ -2,13 +2,17 @@ package rha.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,9 +39,19 @@ public class Proceso {
 	@JoinColumn(name="diagnostico_id", nullable = false)
 	private Diagnostico diagnostico;
 	
-	@ManyToOne
-	@JoinColumn(name="procedimiento_id", nullable = false)
-	private Procedimiento procedimiento;
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "proceso_procedimiento",
+			joinColumns = { @JoinColumn(name = "proceso_id") },
+			inverseJoinColumns = { @JoinColumn(name = "procedimiento_id") })
+	private List<Procedimiento> procedimientos;
+	
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "proceso_cuidado",
+			joinColumns = { @JoinColumn(name = "proceso_id") },
+			inverseJoinColumns = { @JoinColumn(name = "cuidado_id") })
+	private Set<Cuidado> cuidados;
 	
 	@ManyToOne
 	@JoinColumn(name="paciente_id", nullable = false)
@@ -121,12 +135,20 @@ public class Proceso {
 		this.observaciones = observaciones;
 	}
 
-	public Procedimiento getProcedimiento() {
-		return procedimiento;
+	public List<Procedimiento> getProcedimientos() {
+		return procedimientos;
 	}
 
-	public void setProcedimiento(Procedimiento procedimiento) {
-		this.procedimiento = procedimiento;
+	public void setProcedimientos(List<Procedimiento> procedimientos) {
+		this.procedimientos = procedimientos;
+	}
+
+	public Set<Cuidado> getCuidados() {
+		return cuidados;
+	}
+
+	public void setCuidados(Set<Cuidado> cuidados) {
+		this.cuidados = cuidados;
 	}
 	
 	

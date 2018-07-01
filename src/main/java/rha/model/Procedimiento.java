@@ -1,6 +1,6 @@
 package rha.model;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -23,7 +22,7 @@ public class Procedimiento {
 	private long id;
 	
 	@NotBlank(message = "Introduzca el código CPM para el procedimiento.")
-	private String cpm;
+	private String codigo;
 	
 	@Column(unique = true)
 	@NotBlank(message = "Introduzca el nombre del procedimiento.")
@@ -31,31 +30,31 @@ public class Procedimiento {
 	
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "procedimientos")
-	private List<Grupodiagnostico> gruposdiagnostico;
-	
+	private Set<Grupodiagnostico> gruposdiagnostico;
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "procedimiento")
-    private List<Proceso> procesos;
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "procedimientos")
+	private Set<Proceso> procesos;
 
 	public Procedimiento() {
 		super();
 	}
 
-	public Procedimiento(@NotBlank(message = "Introduzca el código CPM para el procedimiento.") String cpm,
+	public Procedimiento(@NotBlank(message = "Introduzca el código CPM para el procedimiento.") String codigo,
 			@NotBlank(message = "Introduzca el nombre del procedimiento.") String nombre,
-			List<Grupodiagnostico> gruposdiagnostico) {
+			Set<Grupodiagnostico> gruposdiagnostico) {
 		super();
-		this.cpm = cpm;
+		this.codigo = codigo;
 		this.nombre = nombre;
 		this.gruposdiagnostico = gruposdiagnostico;
 	}
 
-	public String getCpm() {
-		return cpm;
+	public String getCodigo() {
+		return codigo;
 	}
 
-	public void setCpm(String cpm) {
-		this.cpm = cpm;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getNombre() {
@@ -66,11 +65,11 @@ public class Procedimiento {
 		this.nombre = nombre;
 	}	
 
-	public List<Grupodiagnostico> getGruposdiagnostico() {
+	public Set<Grupodiagnostico> getGruposdiagnostico() {
 		return gruposdiagnostico;
 	}
 
-	public void setGruposdiagnostico(List<Grupodiagnostico> gruposdiagnostico) {
+	public void setGruposdiagnostico(Set<Grupodiagnostico> gruposdiagnostico) {
 		this.gruposdiagnostico = gruposdiagnostico;
 	}
 

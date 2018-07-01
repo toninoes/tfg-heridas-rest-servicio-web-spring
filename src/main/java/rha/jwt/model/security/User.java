@@ -81,7 +81,8 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
 	protected List<Authority> authorities;
     
-    protected ArrayList<Boolean> permisos = new ArrayList <>(3);
+    protected ArrayList<Boolean> permisos;
+    //protected ArrayList<Boolean> permisos = new ArrayList <>(3);
     
     @JsonIgnore
     @OneToMany(mappedBy = "user")

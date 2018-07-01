@@ -1,43 +1,26 @@
 package rha;
 
-import java.util.ArrayList;
-import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import rha.config.ImagenConfig;
-import rha.jwt.model.security.Authority;
-import rha.jwt.model.security.AuthorityName;
-import rha.jwt.model.security.User;
-import rha.jwt.security.JwtUserFactory;
-import rha.jwt.security.repository.AuthorityRepository;
-import rha.jwt.security.repository.UserRepository;
-import rha.model.Paciente;
-import rha.model.Sanitario;
-import rha.repository.PacienteRepository;
-import rha.service.AlmacenamientoService;
 
 @SpringBootApplication
 @EnableConfigurationProperties(ImagenConfig.class)
 public class Application extends SpringBootServletInitializer {
 	
-	@Autowired 
-	private AuthorityRepository authRep;
-	
-	
-	@Autowired
-	private PasswordEncoder pass;
-	
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Application.class, args);
 	}
 	
+	/*
+	@Autowired 
+	private AuthorityRepository authRep;
+
+	@Autowired
+	private PasswordEncoder pass;
+
 	@Bean
     CommandLineRunner init(AlmacenamientoService almacenamientoService, 
     		UserRepository userRepository, PacienteRepository pacienteRepository) {
@@ -79,5 +62,5 @@ public class Application extends SpringBootServletInitializer {
         	}
         };
     }
-
+	*/
 }
