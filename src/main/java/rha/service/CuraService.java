@@ -40,11 +40,9 @@ public class CuraService {
 		
 		try {
 			return new ResponseEntity<Cura>(curaRepository.save(c), HttpStatus.CREATED);
-		} catch (ErrorInternoServidorException e) {
+		} catch (Exception e) {
 			throw new ErrorInternoServidorException("guardar", "Cura", c.getId(), e.getMessage());
 		}
-		
-        
     }
 	
 	public ResponseEntity<Cura> update(long id, Cura c) {
@@ -59,7 +57,6 @@ public class CuraService {
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Cura", id, e.getMessage());
 		}
-		
 	}
 	
 	public ResponseEntity<?> delete(long id) {
