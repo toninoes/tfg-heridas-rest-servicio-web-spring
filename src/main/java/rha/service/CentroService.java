@@ -3,6 +3,7 @@ package rha.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ public class CentroService {
 	@Autowired
 	private CentroRepository centroRepository;
 
+	@Cacheable("centros")
 	public List<Centro> findAll() {
 		return centroRepository.findAll();
 	}
 
+	@Cacheable("centro")
 	public Centro findById(long id) {
 		return centroRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Centro", "id", id));

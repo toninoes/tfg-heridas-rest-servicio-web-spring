@@ -15,38 +15,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import rha.model.Diagnostico;
-import rha.service.DiagnosticoService;
+import rha.model.UserCentro;
+import rha.service.UserCentroService;
 
 @RestController
-@RequestMapping("/api/diagnosticos")
-public class DiagnosticoRestController {
-
+@RequestMapping("/api/usercentros")
+public class UserCentroRestController {
+	
 	@Autowired
-	private DiagnosticoService diagnosticoService;
+	private UserCentroService usercentroService;
 	
 	@GetMapping
-	public List<Diagnostico> findAll() {
-		return diagnosticoService.findAll();
+	public List<UserCentro> findAll() {
+		return usercentroService.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public Diagnostico findById(@PathVariable long id) {
-		return diagnosticoService.findById(id);
+	public UserCentro findById(@PathVariable long id) {
+		return usercentroService.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Diagnostico> create(@Valid @RequestBody Diagnostico d) {
-		return diagnosticoService.create(d);
+	public ResponseEntity<UserCentro> create(@Valid @RequestBody UserCentro uc) {
+		return usercentroService.create(uc);
 	}
 	
 	@PutMapping("/{id}")	
-	public ResponseEntity<Diagnostico> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Diagnostico d) {
-		return diagnosticoService.update(id, d);
+	public ResponseEntity<UserCentro> update(@PathVariable(value = "id") Long id, @Valid @RequestBody UserCentro uc) {
+		return usercentroService.update(id, uc);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-	    return diagnosticoService.delete(id);
+	    return usercentroService.delete(id);
 	}
+
 }

@@ -3,6 +3,7 @@ package rha.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,12 @@ public class DiagnosticoService {
 	@Autowired
 	private GrupodiagnosticoRepository grupoRepository;
 	
+	@Cacheable("diagnosticos")
 	public List<Diagnostico> findAll() {
 		return diagnosticoRepository.findAll();
 	}
 	
+	@Cacheable("diagnostico")
 	public Diagnostico findById(long id) {
 		return diagnosticoRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Diagnostico", "id", id));

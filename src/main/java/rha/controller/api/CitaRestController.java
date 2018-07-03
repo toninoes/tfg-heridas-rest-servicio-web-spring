@@ -15,38 +15,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import rha.model.Diagnostico;
-import rha.service.DiagnosticoService;
+import rha.model.Cita;
+import rha.service.CitaService;
 
 @RestController
-@RequestMapping("/api/diagnosticos")
-public class DiagnosticoRestController {
+@RequestMapping("/api/citas")
+public class CitaRestController {
 
 	@Autowired
-	private DiagnosticoService diagnosticoService;
+	private CitaService citaservice;
 	
 	@GetMapping
-	public List<Diagnostico> findAll() {
-		return diagnosticoService.findAll();
+	public List<Cita> findAll() {
+		return citaservice.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public Diagnostico findById(@PathVariable long id) {
-		return diagnosticoService.findById(id);
+	public Cita findById(@PathVariable long id) {
+		return citaservice.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Diagnostico> create(@Valid @RequestBody Diagnostico d) {
-		return diagnosticoService.create(d);
+	public ResponseEntity<Cita> create(@Valid @RequestBody Cita c) {
+		return citaservice.create(c);
 	}
 	
 	@PutMapping("/{id}")	
-	public ResponseEntity<Diagnostico> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Diagnostico d) {
-		return diagnosticoService.update(id, d);
+	public ResponseEntity<Cita> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Cita c) {
+		return citaservice.update(id, c);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-	    return diagnosticoService.delete(id);
+	    return citaservice.delete(id);
 	}
+	
 }

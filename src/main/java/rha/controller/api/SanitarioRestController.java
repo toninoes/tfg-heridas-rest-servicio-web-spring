@@ -15,38 +15,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import rha.model.Diagnostico;
-import rha.service.DiagnosticoService;
+import rha.model.Sanitario;
+import rha.service.SanitarioService;
 
 @RestController
-@RequestMapping("/api/diagnosticos")
-public class DiagnosticoRestController {
-
+@RequestMapping("/api/sanitarios")
+public class SanitarioRestController {
+	
 	@Autowired
-	private DiagnosticoService diagnosticoService;
+	private SanitarioService sanitarioService;
 	
 	@GetMapping
-	public List<Diagnostico> findAll() {
-		return diagnosticoService.findAll();
+	public List<Sanitario> findAll() {
+		return sanitarioService.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public Diagnostico findById(@PathVariable long id) {
-		return diagnosticoService.findById(id);
+	public Sanitario findById(@PathVariable long id) {
+		return sanitarioService.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<Diagnostico> create(@Valid @RequestBody Diagnostico d) {
-		return diagnosticoService.create(d);
+	public ResponseEntity<Sanitario> create(@Valid @RequestBody Sanitario s) {
+		return sanitarioService.create(s);
 	}
 	
 	@PutMapping("/{id}")	
-	public ResponseEntity<Diagnostico> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Diagnostico d) {
-		return diagnosticoService.update(id, d);
+	public ResponseEntity<Sanitario> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Sanitario s) {
+		return sanitarioService.update(id, s);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
-	    return diagnosticoService.delete(id);
+	    return sanitarioService.delete(id);
 	}
+
 }
