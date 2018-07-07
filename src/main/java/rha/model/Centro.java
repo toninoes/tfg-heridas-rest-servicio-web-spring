@@ -4,14 +4,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,9 +27,11 @@ public class Centro {
 	
 	@Column(unique = true)
 	@NotBlank(message = "Introduzca el nombre del centro sanitario.")
+	@Size(min = 3, max = 50, message = "el tamaño tiene que estar entre 3 y 50")
 	private String nombre;
 	
 	@NotBlank(message = "Introduzca la dirección del centro.")
+	@Size(min = 10, max = 200, message = "el tamaño tiene que estar entre 10 y 200")
 	private String direccion;
 	
 	private String telefono;
@@ -36,7 +41,7 @@ public class Centro {
     private Set<UserCentro> userCentros = new HashSet<UserCentro>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "centro")
+	@OneToMany(cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "centro")
     private List<Sala> salas;
 
 	public Centro() {

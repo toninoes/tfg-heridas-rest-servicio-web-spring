@@ -13,13 +13,20 @@ public class ErrorInternoServidorException extends RuntimeException {
     private String mensaje;
     
     public ErrorInternoServidorException(String op, String nr, Object vc, String msg) {
-        super(String.format("No ha sido posible %s %s con id: '%s'\n Error: %s", op, nr, vc, msg));
+        super(String.format("No ha sido posible %s %s con id: '%s'. Error: %s", op, nr, vc, msg));
         this.nombreRecurso = nr;
         this.operacion = op;
         this.valorCampo = vc;
         this.mensaje = msg;        
     }
-
+    
+    public ErrorInternoServidorException(String op, String nr, Object vc) {
+        super(String.format("No ha sido posible %s %s con id: '%s'. Contactar con el administrador", op, nr, vc));
+        this.nombreRecurso = nr;
+        this.operacion = op;
+        this.valorCampo = vc;      
+    }
+    
 	public String getOperacion() {
 		return operacion;
 	}

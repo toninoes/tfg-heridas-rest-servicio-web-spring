@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,16 +37,19 @@ public class CentroRestController {
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Centro> create(@Valid @RequestBody Centro c) {
 		return centroService.create(c);
 	}
 	
 	@PutMapping("/{id}")	
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Centro> update(@PathVariable(value = "id") Long id, @Valid @RequestBody Centro c) {
 		return centroService.update(id, c);
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 	    return centroService.delete(id);
 	}
