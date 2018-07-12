@@ -38,15 +38,13 @@ public class PacienteService {
 		if(pacienteRepository.findByDni(p.getDni()).isPresent())
 			throw new CampoUnicoException("Paciente", "dni", p.getDni());
 		
-		Paciente paciente = new Paciente();
-		
 		try {
-			paciente = pacienteRepository.save(p);
+			//paciente = pacienteRepository.save(p);
+			return new ResponseEntity<Paciente>(pacienteRepository.save(p), HttpStatus.CREATED);
 		} catch (ErrorInternoServidorException e) {
 			throw new ErrorInternoServidorException("guardar", "Paciente", p.getId(), e.getMessage());
 		}
 		
-        return new ResponseEntity<Paciente>(paciente, HttpStatus.CREATED);
     }
 	
 	public ResponseEntity<Paciente> update(long id, Paciente p) {

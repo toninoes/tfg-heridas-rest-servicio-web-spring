@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rha.model.Centro;
@@ -29,6 +30,11 @@ public class CentroRestController {
 	@GetMapping
 	public List<Centro> findAll() {
 		return centroService.findAll();
+	}
+	
+	@GetMapping("/filtro")
+	public List<Centro> findByFiltro(@RequestParam(value = "filtro", required = false) String filtro) {
+		return centroService.findByFiltro(filtro);
 	}
 	
 	@GetMapping("/{id}")

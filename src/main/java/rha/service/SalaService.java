@@ -27,6 +27,11 @@ public class SalaService {
 		return salaRepository.findAll();
 	}
 	
+	public List<Sala> findByFiltro(String texto) {
+		return salaRepository.findByFiltroContainingIgnoreCase(texto);
+		
+	}
+	
 	public Sala findById(long id) {
 		return salaRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Sala", "id", id) );
@@ -51,6 +56,7 @@ public class SalaService {
 
 		try {
 			sala.setNombre(s.getNombre());
+			sala.setCentro(s.getCentro());
 			return new ResponseEntity<Sala>(salaRepository.save(sala), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Sala", id, e.getMessage());

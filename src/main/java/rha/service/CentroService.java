@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import rha.exception.CampoUnicoException;
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Centro;
@@ -21,6 +22,11 @@ public class CentroService {
 	public List<Centro> findAll() {
 		return centroRepository.findAll();
 	}
+	
+	public List<Centro> findByFiltro(String texto) {
+		return centroRepository.findByFiltroContainingIgnoreCase(texto);
+		
+	}
 
 	public Centro findById(long id) {
 		return centroRepository.findById(id)
@@ -28,6 +34,10 @@ public class CentroService {
 	}
 	
 	public ResponseEntity<Centro> create(Centro c) {
+		// control unicidad de nombre
+		if(centroRepository.findByNombre(c.getNombre()).isPresent())
+			throw new CampoUnicoException("Centro", "nombre", c.getNombre());
+		
 		try {
 			return new ResponseEntity<Centro>(centroRepository.save(c), HttpStatus.CREATED);
 		} catch (ErrorInternoServidorException e) {

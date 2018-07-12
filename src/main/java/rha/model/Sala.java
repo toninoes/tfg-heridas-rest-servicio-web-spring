@@ -3,7 +3,6 @@ package rha.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,8 +23,8 @@ public class Sala {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(unique = true)
 	@NotBlank(message = "Introduzca el nombre de la sala.")
+	@Size(min = 3, max = 50, message = "el tamaño tiene que estar entre 3 y 50")
 	private String nombre;
 	
 	@ManyToOne
