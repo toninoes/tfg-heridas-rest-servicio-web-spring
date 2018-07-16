@@ -59,6 +59,7 @@ public class DiagnosticoService {
 		try {
 			diagnostico.setCodigo(d.getCodigo());
 			diagnostico.setNombre(d.getNombre());
+			diagnostico.setGrupodiagnostico(d.getGrupodiagnostico());
 			return new ResponseEntity<Diagnostico>(diagnosticoRepository.save(diagnostico), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Diagnostico", id, e.getMessage());
