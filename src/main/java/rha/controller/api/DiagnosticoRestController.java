@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rha.model.Diagnostico;
@@ -28,6 +29,11 @@ public class DiagnosticoRestController {
 	@GetMapping
 	public List<Diagnostico> findAll() {
 		return diagnosticoService.findAll();
+	}
+	
+	@GetMapping("/filtro")
+	public List<Diagnostico> findByFiltro(@RequestParam(value = "filtro", required = false) String filtro) {
+		return diagnosticoService.findByFiltro(filtro);
 	}
 	
 	@GetMapping("/{id}")

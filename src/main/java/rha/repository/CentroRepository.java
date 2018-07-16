@@ -17,7 +17,6 @@ public interface CentroRepository extends JpaRepository<Centro, Long> {
 	
 	@Query("SELECT c FROM Centro c "
 			+ "WHERE c.nombre LIKE %:texto% "
-			+ "OR c.direccion LIKE %:texto% "
 			+ "OR c.telefono LIKE %:texto%")
 	List<Centro> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
 

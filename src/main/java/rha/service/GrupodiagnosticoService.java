@@ -3,11 +3,11 @@ package rha.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import rha.exception.CampoUnicoException;
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Grupodiagnostico;
@@ -19,18 +19,27 @@ public class GrupodiagnosticoService {
 	@Autowired 
 	private GrupodiagnosticoRepository grupodiagnosticoRepository;
 	
-	@Cacheable("gruposdiagnosticos")
+	//@Cacheable("gruposdiagnosticos")
 	public List<Grupodiagnostico> findAll() {
 		return grupodiagnosticoRepository.findAll();
 	}
 	
-	@Cacheable("grupodiagnostico")
+	public List<Grupodiagnostico> findByFiltro(String texto) {
+		return grupodiagnosticoRepository.findByFiltroContainingIgnoreCase(texto);
+		
+	}
+	
+	//@Cacheable("grupodiagnostico")
 	public Grupodiagnostico findById(long id) {
 		return grupodiagnosticoRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Grupodiagnostico", "id", id));
 	}
 	
 	public ResponseEntity<Grupodiagnostico> create(Grupodiagnostico gd) {	
+		// control unicidad de nombre
+		if(grupodiagnosticoRepository.findByNombre(gd.getNombre()).isPresent())
+			throw new CampoUnicoException("Grupodiagnostico", "nombre", gd.getNombre());
+				
 		try {
 			return new ResponseEntity<Grupodiagnostico>(grupodiagnosticoRepository.save(gd), HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -57,7 +66,7 @@ public class GrupodiagnosticoService {
 	    try {
 	    	grupodiagnosticoRepository.delete(grupodiagnostico);
 		} catch (Exception e) {
-			throw new ErrorInternoServidorException("borrar", "Grupodiagnostico", id, e.getMessage());
+			throw new ErrorInternoServidorException("borrar", "Grupodiagnostico", id);
 		}
 
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);

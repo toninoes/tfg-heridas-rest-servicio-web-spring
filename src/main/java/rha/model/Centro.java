@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,11 +26,9 @@ public class Centro {
 	
 	@Column(unique = true)
 	@NotBlank(message = "Introduzca el nombre del centro sanitario.")
-	@Size(min = 3, max = 50, message = "el tamaño tiene que estar entre 3 y 50")
 	private String nombre;
 	
 	@NotBlank(message = "Introduzca la dirección del centro.")
-	@Size(min = 10, max = 200, message = "el tamaño tiene que estar entre 10 y 200")
 	private String direccion;
 	
 	private String telefono;
