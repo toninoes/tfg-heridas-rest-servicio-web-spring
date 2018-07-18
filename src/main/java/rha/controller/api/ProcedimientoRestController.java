@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rha.model.Procedimiento;
@@ -28,6 +29,11 @@ public class ProcedimientoRestController {
 	@GetMapping
 	public List<Procedimiento> findAll() {
 		return procedimientoService.findAll();
+	}
+	
+	@GetMapping("/filtro")
+	public List<Procedimiento> findByFiltro(@RequestParam(value = "filtro", required = false) String filtro) {
+		return procedimientoService.findByFiltro(filtro);
 	}
 
 	@GetMapping("/{id}")
