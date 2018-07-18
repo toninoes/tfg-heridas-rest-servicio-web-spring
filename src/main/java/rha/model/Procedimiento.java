@@ -1,14 +1,12 @@
 package rha.model;
 
-import java.util.Set;
-
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -27,26 +25,20 @@ public class Procedimiento {
 	@Column(unique = true)
 	@NotBlank(message = "Introduzca el nombre del procedimiento.")
 	private String nombre;
-	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "procedimientos")
-	private Set<Grupodiagnostico> gruposdiagnostico;
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "procedimientos")
-	private Set<Proceso> procesos;
+	@OneToMany(mappedBy = "procedimiento")
+    private List<Proceso> procesos;
 
 	public Procedimiento() {
 		super();
 	}
 
 	public Procedimiento(@NotBlank(message = "Introduzca el código CPM para el procedimiento.") String codigo,
-			@NotBlank(message = "Introduzca el nombre del procedimiento.") String nombre,
-			Set<Grupodiagnostico> gruposdiagnostico) {
+			@NotBlank(message = "Introduzca el nombre del procedimiento.") String nombre) {
 		super();
 		this.codigo = codigo;
 		this.nombre = nombre;
-		this.gruposdiagnostico = gruposdiagnostico;
 	}
 
 	public String getCodigo() {
@@ -65,17 +57,19 @@ public class Procedimiento {
 		this.nombre = nombre;
 	}	
 
-	public Set<Grupodiagnostico> getGruposdiagnostico() {
-		return gruposdiagnostico;
-	}
-
-	public void setGruposdiagnostico(Set<Grupodiagnostico> gruposdiagnostico) {
-		this.gruposdiagnostico = gruposdiagnostico;
-	}
-
 	public long getId() {
 		return id;
 	}
+
+	public List<Proceso> getProcesos() {
+		return procesos;
+	}
+
+	public void setProcesos(List<Proceso> procesos) {
+		this.procesos = procesos;
+	}
+	
+	
 	
 	
 }
