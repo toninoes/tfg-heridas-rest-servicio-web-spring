@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rha.model.Administrador;
@@ -28,6 +29,11 @@ public class AdministradorRestController {
 	@GetMapping
 	public List<Administrador> findAll() {
 		return administradorService.findAll();
+	}
+	
+	@GetMapping("/filtro")
+	public List<Administrador> findByFiltro(@RequestParam(value = "filtro", required = false) String filtro) {
+		return administradorService.findByFiltro(filtro);
 	}
 	
 	@GetMapping("/{id}")

@@ -38,7 +38,7 @@ public class User {
     @Id
     @Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(name = "USERNAME", length = 100, unique = true)
     @NotNull(message = "Introduzca un username")
@@ -74,6 +74,7 @@ public class User {
     @CreationTimestamp
 	protected Date lastPasswordResetDate;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_AUTHORITY",
@@ -82,7 +83,6 @@ public class User {
 	protected List<Authority> authorities;
     
     protected ArrayList<Boolean> permisos;
-    //protected ArrayList<Boolean> permisos = new ArrayList <>(3);
     
     @JsonIgnore
     @OneToMany(mappedBy = "user")
@@ -136,11 +136,11 @@ public class User {
 		this.permisos = permisos;
 	}
 
-	public Long getId() {
+	public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -176,6 +176,7 @@ public class User {
         this.lastname = lastname;
     }
     
+    @JsonIgnore
     public String getFullName() {
     	return firstname + " " + lastname;
     }

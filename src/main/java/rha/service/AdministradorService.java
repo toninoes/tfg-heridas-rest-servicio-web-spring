@@ -23,6 +23,11 @@ public class AdministradorService {
 		return administradorRepository.findAll();
 	}
 	
+	public List<Administrador> findByFiltro(String texto) {
+		return administradorRepository.findByFiltroContainingIgnoreCase(texto);
+		
+	}
+	
 	public Administrador findById(long id) {
 		return administradorRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Administrador", "id", id));
