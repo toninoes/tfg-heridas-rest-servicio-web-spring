@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -68,8 +69,8 @@ public class User {
 	protected String email;
 
     @Column(name = "ENABLED")
-    //@NotNull(message = "Diga si está habilitado o no")
-	protected Boolean enabled;
+    @NotNull(message = "Diga si está habilitado o no")
+	protected Boolean enabled = false;
 
     @Column(name = "LASTPASSWORDRESETDATE")
     @Temporal(TemporalType.TIMESTAMP)
@@ -84,6 +85,7 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
 	protected List<Authority> authorities;
     
+    @Transient
     protected ArrayList<Boolean> permisos = new ArrayList <>(3);
     
     @JsonIgnore

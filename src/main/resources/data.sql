@@ -99,34 +99,10 @@ INSERT INTO `authority` VALUES
 --
 -- USER
 --
-INSERT INTO `user` VALUES
-	(1,'paciente@user.es','','Paciente','2018-07-01 19:26:06.862000','Paciente','$2a$10$BRRtMHxLQNkkNzbwC2ZSCeQsNFyW8GU9aal7un2T91ShHD.ImnCLa',NULL,'paciente@user.es'),
-	(2,'sanitario@user.es','','Sanitario','2018-07-01 19:26:07.049000','Sanitario','$2a$10$zkludnbw9WR/cgf8pf1OGe/9qv93/FXqxZiqDMfKnbvMeAkFwUVYG',NULL,'sanitario@user.es'),
-	(3,'admin@user.es','','Admin','2018-07-01 19:26:07.193000','Admin','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e',NULL,'admin@user.es');
-
-
---
--- PACIENTES
---
-INSERT INTO `pacientes` VALUES
-	('2018-07-01 19:26:06.909000','2018-07-01 19:26:06.862000',NULL,1,'2018-07-01 19:26:06.862000',1);
-
-
---
--- SANITARIOS
---
-INSERT INTO `sanitarios` VALUES
-	('2018-07-01 19:26:07.049000',7699,'2018-07-01 19:26:07.049000','52929190A','2018-07-01 19:26:07.049000',2);
-
-
---
--- ADMINISTRADORES
---
-INSERT INTO `administradores` VALUES
-	('2018-07-01 19:26:07.049000','2018-07-01 19:26:07.049000','52929190A','2018-07-01 19:26:07.049000',3);
+INSERT INTO `user` VALUES ('ad',1,'admin@user.es','','Antonio','2018-07-21 19:58:37.393000','Ruiz','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','admin@user.es','52929190A','1975-08-15 00:00:00.000000',NULL,NULL);
 
 
 --
 -- USER_AUTHORITY
 --
-INSERT INTO `user_authority` VALUES (1,3),(2,2),(3,1);
+INSERT INTO `user_authority` VALUES (1,1);
