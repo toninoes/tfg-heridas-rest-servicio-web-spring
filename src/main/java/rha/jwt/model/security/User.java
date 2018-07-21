@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,7 +33,8 @@ import rha.model.UserCentro;
 
 @Entity
 @Table(name = "USER")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorValue("us")
 public class User {
 
     @Id
@@ -66,8 +68,8 @@ public class User {
 	protected String email;
 
     @Column(name = "ENABLED")
-    @NotNull(message = "Diga si está habilitado o no")
-	protected Boolean enabled = false;
+    //@NotNull(message = "Diga si está habilitado o no")
+	protected Boolean enabled;
 
     @Column(name = "LASTPASSWORDRESETDATE")
     @Temporal(TemporalType.TIMESTAMP)
@@ -82,7 +84,7 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
 	protected List<Authority> authorities;
     
-    protected ArrayList<Boolean> permisos;
+    protected ArrayList<Boolean> permisos = new ArrayList <>(3);
     
     @JsonIgnore
     @OneToMany(mappedBy = "user")
@@ -92,19 +94,6 @@ public class User {
 		super();
 	}
     
-    public User(@NotNull @Size(min = 4, max = 50) String username,
-			@NotNull @Size(min = 4, max = 100) String password, @NotNull @Size(min = 4, max = 50) String firstname,
-			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String email,
-			List<Authority> authorities) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.email = email;
-		this.authorities = authorities;
-	}
-
 	public User(@NotNull @Size(min = 4, max = 50) String username,
 			@NotNull @Size(min = 4, max = 100) String password, @NotNull @Size(min = 4, max = 50) String firstname,
 			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String email,
@@ -120,10 +109,14 @@ public class User {
 		this.authorities = authorities;
 	}
 	
-	public User(@NotNull @Size(min = 4, max = 50) String username, @NotNull @Size(min = 4, max = 100) String password,
-			@NotNull @Size(min = 4, max = 50) String firstname, @NotNull @Size(min = 4, max = 50) String lastname,
-			@NotNull @Size(min = 4, max = 50) String email, @NotNull Boolean enabled,
-			@NotNull Date lastPasswordResetDate, List<Authority> authorities, ArrayList<Boolean> permisos) {
+	public User(
+			@NotNull(message = "Introduzca un username") @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100") String username,
+			@NotNull(message = "Introduzca una contraseña") @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100") String password,
+			@NotNull(message = "Introduzca un nombre") @Size(min = 3, max = 50, message = "el tamaño tiene que estar entre 3 y 50") String firstname,
+			@NotNull(message = "Introduzca los apellidos") @Size(min = 3, max = 100, message = "el tamaño tiene que estar entre 3 y 100") String lastname,
+			@NotNull(message = "Introduzca un email") @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100") String email,
+			@NotNull(message = "Diga si está habilitado o no") Boolean enabled, Date lastPasswordResetDate,
+			List<Authority> authorities, ArrayList<Boolean> permisos) {
 		super();
 		this.username = username;
 		this.password = password;

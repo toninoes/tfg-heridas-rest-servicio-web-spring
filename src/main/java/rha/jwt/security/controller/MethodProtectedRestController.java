@@ -103,7 +103,7 @@ public class MethodProtectedRestController {
 		
 		// Enviar aqui el mail de activacion.
 		logger.info("Enviando correo de activación a '{}'", usuario.getEmail());
-		emailService.enviarCorreoActivacion(activacionUsuario);
+		//emailService.enviarCorreoActivacion(activacionUsuario);
 		
 		return ResponseEntity.ok(JwtUserFactory.create(usuario));
 	}

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,13 +27,13 @@ import rha.jwt.model.security.User;
 
 @Entity
 @Table(name = "pacientes")
-@JsonIgnoreProperties(value = {"creacion", "actualizacion"}, allowGetters = true)
+@DiscriminatorValue("pa")
 public class Paciente extends User  {
 
 	@Column(unique = true, length = 9)
 	private String dni;
 	
-	@NotNull(message = "Introduzca una fecha de nacimiento")
+	//@NotNull(message = "Introduzca una fecha de nacimiento")
 	private Date nacimiento;
 
 	@Column(unique = true)
@@ -46,18 +47,7 @@ public class Paciente extends User  {
     @OneToMany(mappedBy = "paciente")
     private Set<Cita> citas = new HashSet<Cita>();
 	
-	@Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    @JsonIgnore
-    private Date creacion;
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    @JsonIgnore
-    private Date actualizacion;
-    
+   
     public Paciente() {
 		super();
 	}
@@ -154,14 +144,6 @@ public class Paciente extends User  {
 
 	public void setHistoria(Long historia) {
 		this.historia = historia;
-	}
-
-	public Date getCreacion() {
-		return creacion;
-	}
-
-	public Date getActualizacion() {
-		return actualizacion;
 	}
 
 	public List<Proceso> getProcesos() {

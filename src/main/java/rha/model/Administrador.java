@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,28 +26,16 @@ import rha.jwt.model.security.User;
 
 @Entity
 @Table(name = "administradores")
-@JsonIgnoreProperties(value = {"creacion", "actualizacion"}, allowGetters = true)
+@DiscriminatorValue("ad")
 public class Administrador extends User {
 	
 	@Column(unique = true, length = 9)
-	@NotBlank(message = "Introduzca el DNI.")
+	//@NotBlank(message = "Introduzca el DNI.")
 	private String dni;
 	
-	@NotNull(message = "Introduzca una fecha de nacimiento")
+	//@NotNull(message = "Introduzca una fecha de nacimiento")
 	private Date nacimiento;
-	
-	@Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    @JsonIgnore
-    private Date creacion;
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    @JsonIgnore
-    private Date actualizacion;
-    
+	    
     public Administrador() {
 		super();
 	}
@@ -119,14 +108,6 @@ public class Administrador extends User {
 
 	public void setNacimiento(Date nacimiento) {
 		this.nacimiento = nacimiento;
-	}
-
-    public Date getCreacion() {
-		return creacion;
-	}
-    
-	public Date getActualizacion() {
-		return actualizacion;
 	}
 
 }

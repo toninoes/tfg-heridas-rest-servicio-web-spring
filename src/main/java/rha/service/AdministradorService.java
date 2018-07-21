@@ -83,7 +83,7 @@ public class AdministradorService {
 	    try {
 	    	administradorRepository.delete(administrador);
 		} catch (Exception e) {
-			throw new ErrorInternoServidorException("borrar", "Administrador", id, e.getMessage());
+			throw new ErrorInternoServidorException("borrar", "Administrador", id);
 		}
 
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
