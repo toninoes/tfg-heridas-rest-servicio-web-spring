@@ -99,7 +99,7 @@ INSERT INTO `authority` VALUES
 --
 -- USER
 --
-INSERT INTO `user` VALUES ('ad',1,'admin@user.es','','Antonio','2018-07-21 19:58:37.393000','Ruiz','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','admin@user.es','52929190A','1975-08-15 00:00:00.000000',NULL,NULL);
+INSERT INTO `user` VALUES ('ad',1,'admin@user.es','','Antonio','2018-01-01 00:00:00.000000','Ruiz','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','admin@user.es','52929190A','1975-08-15 00:00:00.000000',NULL,NULL);
 
 
 --

@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -67,6 +68,18 @@ public class User {
     @NotNull(message = "Introduzca un email")
     @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100")
 	protected String email;
+    
+	@Column(unique = true, length = 9)
+	protected String dni;
+	
+	@NotNull(message = "Introduzca una fecha de nacimiento")
+	protected Date nacimiento;
+	
+	@Column(unique = true) //para pacientes
+	protected Long historia;
+	
+	@Column(unique = true) //para sanitarios
+	protected Long colegiado;
 
     @Column(name = "ENABLED")
     @NotNull(message = "Diga si está habilitado o no")
@@ -107,18 +120,14 @@ public class User {
 		this.lastname = lastname;
 		this.email = email;
 		this.enabled = enabled;
-		this.lastPasswordResetDate = lastPasswordResetDate;
 		this.authorities = authorities;
 	}
 	
-	public User(
-			@NotNull(message = "Introduzca un username") @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100") String username,
-			@NotNull(message = "Introduzca una contraseña") @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100") String password,
-			@NotNull(message = "Introduzca un nombre") @Size(min = 3, max = 50, message = "el tamaño tiene que estar entre 3 y 50") String firstname,
-			@NotNull(message = "Introduzca los apellidos") @Size(min = 3, max = 100, message = "el tamaño tiene que estar entre 3 y 100") String lastname,
-			@NotNull(message = "Introduzca un email") @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100") String email,
-			@NotNull(message = "Diga si está habilitado o no") Boolean enabled, Date lastPasswordResetDate,
-			List<Authority> authorities, ArrayList<Boolean> permisos) {
+	public User(@NotNull @Size(min = 4, max = 50) String username,
+			@NotNull @Size(min = 4, max = 100) String password, @NotNull @Size(min = 4, max = 50) String firstname,
+			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String email,
+			@NotNull Boolean enabled, @NotNull Date lastPasswordResetDate, List<Authority> authorities, 
+			@NotNull Date nacimiento, @NotBlank String dni) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -126,11 +135,11 @@ public class User {
 		this.lastname = lastname;
 		this.email = email;
 		this.enabled = enabled;
-		this.lastPasswordResetDate = lastPasswordResetDate;
 		this.authorities = authorities;
-		this.permisos = permisos;
+		this.nacimiento = nacimiento;
+		this.dni = dni;
 	}
-
+	
 	public long getId() {
         return id;
     }
@@ -191,8 +200,40 @@ public class User {
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
+    
+    public String getDni() {
+		return dni;
+	}
 
-    public List<Authority> getAuthorities() {
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	public Date getNacimiento() {
+		return nacimiento;
+	}
+
+	public void setNacimiento(Date nacimiento) {
+		this.nacimiento = nacimiento;
+	}
+	
+	public Long getHistoria() {
+		return historia;
+	}
+
+	public void setHistoria(Long historia) {
+		this.historia = historia;
+	}
+
+	public Long getColegiado() {
+		return colegiado;
+	}
+
+	public void setColegiado(Long colegiado) {
+		this.colegiado = colegiado;
+	}
+
+	public List<Authority> getAuthorities() {
         return authorities;
     }
 

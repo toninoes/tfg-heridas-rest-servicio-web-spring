@@ -30,6 +30,12 @@ import rha.jwt.security.JwtUserFactory;
 import rha.jwt.security.repository.ActivacionUsuarioRepository;
 import rha.jwt.security.repository.AuthorityRepository;
 import rha.jwt.security.repository.UserRepository;
+import rha.model.Administrador;
+import rha.model.Paciente;
+import rha.model.Sanitario;
+import rha.repository.AdministradorRepository;
+import rha.repository.PacienteRepository;
+import rha.repository.SanitarioRepository;
 import rha.service.EmailService;
 
 @RestController
@@ -45,6 +51,15 @@ public class MethodProtectedRestController {
 	
 	@Autowired
 	private UserRepository usrRep;
+	
+	@Autowired
+	private AdministradorRepository admRep;
+	
+	@Autowired
+	private SanitarioRepository sanRep;
+	
+	@Autowired
+	private PacienteRepository pacRep;
 	
 	@Autowired
 	private PasswordEncoder pass;
@@ -66,7 +81,7 @@ public class MethodProtectedRestController {
 		}		
 	}
 	
-	private ResponseEntity<JwtUser> registrar(User user) throws Exception {	
+	/*private ResponseEntity<JwtUser> registrar(User user) throws Exception {	
 		// no se puede registrar a un usuario sin roles
 		if(estaRegistrandoUserSinRoles(user.getPermisos()))
 			throw new RegistroException("Debe asociar al menos un rol al nuevo usuario.");
@@ -106,6 +121,85 @@ public class MethodProtectedRestController {
 		//emailService.enviarCorreoActivacion(activacionUsuario);
 		
 		return ResponseEntity.ok(JwtUserFactory.create(usuario));
+	}*/
+	
+	private ResponseEntity<JwtUser> registrar(User user) throws Exception {	
+		JwtUser jwtuser = null;
+		
+		// no se puede registrar a un usuario sin roles
+		if(estaRegistrandoUserSinRoles(user.getPermisos()))
+			throw new RegistroException("Debe asociar al menos un rol al nuevo usuario.");
+			
+		// los sanitarios (noAdmin) sólo pueden registrar pacientes.
+		if(esSanitarioNoEsAdmin() && !estaRegistrandoSoloPaciente(user.getPermisos()))
+			throw new RegistroException("Usted sólo puede registrar pacientes.");
+		
+		// control unicidad de email (y username...)
+		if(usrRep.findByEmail(user.getEmail()).isPresent())
+			throw new CampoUnicoException("Usuario", "email", user.getEmail());
+		
+		// control unicidad de DNI
+		if(usrRep.findByDni(user.getDni()).isPresent())
+			throw new CampoUnicoException("Usuario", "dni", user.getDni());
+		
+		// control unicidad de nº Colegiado
+		if(usrRep.findByColegiado(user.getColegiado()).isPresent())
+			throw new CampoUnicoException("Usuario", "colegiado", user.getColegiado());
+		
+		Authority role_admin = authRep.findByName(AuthorityName.ROLE_ADMIN);
+		Authority role_sanitario = authRep.findByName(AuthorityName.ROLE_SANITARIO);
+		Authority role_paciente = authRep.findByName(AuthorityName.ROLE_PACIENTE);
+		
+		if (user.getPermisos().get(0)) { // ADMIN
+			List<Authority> rolesAdmin = new ArrayList<Authority>();
+			rolesAdmin.add(role_admin);
+			
+			Administrador admin = new Administrador(user.getUsername(), pass.encode(user.getEmail()),
+					user.getFirstname(), user.getLastname(), user.getEmail(),
+					false, rolesAdmin, user.getNacimiento(), user.getDni());
+			
+			admRep.save(admin);
+			ActivacionUsuario activacionUsuario = new ActivacionUsuario(admin);
+			actUsrRep.save(activacionUsuario);
+			
+			jwtuser = JwtUserFactory.create(admin);
+			
+		} else if (user.getPermisos().get(1)) { // SANITARIO
+			List<Authority> rolesSanitario = new ArrayList<Authority>();
+			rolesSanitario.add(role_sanitario);
+			
+			Sanitario sanitario = new Sanitario(user.getUsername(), pass.encode(user.getEmail()),
+					user.getFirstname(), user.getLastname(), user.getEmail(),
+					false, rolesSanitario, user.getNacimiento(), user.getDni(), user.getColegiado());
+			
+			sanRep.save(sanitario);
+			ActivacionUsuario activacionUsuario = new ActivacionUsuario(sanitario);
+			actUsrRep.save(activacionUsuario);
+			
+			jwtuser = JwtUserFactory.create(sanitario);
+			
+		} else if (user.getPermisos().get(2)) { // PACIENTE
+			List<Authority> rolesPaciente = new ArrayList<Authority>();
+			rolesPaciente.add(role_paciente);
+			
+			Long historia = asignarNumHistoria();
+			
+			Paciente paciente = new Paciente(user.getUsername(), pass.encode(user.getEmail()),
+					user.getFirstname(), user.getLastname(), user.getEmail(),
+					false, rolesPaciente, user.getNacimiento(), user.getDni(), historia);
+			
+			pacRep.save(paciente).getId();
+			ActivacionUsuario activacionUsuario = new ActivacionUsuario(paciente);
+			actUsrRep.save(activacionUsuario);
+						
+			jwtuser = JwtUserFactory.create(paciente);
+		}
+		
+		// Enviar aqui el mail de activacion.
+		logger.info("Enviando correo de activación a '{}'", user.getEmail());
+		//emailService.enviarCorreoActivacion(activacionUsuario);
+		
+		return ResponseEntity.ok(jwtuser);
 	}
 	
 
@@ -159,6 +253,23 @@ public class MethodProtectedRestController {
 		logger.info("'{}'. esAdmin: '{}'. esSanitario: '{}'", username, esAdmin, esSanitario);
 		
 		return (esSanitario && !esAdmin);
+	}
+	
+	/**
+	 * Devuelve el número de historia que pertenece a un nuevo paciente.
+	 * 
+	 * @return Long
+	 */
+	private synchronized Long asignarNumHistoria() {
+		Long historia = null;
+		try {
+			historia = pacRep.findMaxHistoria();
+			historia++;
+		} catch (Exception e) {
+			historia = (long) 1;
+		}
+		
+		return historia;
 	}
 	
 	
