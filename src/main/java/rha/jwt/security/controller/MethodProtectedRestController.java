@@ -101,13 +101,13 @@ public class MethodProtectedRestController {
 		if(usrRep.findByEmail(user.getEmail()).isPresent())
 			throw new CampoUnicoException("Usuario", "email", user.getEmail());
 		
-		
 		// control unicidad de DNI
 		if(user.getDni().isEmpty()) user.setDni(null);
 		if(user.getDni() != null && usrRep.findByDni(user.getDni()).isPresent())
 			throw new CampoUnicoException("Usuario", "dni", user.getDni());
 		
 		// control unicidad de nº Colegiado
+		if(user.getColegiado().isEmpty()) user.setColegiado(null);
 		if(user.getColegiado() != null && usrRep.findByColegiado(user.getColegiado()).isPresent())
 			throw new CampoUnicoException("Usuario", "colegiado", user.getColegiado());
 		
@@ -193,12 +193,19 @@ public class MethodProtectedRestController {
 				usrRep.findByDni(user.getDni()).get().getId() != user.getId())
 			throw new CampoUnicoException("Administrador", "dni", user.getDni());
 		
+		// control unicidad nº Col
+		if(user.getColegiado() != null && 
+				usrRep.findByColegiado(user.getColegiado()).isPresent() && 
+				usrRep.findByColegiado(user.getColegiado()).get().getId() != user.getId())
+			throw new CampoUnicoException("Sanitario", "Nº Colegiado", user.getColegiado());
+		
 		try {
 			usuario.setDni(user.getDni());
 			usuario.setFirstname(user.getFirstname());
 			usuario.setLastname(user.getLastname());
 			usuario.setNacimiento(user.getNacimiento());
 			usuario.setEnabled(user.isEnabled());
+			usuario.setColegiado(user.getColegiado());
 			usrRep.save(usuario);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Usuario", id, e.getMessage());

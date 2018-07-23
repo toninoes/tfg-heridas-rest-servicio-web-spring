@@ -50,7 +50,7 @@ public class Sanitario extends User {
 			@NotNull @Size(min = 4, max = 100) String password, @NotNull @Size(min = 4, max = 50) String firstname,
 			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String email,
 			@NotNull Boolean enabled, List<Authority> authorities, @NotNull Date nacimiento, @NotBlank String dni,
-			Long colegiado) {
+			String colegiado) {
 		super();
 		this.username = username;
 		this.password = password;

@@ -78,7 +78,7 @@ public class User {
 	protected Long historia;
 	
 	@Column(unique = true, nullable=true) //para sanitarios
-	protected Long colegiado;
+	protected String colegiado;
 
     @Column(name = "ENABLED")
     @NotNull(message = "Diga si está habilitado o no")
@@ -224,11 +224,11 @@ public class User {
 		this.historia = historia;
 	}
 
-	public Long getColegiado() {
+	public String getColegiado() {
 		return colegiado;
 	}
 
-	public void setColegiado(Long colegiado) {
+	public void setColegiado(String colegiado) {
 		this.colegiado = colegiado;
 	}
 
