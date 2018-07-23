@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import rha.model.Valoracion;
+import rha.model.ValoracionesResults;
 import rha.service.ValoracionService;
 
 @RestController
@@ -31,6 +32,16 @@ public class ValoracionRestController {
 	@GetMapping("/{id}")
 	public Valoracion findById(@PathVariable long id) {
 		return valoracionService.findById(id);
+	}
+	
+	@GetMapping("/sanitario/{id}")
+	public List<Valoracion> findAllBySanitarioId(@PathVariable long id) {			
+		return valoracionService.findBySanitarioId(id);
+	}
+	
+	@GetMapping("/media")
+	public List<ValoracionesResults> valoracionesMedias() {
+		return valoracionService.valoracionesMedias();
 	}
 	
 	@PostMapping

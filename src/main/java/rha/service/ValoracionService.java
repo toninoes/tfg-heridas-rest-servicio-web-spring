@@ -11,6 +11,7 @@ import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Sanitario;
 import rha.model.Valoracion;
+import rha.model.ValoracionesResults;
 import rha.repository.SanitarioRepository;
 import rha.repository.ValoracionRepository;
 
@@ -24,12 +25,23 @@ public class ValoracionService {
 	private SanitarioRepository sanitarioRepository;
 	
 	public List<Valoracion> findAll() {
-		return valoracionRepository.findAll();
+		return valoracionRepository.findAllByOrderByIdDesc();
 	}
 	
 	public Valoracion findById(long id) {
 		return valoracionRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Valoracion", "id", id));
+	}
+	
+	public List<Valoracion> findBySanitarioId(long id) {
+		Sanitario sanitario = sanitarioRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", id));
+		
+		return valoracionRepository.findBySanitarioOrderByIdDesc(sanitario);
+	}
+	
+	public List<ValoracionesResults> valoracionesMedias() {
+		return valoracionRepository.findAvgNotaBySanitario();
 	}
 	
 	public ResponseEntity<Valoracion> create(Valoracion v) {

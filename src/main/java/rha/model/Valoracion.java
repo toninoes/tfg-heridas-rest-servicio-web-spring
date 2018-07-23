@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -32,7 +31,6 @@ public class Valoracion {
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    @JsonIgnore
     private Date fecha;
 	
 	@ManyToOne
@@ -42,7 +40,7 @@ public class Valoracion {
 	@NotNull
 	@Min(0)
 	@Max(9)
-	private Integer nota;
+	private Double nota;
 	
 	private String observaciones;
 
@@ -50,7 +48,7 @@ public class Valoracion {
 		super();
 	}
 
-	public Valoracion(Sanitario sanitario, @NotNull @Min(0) @Max(9) Integer nota, String observaciones) {
+	public Valoracion(Sanitario sanitario, @NotNull @Min(0) @Max(9) Double nota, String observaciones) {
 		super();
 		this.sanitario = sanitario;
 		this.nota = nota;
@@ -65,11 +63,11 @@ public class Valoracion {
 		this.sanitario = sanitario;
 	}
 
-	public Integer getNota() {
+	public Double getNota() {
 		return nota;
 	}
 
-	public void setNota(Integer nota) {
+	public void setNota(Double nota) {
 		this.nota = nota;
 	}
 
