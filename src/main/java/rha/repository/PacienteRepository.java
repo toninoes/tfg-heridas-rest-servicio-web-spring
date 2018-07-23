@@ -20,4 +20,11 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long>{
 
 	@Query("SELECT MAX(p.historia) FROM Paciente p")
 	Long findMaxHistoria();
+	
+	@Query("SELECT p FROM Paciente p "
+			+ "WHERE p.dni LIKE %:texto% "
+			+ "OR p.firstname LIKE %:texto% "
+			+ "OR p.lastname LIKE %:texto% "
+			+ "OR p.historia LIKE %:texto%")
+	List<Paciente> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
 }

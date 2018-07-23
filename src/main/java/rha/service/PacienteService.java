@@ -23,6 +23,11 @@ public class PacienteService {
 		return pacienteRepository.findAll();
 	}
 	
+	public List<Paciente> findByFiltro(String texto) {
+		return pacienteRepository.findByFiltroContainingIgnoreCase(texto);
+		
+	}
+	
 	public Paciente findById(long id) {
 		return pacienteRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
