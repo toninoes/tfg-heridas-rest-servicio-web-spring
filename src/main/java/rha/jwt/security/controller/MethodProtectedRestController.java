@@ -81,9 +81,7 @@ public class MethodProtectedRestController {
 			throw new CampoUnicoException(e.getNombreRecurso(), e.getNombreCampo() , e.getValorCampo());
 		} catch (RegistroException e) {
 			throw new RegistroException(e.getMessage());
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}		
+		} 		
 	}
 
 	private ResponseEntity<JwtUser> registrar(User user) throws Exception {	
@@ -102,12 +100,12 @@ public class MethodProtectedRestController {
 			throw new CampoUnicoException("Usuario", "email", user.getEmail());
 		
 		// control unicidad de DNI
-		if(user.getDni().isEmpty()) user.setDni(null);
+		if(user.getDni() != null && user.getDni().isEmpty()) user.setDni(null);
 		if(user.getDni() != null && usrRep.findByDni(user.getDni()).isPresent())
 			throw new CampoUnicoException("Usuario", "dni", user.getDni());
 		
 		// control unicidad de nº Colegiado
-		if(user.getColegiado().isEmpty()) user.setColegiado(null);
+		if(user.getColegiado() != null && user.getColegiado().isEmpty()) user.setColegiado(null);
 		if(user.getColegiado() != null && usrRep.findByColegiado(user.getColegiado()).isPresent())
 			throw new CampoUnicoException("Usuario", "colegiado", user.getColegiado());
 		
@@ -191,7 +189,7 @@ public class MethodProtectedRestController {
 		// control unicidad de dni
 		if(usrRep.findByDni(user.getDni()).isPresent() && 
 				usrRep.findByDni(user.getDni()).get().getId() != user.getId())
-			throw new CampoUnicoException("Administrador", "dni", user.getDni());
+			throw new CampoUnicoException("Usuario", "dni", user.getDni());
 		
 		// control unicidad nº Col
 		if(user.getColegiado() != null && 
