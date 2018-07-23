@@ -49,9 +49,8 @@ public class User {
     @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100")
 	protected String username;
 
+    @JsonIgnore
     @Column(name = "PASSWORD", length = 100)
-    @NotNull(message = "Introduzca una contraseña")
-    @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100")
 	protected String password;
 
     @Column(name = "FIRSTNAME", length = 50)
@@ -75,10 +74,10 @@ public class User {
 	@NotNull(message = "Introduzca una fecha de nacimiento")
 	protected Date nacimiento;
 	
-	@Column(unique = true) //para pacientes
+	@Column(unique = true, nullable=true) //para pacientes
 	protected Long historia;
 	
-	@Column(unique = true) //para sanitarios
+	@Column(unique = true, nullable=true) //para sanitarios
 	protected Long colegiado;
 
     @Column(name = "ENABLED")
