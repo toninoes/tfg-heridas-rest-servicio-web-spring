@@ -39,16 +39,17 @@ public class Valoracion {
 	
 	@NotNull
 	@Min(0)
-	@Max(9)
+	@Max(10)
 	private Double nota;
 	
+	@Column(length = 280)
 	private String observaciones;
 
 	public Valoracion() {
 		super();
 	}
 
-	public Valoracion(Sanitario sanitario, @NotNull @Min(0) @Max(9) Double nota, String observaciones) {
+	public Valoracion(Sanitario sanitario, @NotNull @Min(0) @Max(10) Double nota, String observaciones) {
 		super();
 		this.sanitario = sanitario;
 		this.nota = nota;

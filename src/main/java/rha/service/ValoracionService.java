@@ -28,6 +28,16 @@ public class ValoracionService {
 		return valoracionRepository.findAllByOrderByIdDesc();
 	}
 	
+	public List<Valoracion> findByFiltro(String texto) {
+		return valoracionRepository.findByFiltroContainingIgnoreCase(texto);
+		
+	}	
+	
+	public List<ValoracionesResults> findAvgByFiltro(String texto) {
+		return valoracionRepository.findAvgByFiltroContainingIgnoreCase(texto);
+		
+	}	
+	
 	public Valoracion findById(long id) {
 		return valoracionRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Valoracion", "id", id));
@@ -45,6 +55,16 @@ public class ValoracionService {
 	}
 	
 	public ResponseEntity<Valoracion> create(Valoracion v) {
+		if(v.getNota() < 0 || v.getNota() > 10) {
+			throw new ErrorInternoServidorException("guardar", "Valoracion", v.getNota(), 
+					"Nota debe ser un valor entre 0 y 10");
+		}
+		
+		if(v.getObservaciones().length() > 280) {
+			throw new ErrorInternoServidorException("guardar", "Valoracion", v.getNota(), 
+					"Observaciones debe tener una longitud máxima de 280 caracteres.");
+		}
+			
 		Sanitario sanitario = sanitarioRepository.findById(v.getSanitario().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", v.getSanitario().getId()));
 		
@@ -56,4 +76,6 @@ public class ValoracionService {
 			throw new ErrorInternoServidorException("guardar", "Valoracion", v.getId(), e.getMessage());
 		}
     }
+	
+	
 }
