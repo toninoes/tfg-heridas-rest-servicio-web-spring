@@ -13,6 +13,10 @@ import javax.validation.constraints.NotNull;
 
 import rha.jwt.model.security.User;
 
+/**
+ * Solución 1 de 
+ * http://www.codejava.net/frameworks/hibernate/hibernate-many-to-many-association-with-extra-columns-in-join-table-example
+ */
 @Entity
 public class UserCentro {
 	@Id

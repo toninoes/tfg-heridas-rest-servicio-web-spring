@@ -34,8 +34,6 @@ public class ValoracionesResults {
 	public void setTotalNotas(Long totalNotas) {
 		this.totalNotas = totalNotas;
 	}
-
-	
     
 
 }

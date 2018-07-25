@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -36,11 +38,15 @@ import rha.jwt.security.repository.ActivacionUsuarioRepository;
 import rha.jwt.security.repository.AuthorityRepository;
 import rha.jwt.security.repository.UserRepository;
 import rha.model.Administrador;
+import rha.model.Centro;
 import rha.model.Paciente;
 import rha.model.Sanitario;
+import rha.model.UserCentro;
 import rha.repository.AdministradorRepository;
+import rha.repository.CentroRepository;
 import rha.repository.PacienteRepository;
 import rha.repository.SanitarioRepository;
+import rha.repository.UserCentroRepository;
 import rha.service.EmailService;
 
 @RestController
@@ -67,6 +73,12 @@ public class MethodProtectedRestController {
 	private PacienteRepository pacRep;
 	
 	@Autowired
+	private CentroRepository centroRepository;
+	
+	@Autowired 
+	private UserCentroRepository userCentroRepository;
+	
+	@Autowired
 	private PasswordEncoder pass;
 	
 	@Autowired
@@ -75,8 +87,21 @@ public class MethodProtectedRestController {
 	@PostMapping("registro")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SANITARIO')")
 	public ResponseEntity<JwtUser> registro(@Valid @RequestBody User user) throws Exception {	
+		Long centroId = null;
 		try {
-			return registrar(user);
+			return registrar(centroId, user);
+		} catch (CampoUnicoException e) {
+			throw new CampoUnicoException(e.getNombreRecurso(), e.getNombreCampo() , e.getValorCampo());
+		} catch (RegistroException e) {
+			throw new RegistroException(e.getMessage());
+		} 		
+	}
+	
+	@PostMapping("registro/{centroId}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SANITARIO')")
+	public ResponseEntity<JwtUser> registro(@PathVariable Long centroId, @Valid @RequestBody User user) throws Exception {	
+		try {
+			return registrar(centroId, user);
 		} catch (CampoUnicoException e) {
 			throw new CampoUnicoException(e.getNombreRecurso(), e.getNombreCampo() , e.getValorCampo());
 		} catch (RegistroException e) {
@@ -84,8 +109,17 @@ public class MethodProtectedRestController {
 		} 		
 	}
 
-	private ResponseEntity<JwtUser> registrar(User user) throws Exception {	
+	private ResponseEntity<JwtUser> registrar(Long centroId, User user) throws Exception {	
 		JwtUser jwtuser = null;
+		UserCentro userCentro = new UserCentro();
+		
+		if(centroId != null) {
+			Centro centro = centroRepository.findById(centroId)
+					.orElseThrow(() -> new RecursoNoEncontradoException("Centro", "id", centroId));
+			
+			userCentro.setCentro(centro);
+			userCentro.setInicio(new Date());
+		}
 		
 		// no se puede registrar a un usuario sin roles
 		if(estaRegistrandoUserSinRoles(user.getPermisos()))
@@ -127,6 +161,11 @@ public class MethodProtectedRestController {
 			ActivacionUsuario activacionUsuario = new ActivacionUsuario(admin);
 			actUsrRep.save(activacionUsuario);
 			
+			if(centroId != null) {
+				userCentro.setUser(admin);
+				userCentroRepository.save(userCentro);
+			}
+			
 			jwtuser = JwtUserFactory.create(admin);
 			
 		} else if (user.getPermisos().get(1)) { // SANITARIO
@@ -140,6 +179,11 @@ public class MethodProtectedRestController {
 			sanRep.save(sanitario);
 			ActivacionUsuario activacionUsuario = new ActivacionUsuario(sanitario);
 			actUsrRep.save(activacionUsuario);
+			
+			if(centroId != null) {
+				userCentro.setUser(sanitario);
+				userCentroRepository.save(userCentro);
+			}
 			
 			jwtuser = JwtUserFactory.create(sanitario);
 			
@@ -156,6 +200,11 @@ public class MethodProtectedRestController {
 			pacRep.save(paciente).getId();
 			ActivacionUsuario activacionUsuario = new ActivacionUsuario(paciente);
 			actUsrRep.save(activacionUsuario);
+			
+			if(centroId != null) {
+				userCentro.setUser(paciente);
+				userCentroRepository.save(userCentro);
+			}
 						
 			jwtuser = JwtUserFactory.create(paciente);
 		}
@@ -170,8 +219,10 @@ public class MethodProtectedRestController {
 	@PutMapping("registro/{id}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('SANITARIO')")
 	public ResponseEntity<User> editarRegistro(@PathVariable(value = "id") Long id, @Valid @RequestBody User user) throws Exception {	
+		Long centroId = null;
+		
 		try {
-			return editar(id, user);
+			return editar(id, centroId, user);
 		} catch (CampoUnicoException e) {
 			throw new CampoUnicoException(e.getNombreRecurso(), e.getNombreCampo() , e.getValorCampo());
 		} catch (RegistroException e) {
@@ -181,10 +232,54 @@ public class MethodProtectedRestController {
 		}		
 	}
 	
-	private ResponseEntity<User> editar(Long id, User user) {
+	@PutMapping("registro/{id}/{centroId}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('SANITARIO')")
+	public ResponseEntity<User> editarRegistro(@PathVariable(value = "id") Long id, @PathVariable Long centroId, 
+			@Valid @RequestBody User user) throws Exception {	
+		try {
+			return editar(id, centroId, user);
+		} catch (CampoUnicoException e) {
+			throw new CampoUnicoException(e.getNombreRecurso(), e.getNombreCampo() , e.getValorCampo());
+		} catch (RegistroException e) {
+			throw new RegistroException(e.getMessage());
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}		
+	}
+	
+	private ResponseEntity<User> editar(Long id, Long centroId, User user) {
 
 		User usuario = usrRep.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
+		
+		Set<UserCentro> vidaLaboral = usuario.getUserCentros();
+		
+		if(centroId != null) {
+			UserCentro userCentro = new UserCentro();
+			Centro centro = centroRepository.findById(centroId)
+					.orElseThrow(() -> new RecursoNoEncontradoException("Centro", "id", centroId));
+			
+			UserCentro userCentroActual = getUserCentroActual(vidaLaboral);
+			
+			if(userCentroActual != null && userCentroActual.getCentro().getId() != centro.getId()) {
+				userCentroActual.setFin(new Date());
+				userCentroRepository.save(userCentroActual);
+				
+				userCentro.setCentro(centro);
+				userCentro.setInicio(new Date());
+				userCentro.setUser(usuario);
+				userCentroRepository.save(userCentro);
+				usuario.addUserCentro(userCentro);
+			} else if(userCentroActual == null) {
+				userCentro.setCentro(centro);
+				userCentro.setInicio(new Date());
+				userCentro.setUser(usuario);
+				userCentroRepository.save(userCentro);
+				usuario.addUserCentro(userCentro);
+			}
+
+			
+		}
 		
 		// control unicidad de dni
 		if(usrRep.findByDni(user.getDni()).isPresent() && 
@@ -213,6 +308,17 @@ public class MethodProtectedRestController {
 	}
 	
 
+	private UserCentro getUserCentroActual(Set<UserCentro> vidaLaboral) {
+		UserCentro actual = null;
+		
+		for(UserCentro uc: vidaLaboral) {
+			if(uc.getFin() == null)
+				actual = uc;
+		}
+		return actual;
+	}
+
+	
 	/**
 	 * Comprueba que sólo se está intentando registrar a un paciente.
 	 * 
