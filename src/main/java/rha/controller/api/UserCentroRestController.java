@@ -1,6 +1,7 @@
 package rha.controller.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import rha.model.Centro;
 import rha.model.UserCentro;
 import rha.service.UserCentroService;
 
@@ -33,6 +35,11 @@ public class UserCentroRestController {
 	@GetMapping("/{id}")
 	public UserCentro findById(@PathVariable long id) {
 		return usercentroService.findById(id);
+	}
+	
+	@GetMapping("/user/{userId}")
+	public Optional<Centro> getCentroActualByUserId(@PathVariable long userId) {
+		return usercentroService.getCentroActualByUserId(userId);
 	}
 	
 	@PostMapping

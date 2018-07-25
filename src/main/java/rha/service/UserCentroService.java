@@ -1,6 +1,7 @@
 package rha.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,5 +83,13 @@ public class UserCentroService {
 		}
 
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	public Optional<Centro> getCentroActualByUserId(long userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", userId));
+		
+		
+		return usercentroRepository.getCentroActualByUser(user.getId());
 	}
 }

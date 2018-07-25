@@ -31,6 +31,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import rha.model.Centro;
 import rha.model.UserCentro;
 
 @Entity
@@ -100,7 +101,18 @@ public class User {
     @Transient
     protected ArrayList<Boolean> permisos = new ArrayList <>(3);
     
-    @JsonIgnore
+    @Transient
+    protected Centro centroActual = new Centro();
+    
+    public Centro getCentroActual() {
+    	for(UserCentro uc: this.userCentros) {
+    		if(uc.getFin() == null)
+    			centroActual = uc.getCentro();
+    	}
+		return centroActual;
+	}
+
+	@JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<UserCentro> userCentros = new HashSet<UserCentro>();
     
