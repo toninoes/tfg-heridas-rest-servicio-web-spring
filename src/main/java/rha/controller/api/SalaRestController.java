@@ -35,6 +35,11 @@ public class SalaRestController {
 		return salaService.findByFiltro(filtro);
 	}
 	
+	@GetMapping("recientes")
+	public List<Sala> findRecientes() {
+		return salaService.findRecientes();
+	}
+	
 	@GetMapping("/{id}")
 	public Sala findById(@PathVariable long id) {
 		return salaService.findById(id);

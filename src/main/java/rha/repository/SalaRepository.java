@@ -18,4 +18,5 @@ public interface SalaRepository extends JpaRepository<Sala, Long>{
 			+ "OR s.centro.telefono LIKE %:texto%")
 	List<Sala> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
 
+	List<Sala> findTop10ByOrderByIdDesc();
 }

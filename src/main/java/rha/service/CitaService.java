@@ -37,6 +37,10 @@ public class CitaService {
 				.orElseThrow(() -> new RecursoNoEncontradoException("Cita", "id", id));
 	}
 	
+	public List<Cita> findRecientes() {
+		return citaRepository.findTop10ByOrderByIdDesc();
+	}
+	
 	public ResponseEntity<Cita> create(Cita c) {
 		Paciente paciente = pacienteRepository.findById(c.getPaciente().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", c.getPaciente().getId()));

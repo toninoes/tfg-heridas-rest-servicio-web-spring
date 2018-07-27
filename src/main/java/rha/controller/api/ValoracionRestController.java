@@ -33,6 +33,11 @@ public class ValoracionRestController {
 		return valoracionService.findByFiltro(filtro);
 	}
 	
+	@GetMapping("recientes")
+	public List<Valoracion> findRecientes() {
+		return valoracionService.findRecientes();
+	}
+	
 	@GetMapping("/media/filtro")
 	public List<ValoracionesResults> findAvgByFiltro(@RequestParam(value = "filtro", required = false) String filtro) {
 		return valoracionService.findAvgByFiltro(filtro);

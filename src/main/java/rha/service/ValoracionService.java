@@ -33,6 +33,10 @@ public class ValoracionService {
 		
 	}	
 	
+	public List<Valoracion> findRecientes() {
+		return valoracionRepository.findTop10ByOrderByIdDesc();
+	}
+	
 	public List<ValoracionesResults> findAvgByFiltro(String texto) {
 		return valoracionRepository.findAvgByFiltroContainingIgnoreCase(texto);
 		

@@ -35,6 +35,11 @@ public class CitaRestController {
 		return citaservice.findById(id);
 	}
 	
+	@GetMapping("recientes")
+	public List<Cita> findRecientes() {
+		return citaservice.findRecientes();
+	}
+	
 	@PostMapping
 	public ResponseEntity<Cita> create(@Valid @RequestBody Cita c) {
 		return citaservice.create(c);

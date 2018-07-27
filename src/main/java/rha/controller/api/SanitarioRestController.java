@@ -31,6 +31,11 @@ public class SanitarioRestController {
 		return sanitarioService.findByFiltro(filtro);
 	}
 	
+	@GetMapping("recientes")
+	public List<Sanitario> findRecientes() {
+		return sanitarioService.findRecientes();
+	}
+	
 	@GetMapping("/{id}")
 	public Sanitario findById(@PathVariable long id) {
 		return sanitarioService.findById(id);

@@ -18,6 +18,19 @@ public interface ValoracionRepository extends JpaRepository<Valoracion, Long>{
 
 	List<Valoracion> findAllByOrderByIdDesc();
 	
+	List<Valoracion> findTop10ByOrderByIdDesc();
+	
+	@Query("SELECT v FROM Valoracion v "
+			+ "WHERE v.observaciones LIKE %:texto% "
+			+ "OR v.sanitario.firstname LIKE %:texto% "
+			+ "OR v.sanitario.lastname LIKE %:texto% "
+			+ "OR v.sanitario.colegiado LIKE %:texto% "
+			+ "OR v.sanitario.dni LIKE %:texto%")
+	List<Valoracion> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
+	
+	
+	// A partir de aquí con <ValoracionesResults>
+	
 	@Query("SELECT new rha.model.ValoracionesResults"
 			+ "(AVG(v.nota) as notaMedia, v.sanitario as sanitario, COUNT(v.nota) as totalNotas) "
 			+ "FROM Valoracion v "
@@ -36,13 +49,4 @@ public interface ValoracionRepository extends JpaRepository<Valoracion, Long>{
 			+ "ORDER BY AVG(v.nota) DESC")
 	List<ValoracionesResults> findAvgByFiltroContainingIgnoreCase(@Param("texto") String texto);
 	
-	@Query("SELECT v FROM Valoracion v "
-			+ "WHERE v.observaciones LIKE %:texto% "
-			+ "OR v.sanitario.firstname LIKE %:texto% "
-			+ "OR v.sanitario.lastname LIKE %:texto% "
-			+ "OR v.sanitario.colegiado LIKE %:texto% "
-			+ "OR v.sanitario.dni LIKE %:texto%")
-	List<Valoracion> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
-
-
 }

@@ -27,6 +27,10 @@ public class PacienteService {
 		
 	}
 	
+	public List<Paciente> findRecientes() {
+		return pacienteRepository.findTop10ByOrderByIdDesc();
+	}
+	
 	public Paciente findById(long id) {
 		return pacienteRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));

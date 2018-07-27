@@ -27,6 +27,10 @@ public class AdministradorService {
 		
 	}
 	
+	public List<Administrador> findRecientes() {
+		return administradorRepository.findTop10ByOrderByIdDesc();
+	}
+	
 	public Administrador findById(long id) {
 		return administradorRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Administrador", "id", id));

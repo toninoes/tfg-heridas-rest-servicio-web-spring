@@ -27,4 +27,6 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long>{
 			+ "OR p.lastname LIKE %:texto% "
 			+ "OR p.historia LIKE %:texto%")
 	List<Paciente> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
+	
+	List<Paciente> findTop10ByOrderByIdDesc();
 }

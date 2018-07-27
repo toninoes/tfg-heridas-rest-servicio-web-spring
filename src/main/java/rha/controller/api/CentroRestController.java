@@ -37,6 +37,11 @@ public class CentroRestController {
 		return centroService.findByFiltro(filtro);
 	}
 	
+	@GetMapping("recientes")
+	public List<Centro> findRecientes() {
+		return centroService.findRecientes();
+	}
+	
 	@GetMapping("/{id}")
 	public Centro findById(@PathVariable long id) {
 		return centroService.findById(id);

@@ -22,4 +22,6 @@ public interface SanitarioRepository extends JpaRepository<Sanitario, Long> {
 			+ "OR s.lastname LIKE %:texto% "
 			+ "OR s.colegiado LIKE %:texto%")
 	List<Sanitario> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
+	
+	List<Sanitario> findTop10ByOrderByIdDesc();
 }

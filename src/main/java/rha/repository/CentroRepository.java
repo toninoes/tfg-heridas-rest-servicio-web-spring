@@ -20,4 +20,6 @@ public interface CentroRepository extends JpaRepository<Centro, Long> {
 			+ "OR c.telefono LIKE %:texto%")
 	List<Centro> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
 
+	List<Centro> findTop10ByOrderByIdDesc();
+
 }

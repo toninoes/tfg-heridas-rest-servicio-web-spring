@@ -21,4 +21,6 @@ public interface AdministradorRepository extends JpaRepository<Administrador, Lo
 			+ "OR a.firstname LIKE %:texto% "
 			+ "OR a.lastname LIKE %:texto%")
 	List<Administrador> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
+	
+	List<Administrador> findTop10ByOrderByIdDesc();
 }

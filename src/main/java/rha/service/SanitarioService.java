@@ -27,6 +27,10 @@ public class SanitarioService {
 		
 	}
 	
+	public List<Sanitario> findRecientes() {
+		return sanitarioRepository.findTop10ByOrderByIdDesc();
+	}
+	
 	public Sanitario findById(long id) {
 		return sanitarioRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", id));

@@ -31,6 +31,11 @@ public class AdministradorRestController {
 		return administradorService.findByFiltro(filtro);
 	}
 	
+	@GetMapping("recientes")
+	public List<Administrador> findRecientes() {
+		return administradorService.findRecientes();
+	}
+	
 	@GetMapping("/{id}")
 	public Administrador findById(@PathVariable long id) {
 		return administradorService.findById(id);

@@ -32,6 +32,10 @@ public class SalaService {
 		
 	}
 	
+	public List<Sala> findRecientes() {
+		return salaRepository.findTop10ByOrderByIdDesc();
+	}
+	
 	public Sala findById(long id) {
 		return salaRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Sala", "id", id) );

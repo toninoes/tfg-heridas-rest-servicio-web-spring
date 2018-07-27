@@ -32,6 +32,11 @@ public class PacienteRestController {
 		return pacienteService.findByFiltro(filtro);
 	}
 	
+	@GetMapping("recientes")
+	public List<Paciente> findRecientes() {
+		return pacienteService.findRecientes();
+	}
+	
 	@GetMapping("/{id}")
 	public Paciente findById(@PathVariable long id) {
 		return pacienteService.findById(id);

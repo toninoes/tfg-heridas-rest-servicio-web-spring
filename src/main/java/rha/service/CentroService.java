@@ -27,6 +27,10 @@ public class CentroService {
 		return centroRepository.findByFiltroContainingIgnoreCase(texto);
 		
 	}
+	
+	public List<Centro> findRecientes() {
+		return centroRepository.findTop10ByOrderByIdDesc();
+	}
 
 	public Centro findById(long id) {
 		return centroRepository.findById(id)
