@@ -7,6 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.cache.annotation.EnableCaching;
 
 import rha.config.ImagenConfig;
+//import org.springframework.core.SpringVersion;
 
 @SpringBootApplication
 @EnableCaching
@@ -14,6 +15,7 @@ import rha.config.ImagenConfig;
 public class Application extends SpringBootServletInitializer {
 	
 	public static void main(String[] args) throws Exception {
+		//System.out.println("Spring Version: " + SpringVersion.getVersion());
 		SpringApplication.run(Application.class, args);
 	}
 	
