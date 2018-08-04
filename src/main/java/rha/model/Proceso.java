@@ -41,7 +41,7 @@ public class Proceso {
 	@ManyToOne
 	@JoinColumn(name="paciente_id", nullable = false)
 	private Paciente paciente;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "proceso")
     private List<Cura> curas;

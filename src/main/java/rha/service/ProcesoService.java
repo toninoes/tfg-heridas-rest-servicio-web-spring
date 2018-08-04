@@ -12,8 +12,11 @@ import rha.exception.RecursoNoEncontradoException;
 import rha.model.Cura;
 import rha.model.Paciente;
 import rha.model.Proceso;
+import rha.model.Sanitario;
+import rha.repository.CuraRepository;
 import rha.repository.PacienteRepository;
 import rha.repository.ProcesoRepository;
+import rha.repository.SanitarioRepository;
 
 @Service
 public class ProcesoService {
@@ -23,6 +26,12 @@ public class ProcesoService {
 	
 	@Autowired
 	private PacienteRepository pacienteRepository;
+	
+	@Autowired
+	private SanitarioRepository sanitarioRepository;
+	
+	@Autowired
+	private CuraRepository curaRepository;
 	
 	public List<Proceso> findAll() {
 		return procesoRepository.findAll();
@@ -46,14 +55,20 @@ public class ProcesoService {
 		return procesoRepository.findByPaciente(paciente);
 	}
 
-	public ResponseEntity<Proceso> create(Proceso p) {
+	public ResponseEntity<Proceso> create(long sanitarioId, Proceso p) {
 		Paciente paciente = pacienteRepository.findById(p.getPaciente().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", p.getPaciente().getId()));
 		
-		p.setPaciente(paciente);
+		Sanitario sanitario = sanitarioRepository.findById(sanitarioId)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", sanitarioId));
 		
+		p.setPaciente(paciente);
+				
 		try {
-			return new ResponseEntity<Proceso>(procesoRepository.save(p), HttpStatus.CREATED);
+			Proceso proceso = procesoRepository.save(p);
+			Cura cura = new Cura(proceso.getProcedimiento().getNombre(), proceso, sanitario);
+			curaRepository.save(cura);
+			return new ResponseEntity<Proceso>(proceso, HttpStatus.CREATED);
 		} catch (ErrorInternoServidorException e) {
 			throw new ErrorInternoServidorException("guardar", "Proceso", p.getId(), e.getMessage());
 		}

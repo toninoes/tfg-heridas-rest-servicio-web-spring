@@ -32,10 +32,9 @@ public class Cura {
 	private long id;
 	
 	private String evolucion;
-    
-    @NotBlank(message = "Introduzca un tratamiento")
+	
+	@NotBlank(message = "Introduzca un tratamiento")
     private String tratamiento;
-    
     private String recomendaciones;
       
     @ManyToOne
@@ -73,6 +72,13 @@ public class Cura {
 		this.tratamiento = tratamiento;
 		this.recomendaciones = recomendaciones;
 		this.proceso = proceso;
+	}
+
+	public Cura(String tratamiento, Proceso proceso, Sanitario sanitario) {
+		super();
+		this.tratamiento = tratamiento;
+		this.proceso = proceso;
+		this.sanitario = sanitario;
 	}
 
 	public String getEvolucion() {

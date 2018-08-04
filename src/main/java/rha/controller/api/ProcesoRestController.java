@@ -47,9 +47,9 @@ public class ProcesoRestController {
 		return procesoService.findAllByPacienteId(id);
 	}
 	
-	@PostMapping
-	public ResponseEntity<Proceso> create(@Valid @RequestBody Proceso p) {
-		return procesoService.create(p);
+	@PostMapping("/{sanitarioId}")
+	public ResponseEntity<Proceso> create(@PathVariable long sanitarioId, @Valid @RequestBody Proceso p) {
+		return procesoService.create(sanitarioId, p);
 	}
 	
 	@PutMapping("/{id}")
