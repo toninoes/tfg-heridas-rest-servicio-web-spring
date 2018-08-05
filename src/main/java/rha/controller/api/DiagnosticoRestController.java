@@ -36,6 +36,12 @@ public class DiagnosticoRestController {
 		return diagnosticoService.findByFiltro(filtro);
 	}
 	
+	@GetMapping("/g/{id}")
+	public List<Diagnostico> findByGrupoDiagnostico(@PathVariable long id) {
+		return diagnosticoService.findByGrupoDiagnostico(id);
+	}
+	
+	
 	@GetMapping("/{id}")
 	public Diagnostico findById(@PathVariable long id) {
 		return diagnosticoService.findById(id);

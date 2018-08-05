@@ -33,6 +33,13 @@ public class DiagnosticoService {
 		
 	}
 	
+	public List<Diagnostico> findByGrupoDiagnostico(long id) {
+		Grupodiagnostico grupodiagnostico = grupoRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Grupodiagnostico", "id", id));
+		
+		return diagnosticoRepository.findByGrupodiagnostico(grupodiagnostico);
+	}
+	
 	//@Cacheable("diagnostico")
 	public Diagnostico findById(long id) {
 		return diagnosticoRepository.findById(id)

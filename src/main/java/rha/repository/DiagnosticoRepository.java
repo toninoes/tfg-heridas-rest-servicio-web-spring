@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import rha.model.Diagnostico;
+import rha.model.Grupodiagnostico;
 
 @RepositoryRestResource(collectionResourceRel = "diagnosticos", path = "diagnosticos")
 public interface DiagnosticoRepository extends JpaRepository<Diagnostico, Long> {
@@ -16,5 +17,7 @@ public interface DiagnosticoRepository extends JpaRepository<Diagnostico, Long> 
 			+ "WHERE d.nombre LIKE %:texto% "
 			+ "OR d.codigo LIKE %:texto%")
 	List<Diagnostico> findByFiltroContainingIgnoreCase(@Param("texto") String texto);
+
+	List<Diagnostico> findByGrupodiagnostico(Grupodiagnostico grupodiagnostico);
 
 }
