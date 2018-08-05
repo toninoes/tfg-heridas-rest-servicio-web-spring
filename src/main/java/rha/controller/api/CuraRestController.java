@@ -35,9 +35,9 @@ public class CuraRestController {
 		return curaService.findById(id);
 	}
 
-	@PostMapping
-	public ResponseEntity<Cura> create(@Valid @RequestBody Cura c) {
-		return curaService.create(c);
+	@PostMapping("/{sanitarioId}")
+	public ResponseEntity<Cura> create(@PathVariable long sanitarioId, @RequestBody Cura c) {
+		return curaService.create(sanitarioId, c);
     }
 
 	@PutMapping("/{id}")	

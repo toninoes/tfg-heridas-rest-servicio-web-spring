@@ -11,8 +11,10 @@ import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Cura;
 import rha.model.Proceso;
+import rha.model.Sanitario;
 import rha.repository.CuraRepository;
 import rha.repository.ProcesoRepository;
+import rha.repository.SanitarioRepository;
 
 @Service
 public class CuraService {
@@ -22,6 +24,9 @@ public class CuraService {
 	
 	@Autowired
 	private ProcesoRepository procesoRepository;
+	
+	@Autowired
+	private SanitarioRepository sanitarioRepository;
 		
 	public List<Cura> findAll() {
 		return curaRepository.findAll();
@@ -32,11 +37,15 @@ public class CuraService {
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
 	}
 	
-	public ResponseEntity<Cura> create(Cura c) {
+	public ResponseEntity<Cura> create(long sanitarioId, Cura c) {
 		Proceso proceso = procesoRepository.findById(c.getProceso().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Proceso", "id", c.getProceso().getId()));
-		
+	
+		Sanitario sanitario = sanitarioRepository.findById(sanitarioId)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", sanitarioId));
+
 		c.setProceso(proceso);
+		c.setSanitario(sanitario);
 		
 		try {
 			return new ResponseEntity<Cura>(curaRepository.save(c), HttpStatus.CREATED);
