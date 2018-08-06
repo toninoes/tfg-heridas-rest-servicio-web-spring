@@ -1,5 +1,7 @@
 package rha.controller.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import rha.model.Imagen;
 import rha.service.ImagenService;
 
 @RestController
@@ -27,10 +30,10 @@ public class ImagenRestController {
     	return imagenService.descargar(id);
     }
 	
-	/*@PostMapping
-    public ResponseEntity<?> subir(@RequestParam("imagen") MultipartFile img, @RequestParam("curaId") long id) {
-        return imagenService.subir(img, id);
-    }*/
+	@GetMapping("/cura/{id}")
+	public List<Imagen> findByCuraId(@PathVariable long id) {
+		return imagenService.findByCuraId(id);
+	}
 	
 	@PostMapping
     public ResponseEntity<?> subir(@RequestParam("imagen") MultipartFile img) {
@@ -38,8 +41,9 @@ public class ImagenRestController {
     }
 	
 	@PostMapping("/{CuraId}")
-    public ResponseEntity<?> subirByCuraId(@RequestParam("imagen") MultipartFile img, @PathVariable long CuraId) {
-        return imagenService.subir(img, CuraId);
+    public ResponseEntity<?> subirByCuraId(@RequestParam("imagen") MultipartFile img, @PathVariable long CuraId, 
+    		@RequestParam("descripcion") String descripcion) {
+        return imagenService.subir(img, CuraId, descripcion);
     }
 	
 

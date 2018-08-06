@@ -15,7 +15,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.CreationTimestamp;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -30,6 +29,8 @@ public class Imagen {
 	@NotBlank
 	private String nombre;
 	
+	private String descripcion;
+	
 	@ManyToOne
 	@JoinColumn(name="cura_id", nullable = false)
 	private Cura cura;
@@ -37,7 +38,6 @@ public class Imagen {
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    @JsonIgnore
     private Date creacion;
 
 	public Imagen() {
@@ -52,6 +52,13 @@ public class Imagen {
 	public Imagen(@NotBlank String nombre, Cura cura) {
 		super();
 		this.nombre = nombre;
+		this.cura = cura;
+	}
+	
+	public Imagen(@NotBlank String nombre, Cura cura, String descripcion) {
+		super();
+		this.nombre = nombre;
+		this.descripcion = descripcion;
 		this.cura = cura;
 	}
 
@@ -77,6 +84,14 @@ public class Imagen {
 
 	public Date getCreacion() {
 		return creacion;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 	
 

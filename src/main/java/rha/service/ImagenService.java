@@ -1,5 +1,7 @@
 package rha.service;
 
+import java.util.List;
+
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -42,12 +44,13 @@ public class ImagenService {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
     
-    public ResponseEntity<?> subir(MultipartFile img, long curaId) {
+    public ResponseEntity<?> subir(MultipartFile img, long curaId, String descripcion) {
     	if(esImagen(img)) {
 			Cura cura = curaRepository.findById(curaId)
 		            .orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", curaId));
 			
-    		Imagen imagen = new Imagen(img.getOriginalFilename(), cura);
+			descripcion = eliminarDoblesComillas(descripcion);
+    		Imagen imagen = new Imagen(img.getOriginalFilename(), cura, descripcion);
     	
 			imagenRepository.save(imagen);
     		
@@ -103,5 +106,21 @@ public class ImagenService {
     private String obtenerExtension (MultipartFile file) {
     	return FilenameUtils.getExtension(file.getOriginalFilename());
     }
+    
+    private String eliminarDoblesComillas(String string) {
+    	if (string.length() >= 2 && string.charAt(0) == '"' && string.charAt(string.length() - 1) == '"')
+    	{
+    	    string = string.substring(1, string.length() - 1);
+    	}
+    	
+    	return string;
+    }
+
+	public List<Imagen> findByCuraId(long id) {
+		Cura cura = curaRepository.findById(id)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
+		
+		return imagenRepository.findByCura(cura);
+	}
 
 }
