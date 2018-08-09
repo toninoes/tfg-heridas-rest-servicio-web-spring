@@ -27,9 +27,9 @@ public class ImagenRestController {
 	@GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Resource> descargar(@PathVariable long id) {
-    	return imagenService.descargar(id);
+    	return imagenService.descargarById(id);
     }
-	
+		
 	@GetMapping("/cura/{id}")
 	public List<Imagen> findByCuraId(@PathVariable long id) {
 		return imagenService.findByCuraId(id);

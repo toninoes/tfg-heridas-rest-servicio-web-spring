@@ -22,6 +22,7 @@ public class SalaService {
 	
 	@Autowired
 	private CentroRepository centroRepository;
+
 	
 	public List<Sala> findAll() {
 		return salaRepository.findAll();

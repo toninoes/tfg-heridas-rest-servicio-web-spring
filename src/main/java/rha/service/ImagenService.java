@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,13 +36,27 @@ public class ImagenService {
 	private CuraRepository curaRepository;
 
     @ResponseBody
-    public ResponseEntity<Resource> descargar(long id) {
+    public ResponseEntity<Resource> descargarById(long id) {
     	Imagen imagen = imagenRepository.findById(id)
     			.orElseThrow(() -> new RecursoNoEncontradoException("Imagen", "id", id));
     	
         Resource file = almacenamientoService.loadAsResource(imagen.getNombre());
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        /*return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);*/
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(file, httpHeaders, HttpStatus.OK);
+    }
+        
+    @ResponseBody
+    public ResponseEntity<Resource> descargarByNombre(String nombre) {
+    	Imagen imagen = imagenRepository.findByNombre(nombre)
+    			.orElseThrow(() -> new RecursoNoEncontradoException("Imagen", "nombre", nombre));
+    	
+        Resource file = almacenamientoService.loadAsResource(imagen.getNombre());
+        
+        HttpHeaders httpHeaders = new HttpHeaders();
+        return new ResponseEntity<>(file, httpHeaders, HttpStatus.OK);
     }
     
     public ResponseEntity<?> subir(MultipartFile img, long curaId, String descripcion) {
@@ -120,7 +135,6 @@ public class ImagenService {
 		Cura cura = curaRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
 		
-		return imagenRepository.findByCura(cura);
+		return imagenRepository.findByCuraOrderByIdDesc(cura);
 	}
-
 }

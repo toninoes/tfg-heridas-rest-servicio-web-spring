@@ -133,7 +133,7 @@ public class Cura {
 		this.imagenes = imagenes;
 	}
 	
-	public Boolean estaValorada() {
+	public Boolean getValorada() {
 		return valorada;
 	}
 

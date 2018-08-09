@@ -134,4 +134,5 @@ public class AlmacenamientoService {
             throw new AlmacenamientoException("No se pudo inicializar el almacenamiento", e);
         }
     }
+
 }

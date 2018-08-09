@@ -3,13 +3,16 @@ package rha.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -32,6 +35,11 @@ public class Sala {
 	@JsonIgnore
 	@OneToMany(mappedBy = "sala")
     private Set<Cita> citas = new HashSet<Cita>();
+	
+	@OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.ALL,
+            mappedBy = "sala")
+	private SalaConfig salaConfig;
 	
 	public Sala() {
 		super();
@@ -73,7 +81,17 @@ public class Sala {
 	
 	public void addCita(Cita cita) {
         this.citas.add(cita);
-    } 
+    }
+
+	public SalaConfig getSalaConfig() {
+		return salaConfig;
+	}
+
+	public void setSalaConfig(SalaConfig salaConfig) {
+		this.salaConfig = salaConfig;
+	} 
+	
+	
 	
 	
 }
