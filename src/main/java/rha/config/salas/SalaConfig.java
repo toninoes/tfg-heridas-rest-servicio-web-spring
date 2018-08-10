@@ -1,4 +1,4 @@
-package rha.model;
+package rha.config.salas;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +13,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import rha.model.Sala;
 
 @Entity
 @Table(name = "sala_configs")
@@ -34,16 +36,7 @@ public class SalaConfig {
 	@Min(0)
 	@Max(59)
 	private Integer minini;
-	
-	@NotNull
-	@Min(0)
-	@Max(23)
-	private Integer horafin;
-	
-	@NotNull
-	@Min(0)
-	@Max(59)
-	private Integer minfin;
+
 	
 	private Boolean lunes, martes, miercoles, jueves, viernes, sabado, domingo;
 	
@@ -57,15 +50,12 @@ public class SalaConfig {
 	}
 	
 	public SalaConfig(@NotNull @Min(0) Integer cupo, @NotNull @Min(0) @Max(23) Integer horaini,
-			@NotNull @Min(0) @Max(59) Integer minini, @NotNull @Min(0) @Max(23) Integer horafin,
-			@NotNull @Min(0) @Max(59) Integer minfin, Boolean lunes, Boolean martes, Boolean miercoles, Boolean jueves,
-			Boolean viernes, Boolean sabado, Boolean domingo) {
+			@NotNull @Min(0) @Max(59) Integer minini, Boolean lunes, Boolean martes, 
+			Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo) {
 		super();
 		this.cupo = cupo;
 		this.horaini = horaini;
 		this.minini = minini;
-		this.horafin = horafin;
-		this.minfin = minfin;
 		this.lunes = lunes;
 		this.martes = martes;
 		this.miercoles = miercoles;
@@ -76,15 +66,13 @@ public class SalaConfig {
 	}
 	
 	public SalaConfig(@NotNull @Min(0) Integer cupo, @NotNull @Min(0) @Max(23) Integer horaini,
-			@NotNull @Min(0) @Max(59) Integer minini, @NotNull @Min(0) @Max(23) Integer horafin,
-			@NotNull @Min(0) @Max(59) Integer minfin, Boolean lunes, Boolean martes, Boolean miercoles, Boolean jueves,
-			Boolean viernes, Boolean sabado, Boolean domingo, Sala sala) {
+			@NotNull @Min(0) @Max(59) Integer minini, Boolean lunes, Boolean martes, 
+			Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo, 
+			Sala sala) {
 		super();
 		this.cupo = cupo;
 		this.horaini = horaini;
 		this.minini = minini;
-		this.horafin = horafin;
-		this.minfin = minfin;
 		this.lunes = lunes;
 		this.martes = martes;
 		this.miercoles = miercoles;
@@ -125,22 +113,6 @@ public class SalaConfig {
 
 	public void setMinini(Integer minini) {
 		this.minini = minini;
-	}
-
-	public Integer getHorafin() {
-		return horafin;
-	}
-
-	public void setHorafin(Integer horafin) {
-		this.horafin = horafin;
-	}
-
-	public Integer getMinfin() {
-		return minfin;
-	}
-
-	public void setMinfin(Integer minfin) {
-		this.minfin = minfin;
 	}
 
 	public Boolean getLunes() {

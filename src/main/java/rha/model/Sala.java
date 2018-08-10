@@ -18,6 +18,8 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import rha.config.salas.SalaConfig;
+
 @Entity
 @Table(name = "salas")
 public class Sala {
