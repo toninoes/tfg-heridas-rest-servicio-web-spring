@@ -2,7 +2,6 @@ package rha.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,18 +19,20 @@ public class Cita {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PACIENTE_ID") 
+	@ManyToOne
+    @JoinColumn(name = "paciente_id", nullable = false) 
 	private Paciente paciente;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "SALA_ID")
+	@ManyToOne
+    @JoinColumn(name = "sala_id", nullable = false)
 	private Sala sala;
 	
-	// campo adicional (atributo de enlace)
+	// campos adicionales (atributos de enlace)
 	
 	@NotNull(message = "Introduzca una fecha para la cita")
 	private Date fecha;
+	
+	private Long orden;
 
 	public Cita() {
 		super();
@@ -42,6 +43,15 @@ public class Cita {
 		this.paciente = paciente;
 		this.sala = sala;
 		this.fecha = fecha;
+	}
+		
+	public Cita(Paciente paciente, Sala sala, @NotNull(message = "Introduzca una fecha para la cita") Date fecha,
+			Long orden) {
+		super();
+		this.paciente = paciente;
+		this.sala = sala;
+		this.fecha = fecha;
+		this.orden = orden;
 	}
 
 	public Paciente getPaciente() {
@@ -71,7 +81,12 @@ public class Cita {
 	public long getId() {
 		return id;
 	}
-	
-	
-	
+
+	public Long getOrden() {
+		return orden;
+	}
+
+	public void setOrden(Long orden) {
+		this.orden = orden;
+	}
 }

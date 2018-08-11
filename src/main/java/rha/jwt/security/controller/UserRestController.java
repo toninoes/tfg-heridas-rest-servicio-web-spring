@@ -60,6 +60,7 @@ public class UserRestController {
         	if((activacionUsuario.getFechaExpiracion().getTime() - cal.getTime().getTime()) <= 0) {
         		resultado = "Ha pasado el tiempo para activar su cuenta. Contacte con su administrador.";
         	} else {
+        		actUsrRep.delete(activacionUsuario);
         		user.setEnabled(true);
         		userRepository.save(user);
         		resultado = "Bienvenido " + user.getFirstname() + ", su cuenta ha quedado activada correctamente.";

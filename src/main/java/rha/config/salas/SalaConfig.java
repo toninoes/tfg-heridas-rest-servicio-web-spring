@@ -25,7 +25,7 @@ public class SalaConfig {
 	
 	@NotNull
 	@Min(0)
-	private Integer cupo;
+	private Long cupo;
 	
 	@NotNull
 	@Min(0)
@@ -49,7 +49,7 @@ public class SalaConfig {
 		super();
 	}
 	
-	public SalaConfig(@NotNull @Min(0) Integer cupo, @NotNull @Min(0) @Max(23) Integer horaini,
+	public SalaConfig(@NotNull @Min(0) Long cupo, @NotNull @Min(0) @Max(23) Integer horaini,
 			@NotNull @Min(0) @Max(59) Integer minini, Boolean lunes, Boolean martes, 
 			Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo) {
 		super();
@@ -65,7 +65,7 @@ public class SalaConfig {
 		this.domingo = domingo;
 	}
 	
-	public SalaConfig(@NotNull @Min(0) Integer cupo, @NotNull @Min(0) @Max(23) Integer horaini,
+	public SalaConfig(@NotNull @Min(0) Long cupo, @NotNull @Min(0) @Max(23) Integer horaini,
 			@NotNull @Min(0) @Max(59) Integer minini, Boolean lunes, Boolean martes, 
 			Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo, 
 			Sala sala) {
@@ -91,11 +91,11 @@ public class SalaConfig {
 		this.id = id;
 	}
 
-	public Integer getCupo() {
+	public Long getCupo() {
 		return cupo;
 	}
 
-	public void setCupo(Integer cupo) {
+	public void setCupo(Long cupo) {
 		this.cupo = cupo;
 	}
 
