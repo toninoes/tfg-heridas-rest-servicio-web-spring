@@ -28,6 +28,11 @@ public class SalaConfig {
 	private Long cupo;
 	
 	@NotNull
+	@Min(1)
+	@Max(60)
+	private Long minutosPaciente;
+	
+	@NotNull
 	@Min(0)
 	@Max(23)
 	private Integer horaini;
@@ -37,7 +42,6 @@ public class SalaConfig {
 	@Max(59)
 	private Integer minini;
 
-	
 	private Boolean lunes, martes, miercoles, jueves, viernes, sabado, domingo;
 	
 	@JsonIgnore
@@ -48,12 +52,13 @@ public class SalaConfig {
 	public SalaConfig() {
 		super();
 	}
-	
-	public SalaConfig(@NotNull @Min(0) Long cupo, @NotNull @Min(0) @Max(23) Integer horaini,
-			@NotNull @Min(0) @Max(59) Integer minini, Boolean lunes, Boolean martes, 
-			Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo) {
+
+	public SalaConfig(@NotNull @Min(0) Long cupo, @NotNull @Min(1) @Max(120) Long minutosPaciente,
+			@NotNull @Min(0) @Max(23) Integer horaini, @NotNull @Min(0) @Max(59) Integer minini, Boolean lunes,
+			Boolean martes, Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo) {
 		super();
 		this.cupo = cupo;
+		this.minutosPaciente = minutosPaciente;
 		this.horaini = horaini;
 		this.minini = minini;
 		this.lunes = lunes;
@@ -64,13 +69,14 @@ public class SalaConfig {
 		this.sabado = sabado;
 		this.domingo = domingo;
 	}
-	
-	public SalaConfig(@NotNull @Min(0) Long cupo, @NotNull @Min(0) @Max(23) Integer horaini,
-			@NotNull @Min(0) @Max(59) Integer minini, Boolean lunes, Boolean martes, 
-			Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo, 
+
+	public SalaConfig(@NotNull @Min(0) Long cupo, @NotNull @Min(1) @Max(120) Long minutosPaciente,
+			@NotNull @Min(0) @Max(23) Integer horaini, @NotNull @Min(0) @Max(59) Integer minini, Boolean lunes,
+			Boolean martes, Boolean miercoles, Boolean jueves, Boolean viernes, Boolean sabado, Boolean domingo,
 			Sala sala) {
 		super();
 		this.cupo = cupo;
+		this.minutosPaciente = minutosPaciente;
 		this.horaini = horaini;
 		this.minini = minini;
 		this.lunes = lunes;
@@ -178,10 +184,13 @@ public class SalaConfig {
 	public void setSala(Sala sala) {
 		this.sala = sala;
 	}
-	
-	
-	
 
-	
+	public Long getMinutosPaciente() {
+		return minutosPaciente;
+	}
+
+	public void setMinutosPaciente(Long minutosPaciente) {
+		this.minutosPaciente = minutosPaciente;
+	}	
 	
 }

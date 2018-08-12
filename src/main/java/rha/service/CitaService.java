@@ -59,8 +59,8 @@ public class CitaService {
 		if(paciente.getCentroActual().getId() != sala.getCentro().getId())
 			throw new RegistroException("Error. El paciente no pertenece a ese Centro.");
 		
-		Long citasProximasPacienteEnEsaSala = citaRepository.citasProximasPacienteEnEsaSala(sala, hoy, paciente);
-		if(citasProximasPacienteEnEsaSala > 0)
+		Long countProximasCitasPacienteEnEsaSala = citaRepository.countProximasCitasPacienteEnEsaSala(sala, hoy, paciente);
+		if(countProximasCitasPacienteEnEsaSala > 0)
 			throw new RegistroException("Ya tienes próximas citas asignadas en esa sala.");
 
 		SalaConfig sC = sala.getSalaConfig();
@@ -68,34 +68,32 @@ public class CitaService {
 			throw new RegistroException("Esta Sala no está aún disponible para recibir citas.");
 		
 		Boolean disponible = disponibilidad(sC, c.getFecha());
-		Long citasBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, c.getFecha());
-		Long cupoSala = sC.getCupo();
-		if(disponible && citasBySalaAndFecha < cupoSala) {
+		if (!disponible)
+			throw new RegistroException("El día indicado no está disponible.");
+			
+		Long countBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, c.getFecha());
+		if (countBySalaAndFecha >= sC.getCupo())
+			throw new RegistroException("El día indicado está completo de citas para esa sala.");
+		
+		if(c.getOrden() > sC.getCupo())
+			throw new RegistroException("Error: Nº de orden(" + c.getOrden() +
+					") mayor que el cupo disponible en esa sala(" + sC.getCupo() + ").");
+		
+		Long countBySalaAndFechaAndOrden = citaRepository.countBySalaAndFechaAndOrden(sala, 
+				c.getFecha(), c.getOrden());
+		if (countBySalaAndFechaAndOrden > 0)
+			throw new RegistroException("Ya hay una cita reservada para ese día y hora.");
+				
+		try {
 			c.setPaciente(paciente);
 			c.setSala(sala);
-			
-			Long maxOrden = citaRepository.findMaxOrden(sala, c.getFecha());
-			if(maxOrden != null)
-				maxOrden++;
-			else
-				maxOrden = (long) 1;
-			
-			c.setOrden(maxOrden);
-		} else if (!disponible) {
-			throw new RegistroException("El día indicado no está disponible.");
-		} else if (citasBySalaAndFecha >= cupoSala) {
-			throw new RegistroException("El día indicado está completo de citas para esa sala.");
-		}
-		
-		
-		try {
 			return new ResponseEntity<Cita>(citaRepository.save(c), HttpStatus.CREATED);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("guardar", "Cita", c.getId(), e.getMessage());
 		}
 	}
 	
-	public ResponseEntity<Cita> update(long id, Cita c) {
+	public synchronized ResponseEntity<Cita> update(long id, Cita c) {
 		Cita cita = citaRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Cita", "id", id));
 		
@@ -108,8 +106,14 @@ public class CitaService {
 		Paciente paciente = pacienteRepository.findById(c.getPaciente().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", c.getPaciente().getId()));
 		
+		if(cita.getPaciente().getId() != paciente.getId())
+			throw new RegistroException("Error. Está intentando modificar una cita que no le pertenece.");
+		
 		Sala sala = salaRepository.findById(c.getSala().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Sala", "id", c.getSala().getId()));
+		
+		if(cita.getSala().getId() != sala.getId())
+			throw new RegistroException("Error. No está permitido modificar la sala de esta cita.");
 		
 		if(paciente.getCentroActual().getId() != sala.getCentro().getId())
 			throw new RegistroException("Error. El paciente no pertenece a ese Centro.");
@@ -119,26 +123,30 @@ public class CitaService {
 			throw new RegistroException("Esta Sala no está aún disponible para recibir citas.");
 		
 		Boolean disponible = disponibilidad(sC, c.getFecha());
+		if (!disponible)
+			throw new RegistroException("El día indicado no está disponible.");
+		
 		Long citasBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, c.getFecha());
 		Long cupoSala = sC.getCupo();
-		if(disponible && citasBySalaAndFecha < cupoSala) {		
-			Long maxOrden = citaRepository.findMaxOrden(sala, c.getFecha());
-			if(maxOrden != null)
-				maxOrden++;
-			else
-				maxOrden = (long) 1;
-			
-			cita.setOrden(maxOrden);
-			cita.setFecha(c.getFecha());
-		} else if (!disponible) {
-			throw new RegistroException("El día indicado no está disponible.");
-		} else if (citasBySalaAndFecha >= cupoSala) {
+		if (citasBySalaAndFecha >= cupoSala)
 			throw new RegistroException("El día indicado está completo de citas para esa sala.");
-		}
 		
-
+		if(c.getOrden() > sC.getCupo())
+			throw new RegistroException("Error: Nº de orden(" + c.getOrden() +
+					") mayor que el cupo disponible en esa sala(" + sC.getCupo() + ").");
+		
+		Long countBySalaAndFechaAndOrden = citaRepository.countBySalaAndFechaAndOrden(sala, 
+				c.getFecha(), c.getOrden());
+		Long countByIdAndSalaAndFechaAndOrden = citaRepository.countByIdAndSalaAndFechaAndOrden(id, sala, 
+				c.getFecha(), c.getOrden());
+		if (countByIdAndSalaAndFechaAndOrden > 0)
+			System.out.println("REGISTRO NO MODIFICADO");
+		else if (countBySalaAndFechaAndOrden > 0)
+			throw new RegistroException("Ya hay una cita reservada para ese día y hora por otro paciente.");
+		
 		try {
-			
+			cita.setOrden(c.getOrden());
+			cita.setFecha(c.getFecha());
 			return new ResponseEntity<Cita>(citaRepository.save(cita), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Cita", id, e.getMessage());

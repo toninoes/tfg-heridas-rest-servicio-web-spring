@@ -32,6 +32,7 @@ public class Cita {
 	@NotNull(message = "Introduzca una fecha para la cita")
 	private Date fecha;
 	
+	@NotNull(message = "Introduzca un número de orden")
 	private Long orden;
 
 	public Cita() {

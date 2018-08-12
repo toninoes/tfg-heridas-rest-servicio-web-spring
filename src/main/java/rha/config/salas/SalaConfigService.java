@@ -39,6 +39,7 @@ public class SalaConfigService {
 
 		try {
 			salaConfig.setCupo(sC.getCupo());
+			salaConfig.setMinutosPaciente(sC.getMinutosPaciente());
 			salaConfig.setHoraini(sC.getHoraini());
 			salaConfig.setMinini(sC.getMinini());
 			salaConfig.setLunes(sC.getLunes());

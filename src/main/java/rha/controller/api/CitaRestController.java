@@ -40,11 +40,6 @@ public class CitaRestController {
 		return citaservice.pacientesDelanteMia(citaId);
 	}
 	
-	/*@PostMapping
-	public Long numeroCitasBySalaIdByFecha(@RequestBody Cita peticionCita) {
-		return citaservice.numeroCitasBySalaIdByFecha(peticionCita);
-	}*/
-	
 	@GetMapping("recientes")
 	public List<Cita> findRecientes() {
 		return citaservice.findRecientes();

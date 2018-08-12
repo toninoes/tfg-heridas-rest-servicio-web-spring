@@ -19,17 +19,23 @@ public interface CitaRepository extends JpaRepository<Cita, Long>{
 
 	Long countBySalaAndFecha(@Param("sala") Sala sala, @Param("fecha") Date fecha);
 	
+	Long countBySalaAndFechaAndOrden(@Param("sala") Sala sala, @Param("fecha") Date fecha, 
+			@Param("orden") Long orden);
+	
 	@Query("SELECT MAX(c.orden) FROM Cita c "
 			+ "WHERE c.sala =:sala AND c.fecha =:fecha")
 	Long findMaxOrden(@Param("sala") Sala sala, @Param("fecha") Date fecha);
 
 	@Query("SELECT COUNT(*) FROM Cita c "
 			+ "WHERE c.sala =:sala AND c.paciente =:paciente AND c.fecha >= :fecha")
-	Long citasProximasPacienteEnEsaSala(@Param("sala") Sala sala, @Param("fecha") Date date, 
+	Long countProximasCitasPacienteEnEsaSala(@Param("sala") Sala sala, @Param("fecha") Date date, 
 			@Param("paciente") Paciente paciente);
 	
 	@Query("SELECT COUNT(*) FROM Cita c "
 			+ "WHERE c.sala =:sala AND c.fecha =:fecha AND c.orden < :orden")
 	Long countCuantosHayDelante(@Param("sala") Sala sala, @Param("fecha") Date fecha, 
+			@Param("orden") Long orden);
+
+	Long countByIdAndSalaAndFechaAndOrden(@Param("id") long id, @Param("sala") Sala sala, @Param("fecha") Date fecha, 
 			@Param("orden") Long orden);
 }
