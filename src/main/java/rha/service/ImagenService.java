@@ -41,8 +41,6 @@ public class ImagenService {
     			.orElseThrow(() -> new RecursoNoEncontradoException("Imagen", "id", id));
     	
         Resource file = almacenamientoService.loadAsResource(imagen.getNombre());
-        /*return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);*/
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(file, httpHeaders, HttpStatus.OK);
@@ -56,6 +54,7 @@ public class ImagenService {
         Resource file = almacenamientoService.loadAsResource(imagen.getNombre());
         
         HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(file, httpHeaders, HttpStatus.OK);
     }
     

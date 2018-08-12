@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
+import rha.jwt.model.security.User;
+import rha.jwt.security.repository.UserRepository;
 import rha.model.Centro;
 import rha.model.Sala;
 import rha.repository.CentroRepository;
@@ -22,6 +24,9 @@ public class SalaService {
 	
 	@Autowired
 	private CentroRepository centroRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	
 	public List<Sala> findAll() {
@@ -79,5 +84,12 @@ public class SalaService {
 		}
 
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	public List<Sala> findByUserId(long userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", userId));
+		
+		return user.getCentroActual().getSalas();
 	}
 }

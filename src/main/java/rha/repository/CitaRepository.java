@@ -38,4 +38,12 @@ public interface CitaRepository extends JpaRepository<Cita, Long>{
 
 	Long countByIdAndSalaAndFechaAndOrden(@Param("id") long id, @Param("sala") Sala sala, @Param("fecha") Date fecha, 
 			@Param("orden") Long orden);
+
+	List<Cita> findAllByPacienteOrderByIdDesc(@Param("paciente") Paciente paciente);
+	
+	@Query("SELECT c.orden FROM Cita c "
+			+ "WHERE c.sala =:sala AND c.fecha =:fecha")
+	List<Long> findCitasRealizadasByFechaAndSala(@Param("sala") Sala sala, @Param("fecha") Date fecha);
+
+	List<Cita> findAllBySalaAndFecha(@Param("sala") Sala sala, @Param("fecha") Date fecha);
 }

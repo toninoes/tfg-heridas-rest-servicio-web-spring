@@ -1,9 +1,9 @@
 package rha.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,11 @@ import rha.exception.RegistroException;
 import rha.model.Cita;
 import rha.model.Paciente;
 import rha.model.Sala;
+import rha.model.Sanitario;
 import rha.repository.CitaRepository;
 import rha.repository.PacienteRepository;
 import rha.repository.SalaRepository;
+import rha.repository.SanitarioRepository;
 
 @Service
 public class CitaService {
@@ -31,6 +33,9 @@ public class CitaService {
 	
 	@Autowired
 	private SalaRepository salaRepository;
+	
+	@Autowired
+	private SanitarioRepository sanitarioRepository;
 	
 	public List<Cita> findAll() {
 		return citaRepository.findAll();
@@ -156,6 +161,10 @@ public class CitaService {
 	public ResponseEntity<?> delete(long id) {
 	    Cita cita = citaRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Cita", "id", id));
+	    
+	    Date hoy = new Date();
+		if(cita.getFecha().before(hoy))
+			throw new RegistroException("No puedes eliminar una cita pasada.");
 
 	    try {
 	    	citaRepository.delete(cita);
@@ -202,6 +211,64 @@ public class CitaService {
 		Long orden = cita.getOrden();
 		
 		return citaRepository.countCuantosHayDelante(sala, fecha, orden);
+	}
+
+	public List<Cita> findRealizadasByPacienteId(long pacienteId) {
+		Paciente paciente = pacienteRepository.findById(pacienteId)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "pacienteId", pacienteId));
+		
+		return citaRepository.findAllByPacienteOrderByIdDesc(paciente);
+	}
+
+	public List<Cita> findPosiblesByPacienteAndSalaAndFecha(Cita c) {
+		Date hoy = new Date();
+		if(c.getFecha().before(hoy))
+			throw new RegistroException("Tienes que indicar una fecha posterior a la actual.");
+		
+		Paciente paciente = pacienteRepository.findById(c.getPaciente().getId())
+				.orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", c.getPaciente().getId()));
+		
+		Sala sala = salaRepository.findById(c.getSala().getId())
+				.orElseThrow(() -> new RecursoNoEncontradoException("Sala", "id", c.getSala().getId()));
+		
+		if(paciente.getCentroActual().getId() != sala.getCentro().getId())
+			throw new RegistroException("Error. El paciente no pertenece a ese Centro.");
+		
+		SalaConfig sC = sala.getSalaConfig();
+		if(sC == null)
+			throw new RegistroException("Esta Sala no está aún disponible para recibir citas.");
+		
+		Boolean disponible = disponibilidad(sC, c.getFecha());
+		if (!disponible)
+			throw new RegistroException("El día indicado no está disponible.");
+		
+		Long countBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, c.getFecha());
+		if (countBySalaAndFecha >= sC.getCupo())
+			throw new RegistroException("El día indicado está completo de citas para esa sala.");
+		
+		List<Long> citasRealizadas = citaRepository.findCitasRealizadasByFechaAndSala(sala, c.getFecha());
+		//List<Long> ordenesHastaCupo = new ArrayList<Long>();
+		List<Cita> posiblesCitas = new ArrayList<Cita>();
+		Long cupo = sC.getCupo();
+		for(Long i=(long) 1; i<=cupo; i++) {
+			if(!citasRealizadas.contains(i))
+				posiblesCitas.add(new Cita(paciente, sala, c.getFecha(), i));
+		}
+		
+		return posiblesCitas;
+	}
+
+	public List<Cita> findAgendaBySanitarioId(long sanitarioId, Cita c) {
+		Sanitario sanitario = sanitarioRepository.findById(sanitarioId)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "sanitarioId", sanitarioId));
+
+		Sala sala = salaRepository.findById(c.getSala().getId())
+				.orElseThrow(() -> new RecursoNoEncontradoException("Sala", "id", c.getSala().getId()));
+		
+		if(sanitario.getCentroActual().getId() != sala.getCentro().getId())
+			throw new RegistroException("Error. El sanitario no pertenece a ese Centro.");
+				
+		return citaRepository.findAllBySalaAndFecha(sala, c.getFecha());
 	}
 
 }

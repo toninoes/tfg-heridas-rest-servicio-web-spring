@@ -30,6 +30,21 @@ public class CitaRestController {
 		return citaservice.findAll();
 	}
 	
+	@GetMapping("/realizadas/{pacienteId}")
+	public List<Cita> findRealizadasByPacienteId(@PathVariable long pacienteId) {
+		return citaservice.findRealizadasByPacienteId(pacienteId);
+	}
+	
+	@PostMapping("/agenda/{sanitarioId}")
+	public List<Cita> findAgendaBySanitarioId(@PathVariable long sanitarioId, @RequestBody Cita c) {
+		return citaservice.findAgendaBySanitarioId(sanitarioId, c);
+	}
+	
+	@PostMapping("/posibles")
+	public List<Cita> findPosiblesByPacienteAndSalaAndFecha(@RequestBody Cita c) {
+		return citaservice.findPosiblesByPacienteAndSalaAndFecha(c);
+	}
+	
 	@GetMapping("/{id}")
 	public Cita findById(@PathVariable long id) {
 		return citaservice.findById(id);
