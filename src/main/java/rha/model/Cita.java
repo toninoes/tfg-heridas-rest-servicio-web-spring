@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 
@@ -30,6 +32,7 @@ public class Cita {
 	// campos adicionales (atributos de enlace)
 	
 	@NotNull(message = "Introduzca una fecha para la cita")
+	@Temporal(TemporalType.DATE)
 	private Date fecha;
 	
 	@NotNull(message = "Introduzca un número de orden")

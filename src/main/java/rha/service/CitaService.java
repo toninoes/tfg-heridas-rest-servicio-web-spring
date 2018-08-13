@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ import rha.repository.SanitarioRepository;
 
 @Service
 public class CitaService {
+	
+	private Date hoy = getHoy();
 	
 	@Autowired
 	private CitaRepository citaRepository;
@@ -51,8 +54,8 @@ public class CitaService {
 	}
 	
 	public synchronized ResponseEntity<Cita> create(Cita c) {
-		Date hoy = new Date();
-		if(c.getFecha().before(hoy))
+		Date fechaSolicitada = FechaSinTiempo(c.getFecha());
+		if(fechaSolicitada.before(hoy) || fechaSolicitada.equals(hoy))
 			throw new RegistroException("Tienes que indicar una fecha posterior a la actual.");
 						
 		Paciente paciente = pacienteRepository.findById(c.getPaciente().getId())
@@ -72,11 +75,11 @@ public class CitaService {
 		if(sC == null)
 			throw new RegistroException("Esta Sala no está aún disponible para recibir citas.");
 		
-		Boolean disponible = disponibilidad(sC, c.getFecha());
+		Boolean disponible = disponibilidad(sC, fechaSolicitada);
 		if (!disponible)
 			throw new RegistroException("El día indicado no está disponible.");
 			
-		Long countBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, c.getFecha());
+		Long countBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, fechaSolicitada);
 		if (countBySalaAndFecha >= sC.getCupo())
 			throw new RegistroException("El día indicado está completo de citas para esa sala.");
 		
@@ -85,7 +88,7 @@ public class CitaService {
 					") mayor que el cupo disponible en esa sala(" + sC.getCupo() + ").");
 		
 		Long countBySalaAndFechaAndOrden = citaRepository.countBySalaAndFechaAndOrden(sala, 
-				c.getFecha(), c.getOrden());
+				fechaSolicitada, c.getOrden());
 		if (countBySalaAndFechaAndOrden > 0)
 			throw new RegistroException("Ya hay una cita reservada para ese día y hora.");
 				
@@ -101,11 +104,10 @@ public class CitaService {
 	public synchronized ResponseEntity<Cita> update(long id, Cita c) {
 		Cita cita = citaRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Cita", "id", id));
-		
-		Date hoy = new Date();
+		Date fechaSolicitada = FechaSinTiempo(c.getFecha());
 		if(cita.getFecha().before(hoy))
 			throw new RegistroException("No puedes modificar una cita pasada.");
-		else if(c.getFecha().before(hoy))
+		else if(fechaSolicitada.before(hoy) || fechaSolicitada.equals(hoy))
 			throw new RegistroException("Tienes que indicar una fecha posterior a la actual.");
 		
 		Paciente paciente = pacienteRepository.findById(c.getPaciente().getId())
@@ -127,11 +129,11 @@ public class CitaService {
 		if(sC == null)
 			throw new RegistroException("Esta Sala no está aún disponible para recibir citas.");
 		
-		Boolean disponible = disponibilidad(sC, c.getFecha());
+		Boolean disponible = disponibilidad(sC, fechaSolicitada);
 		if (!disponible)
 			throw new RegistroException("El día indicado no está disponible.");
 		
-		Long citasBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, c.getFecha());
+		Long citasBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, fechaSolicitada);
 		Long cupoSala = sC.getCupo();
 		if (citasBySalaAndFecha >= cupoSala)
 			throw new RegistroException("El día indicado está completo de citas para esa sala.");
@@ -141,9 +143,9 @@ public class CitaService {
 					") mayor que el cupo disponible en esa sala(" + sC.getCupo() + ").");
 		
 		Long countBySalaAndFechaAndOrden = citaRepository.countBySalaAndFechaAndOrden(sala, 
-				c.getFecha(), c.getOrden());
+				fechaSolicitada, c.getOrden());
 		Long countByIdAndSalaAndFechaAndOrden = citaRepository.countByIdAndSalaAndFechaAndOrden(id, sala, 
-				c.getFecha(), c.getOrden());
+				fechaSolicitada, c.getOrden());
 		if (countByIdAndSalaAndFechaAndOrden > 0)
 			System.out.println("REGISTRO NO MODIFICADO");
 		else if (countBySalaAndFechaAndOrden > 0)
@@ -151,7 +153,7 @@ public class CitaService {
 		
 		try {
 			cita.setOrden(c.getOrden());
-			cita.setFecha(c.getFecha());
+			cita.setFecha(fechaSolicitada);
 			return new ResponseEntity<Cita>(citaRepository.save(cita), HttpStatus.OK);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("actualizar", "Cita", id, e.getMessage());
@@ -162,7 +164,6 @@ public class CitaService {
 	    Cita cita = citaRepository.findById(id)
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Cita", "id", id));
 	    
-	    Date hoy = new Date();
 		if(cita.getFecha().before(hoy))
 			throw new RegistroException("No puedes eliminar una cita pasada.");
 
@@ -221,8 +222,8 @@ public class CitaService {
 	}
 
 	public List<Cita> findPosiblesByPacienteAndSalaAndFecha(Cita c) {
-		Date hoy = new Date();
-		if(c.getFecha().before(hoy))
+		Date fechaSolicitada = FechaSinTiempo(c.getFecha());
+		if(fechaSolicitada.before(hoy) || fechaSolicitada.equals(hoy))
 			throw new RegistroException("Tienes que indicar una fecha posterior a la actual.");
 		
 		Paciente paciente = pacienteRepository.findById(c.getPaciente().getId())
@@ -238,27 +239,27 @@ public class CitaService {
 		if(sC == null)
 			throw new RegistroException("Esta Sala no está aún disponible para recibir citas.");
 		
-		Boolean disponible = disponibilidad(sC, c.getFecha());
+		Boolean disponible = disponibilidad(sC, fechaSolicitada);
 		if (!disponible)
 			throw new RegistroException("El día indicado no está disponible.");
 		
-		Long countBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, c.getFecha());
+		Long countBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, fechaSolicitada);
 		if (countBySalaAndFecha >= sC.getCupo())
 			throw new RegistroException("El día indicado está completo de citas para esa sala.");
 		
-		List<Long> citasRealizadas = citaRepository.findCitasRealizadasByFechaAndSala(sala, c.getFecha());
-		//List<Long> ordenesHastaCupo = new ArrayList<Long>();
+		List<Long> citasRealizadas = citaRepository.findCitasRealizadasByFechaAndSala(sala, fechaSolicitada);
 		List<Cita> posiblesCitas = new ArrayList<Cita>();
 		Long cupo = sC.getCupo();
 		for(Long i=(long) 1; i<=cupo; i++) {
 			if(!citasRealizadas.contains(i))
-				posiblesCitas.add(new Cita(paciente, sala, c.getFecha(), i));
+				posiblesCitas.add(new Cita(paciente, sala, fechaSolicitada, i));
 		}
 		
 		return posiblesCitas;
 	}
 
 	public List<Cita> findAgendaBySanitarioId(long sanitarioId, Cita c) {
+		Date fechaSolicitada = FechaSinTiempo(c.getFecha());
 		Sanitario sanitario = sanitarioRepository.findById(sanitarioId)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "sanitarioId", sanitarioId));
 
@@ -268,7 +269,27 @@ public class CitaService {
 		if(sanitario.getCentroActual().getId() != sala.getCentro().getId())
 			throw new RegistroException("Error. El sanitario no pertenece a ese Centro.");
 				
-		return citaRepository.findAllBySalaAndFecha(sala, c.getFecha());
+		return citaRepository.findAllBySalaAndFecha(sala, fechaSolicitada);
+	}
+	
+	private Date getHoy() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
+	}
+	
+	private Date FechaSinTiempo(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		
+		return cal.getTime();
 	}
 
 }
