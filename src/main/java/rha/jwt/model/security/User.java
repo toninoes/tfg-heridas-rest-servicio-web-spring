@@ -73,6 +73,7 @@ public class User {
 	protected String dni;
 	
 	@NotNull(message = "Introduzca una fecha de nacimiento")
+	@Temporal(TemporalType.DATE)
 	protected Date nacimiento;
 	
 	@Column(unique = true, nullable=true) //para pacientes

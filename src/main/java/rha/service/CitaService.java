@@ -269,7 +269,7 @@ public class CitaService {
 		if(sanitario.getCentroActual().getId() != sala.getCentro().getId())
 			throw new RegistroException("Error. El sanitario no pertenece a ese Centro.");
 				
-		return citaRepository.findAllBySalaAndFecha(sala, fechaSolicitada);
+		return citaRepository.findAllBySalaAndFechaOrderByOrdenAsc(sala, fechaSolicitada);
 	}
 	
 	private Date getHoy() {
