@@ -26,7 +26,7 @@ import rha.repository.SanitarioRepository;
 @Service
 public class CitaService {
 	
-	private Date hoy = getHoy();
+	private Date hoy = getHoySinTiempo();
 	
 	@Autowired
 	private CitaRepository citaRepository;
@@ -269,10 +269,10 @@ public class CitaService {
 		if(sanitario.getCentroActual().getId() != sala.getCentro().getId())
 			throw new RegistroException("Error. El sanitario no pertenece a ese Centro.");
 				
-		return citaRepository.findAllBySalaAndFechaOrderByOrdenAsc(sala, fechaSolicitada);
+		return citaRepository.findAllBySalaAndFechaOrderByIdDesc(sala, fechaSolicitada);
 	}
 	
-	private Date getHoy() {
+	private Date getHoySinTiempo() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
