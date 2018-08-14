@@ -104,6 +104,7 @@ public class CitaService {
 	public synchronized ResponseEntity<Cita> update(long id, Cita c) {
 		Cita cita = citaRepository.findById(id)
 				.orElseThrow(() -> new RecursoNoEncontradoException("Cita", "id", id));
+		
 		Date fechaSolicitada = FechaSinTiempo(c.getFecha());
 		if(cita.getFecha().before(hoy))
 			throw new RegistroException("No puedes modificar una cita pasada.");
@@ -222,8 +223,8 @@ public class CitaService {
 	}
 
 	public List<Cita> findPosiblesByPacienteAndSalaAndFecha(Cita c) {
-		Date fechaSolicitada = FechaSinTiempo(c.getFecha());
-		if(fechaSolicitada.before(hoy) || fechaSolicitada.equals(hoy))
+		Date fechaSeleccionada = FechaSinTiempo(c.getFecha());
+		if(fechaSeleccionada.before(hoy) || fechaSeleccionada.equals(hoy))
 			throw new RegistroException("Tienes que indicar una fecha posterior a la actual.");
 		
 		Paciente paciente = pacienteRepository.findById(c.getPaciente().getId())
@@ -239,20 +240,20 @@ public class CitaService {
 		if(sC == null)
 			throw new RegistroException("Esta Sala no está aún disponible para recibir citas.");
 		
-		Boolean disponible = disponibilidad(sC, fechaSolicitada);
+		Boolean disponible = disponibilidad(sC, fechaSeleccionada);
 		if (!disponible)
 			throw new RegistroException("El día indicado no está disponible.");
 		
-		Long countBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, fechaSolicitada);
+		Long countBySalaAndFecha = citaRepository.countBySalaAndFecha(sala, fechaSeleccionada);
 		if (countBySalaAndFecha >= sC.getCupo())
 			throw new RegistroException("El día indicado está completo de citas para esa sala.");
 		
-		List<Long> citasRealizadas = citaRepository.findCitasRealizadasByFechaAndSala(sala, fechaSolicitada);
+		List<Long> citasRealizadas = citaRepository.findCitasRealizadasByFechaAndSala(sala, fechaSeleccionada);
 		List<Cita> posiblesCitas = new ArrayList<Cita>();
 		Long cupo = sC.getCupo();
 		for(Long i=(long) 1; i<=cupo; i++) {
 			if(!citasRealizadas.contains(i))
-				posiblesCitas.add(new Cita(paciente, sala, fechaSolicitada, i));
+				posiblesCitas.add(new Cita(paciente, sala, c.getFecha(), i));
 		}
 		
 		return posiblesCitas;
@@ -271,7 +272,7 @@ public class CitaService {
 				
 		return citaRepository.findAllBySalaAndFechaOrderByIdDesc(sala, fechaSolicitada);
 	}
-	
+
 	private Date getHoySinTiempo() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -291,5 +292,6 @@ public class CitaService {
 		
 		return cal.getTime();
 	}
+
 
 }
