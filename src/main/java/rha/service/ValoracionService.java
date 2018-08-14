@@ -1,5 +1,6 @@
 package rha.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,8 @@ import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Sanitario;
 import rha.model.Valoracion;
-import rha.model.ValoracionesResults;
+import rha.model.mapping.DosFechas;
+import rha.model.mapping.ValoracionesResults;
 import rha.repository.SanitarioRepository;
 import rha.repository.ValoracionRepository;
 
@@ -80,6 +82,12 @@ public class ValoracionService {
 			throw new ErrorInternoServidorException("guardar", "Valoracion", v.getId(), e.getMessage());
 		}
     }
+
+	public List<ValoracionesResults> findAvgNotaBySanitarioPeriodico(DosFechas df) {
+		Date fecha1 = df.getFecha1();
+		Date fecha2 = df.getFecha2();
+		return valoracionRepository.findAvgNotaBySanitarioPeriodico(fecha1, fecha2);
+	}
 	
 	
 }

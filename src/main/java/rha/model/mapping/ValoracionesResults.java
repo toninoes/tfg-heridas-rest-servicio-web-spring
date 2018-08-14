@@ -1,4 +1,6 @@
-package rha.model;
+package rha.model.mapping;
+
+import rha.model.Sanitario;
 
 public class ValoracionesResults {
 	private Double notaMedia;

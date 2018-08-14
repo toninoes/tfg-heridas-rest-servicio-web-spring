@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rha.model.Valoracion;
-import rha.model.ValoracionesResults;
+import rha.model.mapping.DosFechas;
+import rha.model.mapping.ValoracionesResults;
 import rha.service.ValoracionService;
 
 @RestController
@@ -56,6 +57,11 @@ public class ValoracionRestController {
 	@GetMapping("/media")
 	public List<ValoracionesResults> valoracionesMedias() {
 		return valoracionService.valoracionesMedias();
+	}
+	
+	@PostMapping("/media")
+	public List<ValoracionesResults> valoracionesMediasPeriodicas(@RequestBody DosFechas df) {
+		return valoracionService.findAvgNotaBySanitarioPeriodico(df);
 	}
 	
 	@PostMapping

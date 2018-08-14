@@ -29,7 +29,7 @@ public class Valoracion {
 	private long id;
 	
 	@Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
     @CreationTimestamp
     private Date fecha;
 	

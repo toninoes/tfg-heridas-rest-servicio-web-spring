@@ -1,5 +1,6 @@
 package rha.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import rha.model.Sanitario;
 import rha.model.Valoracion;
-import rha.model.ValoracionesResults;
+import rha.model.mapping.ValoracionesResults;
 
 @RepositoryRestResource(collectionResourceRel = "valoraciones", path = "valoraciones")
 public interface ValoracionRepository extends JpaRepository<Valoracion, Long>{
@@ -31,14 +32,21 @@ public interface ValoracionRepository extends JpaRepository<Valoracion, Long>{
 	
 	// A partir de aquí con <ValoracionesResults>
 	
-	@Query("SELECT new rha.model.ValoracionesResults"
+	@Query("SELECT new rha.model.mapping.ValoracionesResults"
 			+ "(AVG(v.nota) as notaMedia, v.sanitario as sanitario, COUNT(v.nota) as totalNotas) "
 			+ "FROM Valoracion v "
 			+ "GROUP BY v.sanitario "
 			+ "ORDER BY AVG(v.nota) DESC")
 	List<ValoracionesResults> findAvgNotaBySanitario();
 	
-	@Query("SELECT new rha.model.ValoracionesResults"
+	@Query("SELECT new rha.model.mapping.ValoracionesResults"
+			+ "(AVG(v.nota) as notaMedia, v.sanitario as sanitario, COUNT(v.nota) as totalNotas) "
+			+ "FROM Valoracion v WHERE v.fecha BETWEEN :d1 AND :d2 "
+			+ "GROUP BY v.sanitario "
+			+ "ORDER BY AVG(v.nota) DESC")
+	List<ValoracionesResults> findAvgNotaBySanitarioPeriodico(@Param("d1") Date d1, @Param("d2") Date d2);
+	
+	@Query("SELECT new rha.model.mapping.ValoracionesResults"
 			+ "(AVG(v.nota) as notaMedia, v.sanitario as sanitario, COUNT(v.nota) as totalNotas) "
 			+ "FROM Valoracion v "
 			+ "WHERE v.sanitario.firstname LIKE %:texto% "
