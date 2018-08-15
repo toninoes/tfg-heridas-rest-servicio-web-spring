@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service;
 
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
+import rha.exception.RegistroException;
+import rha.model.Cura;
 import rha.model.Sanitario;
 import rha.model.Valoracion;
 import rha.model.mapping.DosFechas;
 import rha.model.mapping.ValoracionesResults;
+import rha.repository.CuraRepository;
 import rha.repository.SanitarioRepository;
 import rha.repository.ValoracionRepository;
 
@@ -25,6 +28,10 @@ public class ValoracionService {
 	
 	@Autowired
 	private SanitarioRepository sanitarioRepository;
+	
+	@Autowired
+	private CuraRepository curaRepository;
+	
 	
 	public List<Valoracion> findAll() {
 		return valoracionRepository.findAllByOrderByIdDesc();
@@ -60,7 +67,15 @@ public class ValoracionService {
 		return valoracionRepository.findAvgNotaBySanitario();
 	}
 	
-	public ResponseEntity<Valoracion> create(Valoracion v) {
+	public ResponseEntity<Valoracion> create(long id, Valoracion v) {
+		Cura cura = curaRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
+		
+		if(cura.getValorada()) {
+			throw new RegistroException("La cura indicada ya ha sido valorada anteriormente.");
+		}
+
+		
 		if(v.getNota() < 0 || v.getNota() > 10) {
 			throw new ErrorInternoServidorException("guardar", "Valoracion", v.getNota(), 
 					"Nota debe ser un valor entre 0 y 10");
@@ -74,9 +89,13 @@ public class ValoracionService {
 		Sanitario sanitario = sanitarioRepository.findById(v.getSanitario().getId())
 				.orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", v.getSanitario().getId()));
 		
-		v.setSanitario(sanitario);
+		if(cura.getSanitario().getId() != sanitario.getId()) {
+			throw new RegistroException("La cura indicada no ha sido atendida por ese sanitario.");
+		}
 		
 		try {
+			cura.setValorada(true);
+			curaRepository.save(cura);
 			return new ResponseEntity<Valoracion>(valoracionRepository.save(v), HttpStatus.CREATED);
 		} catch (Exception e) {
 			throw new ErrorInternoServidorException("guardar", "Valoracion", v.getId(), e.getMessage());

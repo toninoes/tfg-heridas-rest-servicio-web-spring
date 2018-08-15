@@ -64,9 +64,9 @@ public class ValoracionRestController {
 		return valoracionService.findAvgNotaBySanitarioPeriodico(df);
 	}
 	
-	@PostMapping
-	public ResponseEntity<Valoracion> create(@RequestBody Valoracion v) {
-		return valoracionService.create(v);
+	@PostMapping("/cura/{id}")
+	public ResponseEntity<Valoracion> create(@PathVariable long id, @RequestBody Valoracion v) {
+		return valoracionService.create(id, v);
 	}
 
 }

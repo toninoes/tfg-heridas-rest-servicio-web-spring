@@ -50,46 +50,10 @@ public class CuraRestController {
 	    return curaService.delete(id);
 	}
 	
-	/*
-	@Autowired
-	private CuraRepository curaRepository;
-		
-	
-	@GetMapping("/foto/{id}")
-	public ResponseEntity<Resource> fotoByCuraId(@PathVariable long id) {
-		
-		String foto = curaRepository.fotoByCuraId(id)
-				.orElseThrow(() -> new RecursoNoEncontradoException("Fotografia", " Cura.id", id));
-		
-		ImagenService fichero = new ImagenService();
-		
-		return fichero.descargar(foto);
+	@GetMapping("/novaloradas/bypaciente/{pacienteId}")
+	public List<Cura> findByPacienteIdAndNotValoradas(@PathVariable long pacienteId) {
+		return curaService.findByPacienteIdAndNotValoradas(pacienteId);
 	}
-	
-	@PutMapping("/{id}")	
-	public ResponseEntity<Cura> update(@PathVariable(value = "id") Long id,
-			@RequestParam("file") MultipartFile mpf) {
-		
-		ImagenService fichero = new ImagenService(almacenamientoService);
-		Cura curaDeId = curaRepository.findById(id)
-				.orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", id));
-		
-		Optional<Cura> curaDeMpf = curaRepository.findByFoto(mpf.getName());
-		
-		// control unicidad de nombre de fotografía
-		if(curaDeMpf.isPresent() && (curaDeMpf.get().getId() != curaDeId.getId()))
-			throw new CampoUnicoException("Cura", "foto", mpf.getName());
 
-		try {
-			fichero.borrar(curaDeId.getFoto());
-			curaDeId.setFoto(fichero.subir(mpf));
-			curaRepository.save(curaDeId);
-		} catch (Exception e) {
-			throw new ErrorInternoServidorException("actualizar", "Cura", id, e.getMessage());
-		}
-		
-		return new ResponseEntity<Cura>(HttpStatus.OK);
-	}
-	*/
 	
 }
