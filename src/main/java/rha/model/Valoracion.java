@@ -42,7 +42,7 @@ public class Valoracion {
 	@Max(10)
 	private Double nota;
 	
-	@Column(length = 280)
+	@Column(length = 280) //como un tweet
 	private String observaciones;
 
 	public Valoracion() {

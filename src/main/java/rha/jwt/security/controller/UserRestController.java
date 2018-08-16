@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,7 @@ import rha.jwt.security.JwtTokenUtil;
 import rha.jwt.security.JwtUser;
 import rha.jwt.security.repository.ActivacionUsuarioRepository;
 import rha.jwt.security.repository.UserRepository;
+import rha.model.Centro;
 
 @RestController
 public class UserRestController {
@@ -37,6 +40,11 @@ public class UserRestController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @GetMapping("ping")
+    public ResponseEntity<?> ping() {
+    	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } 
 
     @GetMapping("user")
     public JwtUser getAuthenticatedUser(HttpServletRequest request) {

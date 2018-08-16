@@ -74,9 +74,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             
             // Para H2 Database
-            .antMatchers("/h2-console/**/**").permitAll()
+            //.antMatchers("/h2-console/**/**").permitAll()
 
             .antMatchers("/auth/**").permitAll()
+            .antMatchers("/ping/**").permitAll()
             //.antMatchers("/api/imagenes/**").permitAll()
             .antMatchers("/activacion/**").permitAll()
             .anyRequest().authenticated();
