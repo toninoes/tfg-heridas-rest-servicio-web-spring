@@ -12,4 +12,11 @@ public class Fecha {
 		
 		return formateador.format(fechaExpiracion);
 	}
+	
+	public static String fechaHoraSPshort(Date fecha) {
+		SimpleDateFormat formateador = new SimpleDateFormat(
+				   "dd'/'MM'/'yyyy HH:mm ", new Locale("es_ES"));
+		
+		return formateador.format(fecha);
+	}
 }
