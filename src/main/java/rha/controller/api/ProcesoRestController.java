@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import rha.model.Cura;
 import rha.model.Proceso;
 import rha.service.ProcesoService;
-import rha.util.GeneratePdfReport;
+import rha.util.GenerarInformePDF;
 
 @RestController
 @RequestMapping("/api/procesos")
@@ -46,7 +46,7 @@ public class ProcesoRestController {
 	public ResponseEntity<InputStreamResource> findPdfById(@PathVariable long id) throws IOException {
 		Proceso proceso =  procesoService.findById(id);
 
-        ByteArrayInputStream bis = GeneratePdfReport.informeProceso(proceso);
+        ByteArrayInputStream bis = GenerarInformePDF.informeProceso(proceso);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "inline; filename=informe.pdf");
