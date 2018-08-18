@@ -21,13 +21,14 @@ import rha.model.Cura;
 import rha.model.Imagen;
 import rha.repository.CuraRepository;
 import rha.repository.ImagenRepository;
+import rha.util.Fichero;
 
 
 @Service
 public class ImagenService {
 
 	@Autowired
-    private AlmacenamientoService almacenamientoService;
+    private AlmacenamientoImgService almacenamientoImgService;
 	
 	@Autowired
 	private ImagenRepository imagenRepository;
@@ -40,7 +41,7 @@ public class ImagenService {
     	Imagen imagen = imagenRepository.findById(id)
     			.orElseThrow(() -> new RecursoNoEncontradoException("Imagen", "id", id));
     	
-        Resource file = almacenamientoService.loadAsResource(imagen.getNombre());
+        Resource file = almacenamientoImgService.loadAsResource(imagen.getNombre());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(file, httpHeaders, HttpStatus.OK);
@@ -51,7 +52,7 @@ public class ImagenService {
     	Imagen imagen = imagenRepository.findByNombre(nombre)
     			.orElseThrow(() -> new RecursoNoEncontradoException("Imagen", "nombre", nombre));
     	
-        Resource file = almacenamientoService.loadAsResource(imagen.getNombre());
+        Resource file = almacenamientoImgService.loadAsResource(imagen.getNombre());
         
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.IMAGE_JPEG);
@@ -59,7 +60,7 @@ public class ImagenService {
     }
     
     public ResponseEntity<?> subir(MultipartFile img, long curaId, String descripcion) {
-    	if(esImagen(img)) {
+    	if(Fichero.esImagen(img)) {
 			Cura cura = curaRepository.findById(curaId)
 		            .orElseThrow(() -> new RecursoNoEncontradoException("Cura", "id", curaId));
 			
@@ -68,7 +69,7 @@ public class ImagenService {
     	
 			imagenRepository.save(imagen);
     		
-        	almacenamientoService.store(img);
+        	almacenamientoImgService.store(img);
         	
         	return new ResponseEntity<Imagen>(imagen, HttpStatus.CREATED);
     	}else {
@@ -77,14 +78,14 @@ public class ImagenService {
     }
     
     public ResponseEntity<?> subirsinCura(MultipartFile img)  {
-    	if(esImagen(img)) {
+    	if(Fichero.esImagen(img)) {
     		
     		Imagen imagen = new Imagen(img.getOriginalFilename());
     		imagenRepository.save(imagen);
     		String nuevoNombre = imagen.getId() + "." + obtenerExtension(img);
     		imagen.setNombre(nuevoNombre);    	
 			imagenRepository.save(imagen);    		
-        	almacenamientoService.store(img, nuevoNombre);
+        	almacenamientoImgService.store(img, nuevoNombre);
         	
         	return new ResponseEntity<Imagen>(imagen, HttpStatus.CREATED);
     	}else {
@@ -93,7 +94,7 @@ public class ImagenService {
     }
     
     public void borrar(@PathVariable String filename) {
-        almacenamientoService.delete(filename);
+        almacenamientoImgService.delete(filename);
     }
     
 
@@ -101,21 +102,6 @@ public class ImagenService {
     public ResponseEntity<?> handleStorageFileNotFound(AlmacenamientoFicheroNoEncontradoException exc) {
         return ResponseEntity.notFound().build();
     }
-    
-    private Boolean esImagen(MultipartFile f) {
-		Boolean res = false;
-		
-		if(
-				f.getContentType().equals("image/jpeg")		||	// .jpeg .jpg	JPEG images
-				f.getContentType().equals("image/png")		||	// .png			Portable Network Graphics
-				f.getContentType().equals("image/gif")		||	// .gif			Graphics Interchange Format (GIF)				
-				f.getContentType().equals("image/tiff")		||	// .tif .tiff	Tagged Image File Format (TIFF)
-				f.getContentType().equals("image/webp")			// .webp		WEBP image				
-			)		
-			res = true;
-		
-		return res;
-	}
     
     private String obtenerExtension (MultipartFile file) {
     	return FilenameUtils.getExtension(file.getOriginalFilename());

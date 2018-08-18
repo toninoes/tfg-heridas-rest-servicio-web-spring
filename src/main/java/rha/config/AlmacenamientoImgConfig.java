@@ -3,20 +3,20 @@ package rha.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("storage")
-public class AlmacenamientoConfig {
+public class AlmacenamientoImgConfig {
 
     /**
      * Localización de los ficheros
      */
-    private final String LOCATION = "../RESTheridAppStorage";
+    private final String LOCATION_IMG = "../RESTheridAppIMG";
     
     /**
      * Tamaño máximo ficheros
      */
     private final long TAM_MAX_FICHERO = 7340032; // 7 MiB (7340032 B)
 
-    public String getLocation() {
-        return LOCATION;
+    public String getLocationIMG() {
+        return LOCATION_IMG;
     }
 
 	public long getTamMaxFichero() {

@@ -4,10 +4,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import rha.config.AlmacenamientoConfig;
+import rha.config.AlmacenamientoImgConfig;
 import rha.exception.AlmacenamientoException;
 import rha.exception.AlmacenamientoFicheroNoEncontradoException;
-
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -22,15 +21,15 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 
 @Service
-public class AlmacenamientoService {
-	private Path rootLocation;
+public class AlmacenamientoImgService {
+	private Path rootLocationIMG;
 	
 	private long tam_max_fichero;
 	private double MibToB = 1048576; //1024 x 1024
 
     @Autowired
-    public AlmacenamientoService(AlmacenamientoConfig properties) {
-        this.rootLocation = Paths.get(properties.getLocation());
+    public AlmacenamientoImgService(AlmacenamientoImgConfig properties) {
+        this.rootLocationIMG = Paths.get(properties.getLocationIMG());
         this.tam_max_fichero = properties.getTamMaxFichero();
     }
 
@@ -46,8 +45,10 @@ public class AlmacenamientoService {
                         "No se puede almacenar el fichero con una ruta relativa fuera del directorio actual "
                                 + filename);
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
-                    StandardCopyOption.REPLACE_EXISTING);
+            
+            Files.copy(file.getInputStream(), this.rootLocationIMG.resolve(filename),
+                        StandardCopyOption.REPLACE_EXISTING);
+            
         }
         catch (IOException e) {
             throw new AlmacenamientoException("Error al almacenar el fichero " + filename, e);
@@ -71,28 +72,32 @@ public class AlmacenamientoService {
             	throw new AlmacenamientoException(String.format("ERROR: El fichero supera los %.2f MiB", 
             			(tam_max_fichero/MibToB)));
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
-                    StandardCopyOption.REPLACE_EXISTING);
+            
+            Files.copy(file.getInputStream(), this.rootLocationIMG.resolve(filename),
+                        StandardCopyOption.REPLACE_EXISTING);
+            
         }
         catch (IOException e) {
             throw new AlmacenamientoException("Error al almacenar el fichero " + filename, e);
         }
     }
 
+    
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(path -> this.rootLocation.relativize(path));
+            return Files.walk(this.rootLocationIMG, 1)
+                    .filter(path -> !path.equals(this.rootLocationIMG))
+                    .map(path -> this.rootLocationIMG.relativize(path));
         }
         catch (IOException e) {
             throw new AlmacenamientoException("Error al leer los ficheros almacenados", e);
         }
 
     }
+    
 
     public Path load(String filename) {
-        return rootLocation.resolve(filename);
+        return rootLocationIMG.resolve(filename);
     }
 
     public Resource loadAsResource(String filename) {
@@ -115,7 +120,7 @@ public class AlmacenamientoService {
 
     public void delete(String filename) {
         try {
-			FileSystemUtils.deleteRecursively(rootLocation.resolve(filename));
+			FileSystemUtils.deleteRecursively(rootLocationIMG.resolve(filename));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,12 +128,12 @@ public class AlmacenamientoService {
     }
     
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+        FileSystemUtils.deleteRecursively(rootLocationIMG.toFile());
     }
 
     public void init() {
         try {
-            Files.createDirectories(rootLocation);
+            Files.createDirectories(rootLocationIMG);
         }
         catch (IOException e) {
             throw new AlmacenamientoException("No se pudo inicializar el almacenamiento", e);

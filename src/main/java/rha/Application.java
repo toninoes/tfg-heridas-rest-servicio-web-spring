@@ -5,17 +5,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
 
-import rha.config.AlmacenamientoConfig;
-//import org.springframework.core.SpringVersion;
+import rha.config.AlmacenamientoDocConfig;
+import rha.config.AlmacenamientoImgConfig;
+import org.springframework.core.SpringVersion;
 
 @SpringBootApplication
 @EnableCaching
-@EnableConfigurationProperties(AlmacenamientoConfig.class)
+@Configuration
+@EnableConfigurationProperties({AlmacenamientoImgConfig.class, AlmacenamientoDocConfig.class})
 public class Application extends SpringBootServletInitializer {
 	
 	public static void main(String[] args) throws Exception {
-		//System.out.println("Spring Version: " + SpringVersion.getVersion());
+		System.out.println("Spring Version: " + SpringVersion.getVersion());
 		SpringApplication.run(Application.class, args);
 	}
 	

@@ -21,13 +21,14 @@ import rha.model.Cuidado;
 import rha.model.Diagnostico;
 import rha.repository.CuidadoRepository;
 import rha.repository.DiagnosticoRepository;
+import rha.util.Fichero;
 
 
 @Service
 public class CuidadoService {
 
 	@Autowired
-    private AlmacenamientoService almacenamientoService;
+    private AlmacenamientoDocService almacenamientoDocService;
 	
 	@Autowired
 	private CuidadoRepository cuidadoRepository;
@@ -41,7 +42,7 @@ public class CuidadoService {
     	Cuidado cuidado = cuidadoRepository.findById(id)
     			.orElseThrow(() -> new RecursoNoEncontradoException("Cuidado", "id", id));
     	
-        Resource file = almacenamientoService.loadAsResource(cuidado.getNombre());
+        Resource file = almacenamientoDocService.loadAsResource(cuidado.getNombre());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_PDF);
         return new ResponseEntity<>(file, httpHeaders, HttpStatus.OK);
@@ -52,7 +53,7 @@ public class CuidadoService {
     	Cuidado cuidado = cuidadoRepository.findByNombre(nombre)
     			.orElseThrow(() -> new RecursoNoEncontradoException("Cuidado", "nombre", nombre));
     	
-        Resource file = almacenamientoService.loadAsResource(cuidado.getNombre());
+        Resource file = almacenamientoDocService.loadAsResource(cuidado.getNombre());
         
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_PDF);
@@ -60,7 +61,7 @@ public class CuidadoService {
     }
     
     public ResponseEntity<?> subir(MultipartFile pdf, long diagnosticoId, String descripcion) {
-    	if(esPDF(pdf)) {
+    	if(Fichero.esPDF(pdf)) {
 			Diagnostico diagnostico = diagnosticoRepository.findById(diagnosticoId)
 		            .orElseThrow(() -> new RecursoNoEncontradoException("Diagnostico", "id", diagnosticoId));
 			
@@ -69,7 +70,7 @@ public class CuidadoService {
     	
 			cuidadoRepository.save(cuidado);
     		
-        	almacenamientoService.store(pdf);
+        	almacenamientoDocService.store(pdf);
         	
         	return new ResponseEntity<Cuidado>(cuidado, HttpStatus.CREATED);
     	}else {
@@ -78,14 +79,14 @@ public class CuidadoService {
     }
     
     public ResponseEntity<?> subirsinDiagnostico(MultipartFile doc)  {
-    	if(esPDF(doc)) {
+    	if(Fichero.esPDF(doc)) {
     		
     		Cuidado cuidado = new Cuidado(doc.getOriginalFilename());
     		cuidadoRepository.save(cuidado);
     		String nuevoNombre = cuidado.getId() + "." + obtenerExtension(doc);
     		cuidado.setNombre(nuevoNombre);    	
 			cuidadoRepository.save(cuidado);    		
-        	almacenamientoService.store(doc, nuevoNombre);
+        	almacenamientoDocService.store(doc, nuevoNombre);
         	
         	return new ResponseEntity<Cuidado>(cuidado, HttpStatus.CREATED);
     	}else {
@@ -94,7 +95,7 @@ public class CuidadoService {
     }
     
     public void borrar(@PathVariable String filename) {
-        almacenamientoService.delete(filename);
+        almacenamientoDocService.delete(filename);
     }
     
 
@@ -102,10 +103,6 @@ public class CuidadoService {
     public ResponseEntity<?> handleStorageFileNotFound(AlmacenamientoFicheroNoEncontradoException exc) {
         return ResponseEntity.notFound().build();
     }
-    
-    private Boolean esPDF(MultipartFile f) {
-		return (f.getContentType().equals("application/pdf"));
-	}
     
     private String obtenerExtension (MultipartFile file) {
     	return FilenameUtils.getExtension(file.getOriginalFilename());
