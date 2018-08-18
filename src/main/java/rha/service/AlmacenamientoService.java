@@ -4,7 +4,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import rha.config.ImagenConfig;
+import rha.config.AlmacenamientoConfig;
 import rha.exception.AlmacenamientoException;
 import rha.exception.AlmacenamientoFicheroNoEncontradoException;
 
@@ -25,13 +25,13 @@ import org.springframework.util.StringUtils;
 public class AlmacenamientoService {
 	private Path rootLocation;
 	
-	private long tam_max_img;
+	private long tam_max_fichero;
 	private double MibToB = 1048576; //1024 x 1024
 
     @Autowired
-    public AlmacenamientoService(ImagenConfig properties) {
+    public AlmacenamientoService(AlmacenamientoConfig properties) {
         this.rootLocation = Paths.get(properties.getLocation());
-        this.tam_max_img = properties.getTamMaxImagen();
+        this.tam_max_fichero = properties.getTamMaxFichero();
     }
 
     public void store(MultipartFile file) {
@@ -67,9 +67,9 @@ public class AlmacenamientoService {
                                 + filename);
             }
             
-            if (file.getSize() > tam_max_img) {
-            	throw new AlmacenamientoException(String.format("ERROR: la imagen supera los %.2f MiB", 
-            			(tam_max_img/MibToB)));
+            if (file.getSize() > tam_max_fichero) {
+            	throw new AlmacenamientoException(String.format("ERROR: El fichero supera los %.2f MiB", 
+            			(tam_max_fichero/MibToB)));
             }
             Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
                     StandardCopyOption.REPLACE_EXISTING);

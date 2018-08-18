@@ -6,12 +6,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 
-import rha.config.ImagenConfig;
+import rha.config.AlmacenamientoConfig;
 //import org.springframework.core.SpringVersion;
 
 @SpringBootApplication
 @EnableCaching
-@EnableConfigurationProperties(ImagenConfig.class)
+@EnableConfigurationProperties(AlmacenamientoConfig.class)
 public class Application extends SpringBootServletInitializer {
 	
 	public static void main(String[] args) throws Exception {

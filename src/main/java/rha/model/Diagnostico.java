@@ -37,6 +37,10 @@ public class Diagnostico {
 	@JoinColumn(name="grupo_id", nullable = false)
 	private Grupodiagnostico grupodiagnostico;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "diagnostico")
+    private List<Cuidado> cuidados;
+	
 	public Diagnostico() {
 		super();
 	}
@@ -82,6 +86,14 @@ public class Diagnostico {
 
 	public long getId() {
 		return id;
+	}
+
+	public List<Cuidado> getCuidados() {
+		return cuidados;
+	}
+
+	public void setCuidados(List<Cuidado> cuidados) {
+		this.cuidados = cuidados;
 	}
 
 	
