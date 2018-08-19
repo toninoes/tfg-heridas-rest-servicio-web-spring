@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Cuidado;
+import rha.model.Grupodiagnostico;
 import rha.model.Sanitario;
 import rha.repository.CuidadoRepository;
+import rha.repository.GrupodiagnosticoRepository;
 import rha.repository.SanitarioRepository;
 
 
@@ -23,6 +25,9 @@ public class CuidadoService {
 	
 	@Autowired
 	private SanitarioRepository sanitarioRepository;
+	
+	@Autowired
+	private GrupodiagnosticoRepository grupodiagnosticoRepository;
 
 	public List<Cuidado> findAll() {
 		return cuidadoRepository.findAll();
@@ -33,9 +38,9 @@ public class CuidadoService {
 	            .orElseThrow(() -> new RecursoNoEncontradoException("Cuidado", "id", id));
 	}
 	
-	public ResponseEntity<Cuidado> create(Cuidado c) {
-		Sanitario sanitario = sanitarioRepository.findById(c.getSanitario().getId())
-	            .orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", c.getSanitario().getId()));
+	public ResponseEntity<Cuidado> create(long id, Cuidado c) {
+		Sanitario sanitario = sanitarioRepository.findById(id)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", id));
 
 		c.setSanitario(sanitario);
 		
@@ -72,6 +77,13 @@ public class CuidadoService {
 		}
 
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	public List<Cuidado> findByGDiagnosticoId(long id) {
+		Grupodiagnostico grupodiagnostico = grupodiagnosticoRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Grupodiagnostico", "id", id));
+		
+		return cuidadoRepository.findByGrupodiagnostico(grupodiagnostico);
 	}
 
 }

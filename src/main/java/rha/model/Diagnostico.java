@@ -84,6 +84,54 @@ public class Diagnostico {
 	public long getId() {
 		return id;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		result = prime * result + ((grupodiagnostico == null) ? 0 : grupodiagnostico.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		result = prime * result + ((procesos == null) ? 0 : procesos.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Diagnostico other = (Diagnostico) obj;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		if (grupodiagnostico == null) {
+			if (other.grupodiagnostico != null)
+				return false;
+		} else if (!grupodiagnostico.equals(other.grupodiagnostico))
+			return false;
+		if (id != other.id)
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		if (procesos == null) {
+			if (other.procesos != null)
+				return false;
+		} else if (!procesos.equals(other.procesos))
+			return false;
+		return true;
+	}
+	
+	
 	
 
 }

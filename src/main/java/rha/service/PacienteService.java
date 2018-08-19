@@ -1,5 +1,6 @@
 package rha.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
+import rha.model.Diagnostico;
+import rha.model.Grupodiagnostico;
 import rha.model.Paciente;
+import rha.model.Proceso;
 import rha.repository.PacienteRepository;
 
 @Service
@@ -52,5 +56,26 @@ public class PacienteService {
 		}
 
 	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	public List<Grupodiagnostico> findGruposdiagnosticosByPaciente(long id) {
+		Paciente paciente = pacienteRepository.findById(id)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Paciente", "id", id));
+		
+		List<Proceso> procesos = paciente.getProcesos();
+		List<Diagnostico> diagnosticos = new ArrayList<>();
+		
+		for(Proceso p : procesos) {
+			if(!diagnosticos.contains(p.getDiagnostico()))
+				diagnosticos.add(p.getDiagnostico());
+		}
+		
+		List<Grupodiagnostico> grupodiagnosticos = new ArrayList<>();
+		for(Diagnostico d : diagnosticos) {
+			if(!grupodiagnosticos.contains(d.getGrupodiagnostico()))
+				grupodiagnosticos.add(d.getGrupodiagnostico());
+		}
+		
+		return grupodiagnosticos;
 	}
 }

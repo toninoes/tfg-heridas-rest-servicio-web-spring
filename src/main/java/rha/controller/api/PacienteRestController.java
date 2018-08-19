@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import rha.model.Grupodiagnostico;
 import rha.model.Paciente;
 import rha.service.PacienteService;
 
@@ -50,6 +51,11 @@ public class PacienteRestController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		return pacienteService.delete(id);
+	}
+	
+	@GetMapping("/{id}/gruposdiagnosticos")
+	public List<Grupodiagnostico> findGruposdiagnosticosByPaciente(@PathVariable long id) {
+		return pacienteService.findGruposdiagnosticosByPaciente(id);
 	}
 
 }

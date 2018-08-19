@@ -15,7 +15,10 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import rha.model.Cuidado;
 import rha.model.Cura;
+import rha.model.Diagnostico;
+import rha.model.Grupodiagnostico;
 import rha.model.Proceso;
 
 import java.io.ByteArrayInputStream;
@@ -198,7 +201,6 @@ public class GenerarInformePDF {
             document.close();
             
         } catch (DocumentException ex) {
-        
             Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
@@ -210,4 +212,124 @@ public class GenerarInformePDF {
 
         return new ByteArrayInputStream(out.toByteArray());
     }
+
+	public static ByteArrayInputStream informeCuidado(Grupodiagnostico grupodiagnostico) {
+		
+		String IMG = "src/main/resources/logo.png";
+    	Document document = new Document(PageSize.A4);
+        document.setMargins(60, 30, 30, 30);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        
+        try {
+        	Image img = Image.getInstance(IMG);
+        	img.setAbsolutePosition(60, 750);
+        	img.scalePercent(45);
+        	            
+        	// Título del documento
+        	Font f=new Font(FontFamily.TIMES_ROMAN, 25.0f, Font.BOLD, BaseColor.BLUE);
+        	String titulo = "Guía de Cuidados\n\n";
+            Paragraph p1=new Paragraph(titulo, f);
+            p1.setAlignment(Element.ALIGN_CENTER);
+            
+            Font fuenteCabecera = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            
+            // Tabla para definir el grupo diagnóstico
+            PdfPTable tabla1 = new PdfPTable(2);
+            tabla1.setWidthPercentage(100);
+            tabla1.setWidths(new int[]{3, 6});
+            
+            PdfPCell celdaTabla1Titulo;
+            celdaTabla1Titulo = new PdfPCell(new Phrase("Cuidados para:", fuenteCabecera));
+            celdaTabla1Titulo.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            celdaTabla1Titulo.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tabla1.addCell(celdaTabla1Titulo);
+            
+            PdfPCell celdaTabla1;
+            celdaTabla1 = new PdfPCell(new Phrase(grupodiagnostico.getNombre()));
+            celdaTabla1.setVerticalAlignment(Element.ALIGN_TOP);
+            celdaTabla1.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tabla1.addCell(celdaTabla1);
+            
+            String cadenaDiagnosticos = "";
+            List<Diagnostico> diagnosticos = grupodiagnostico.getDiagnosticos();
+            for(Diagnostico diagnostico : diagnosticos) {
+            	cadenaDiagnosticos += "-" + diagnostico.getNombre() + "\n";
+            }
+            
+            celdaTabla1Titulo = new PdfPCell(new Phrase("Para pacientes diagnosticados de:", fuenteCabecera));
+            celdaTabla1Titulo.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            celdaTabla1Titulo.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tabla1.addCell(celdaTabla1Titulo);
+            
+            celdaTabla1 = new PdfPCell(new Phrase(cadenaDiagnosticos));
+            celdaTabla1.setVerticalAlignment(Element.ALIGN_TOP);
+            celdaTabla1.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tabla1.addCell(celdaTabla1); 
+            
+            // Parrafo para dar paso a los cuidados
+            String cadena = "\n\nA continuación las siguientes recomendaciones o referencias a tener en cuenta:\n\n";
+            Paragraph p2=new Paragraph(cadena);
+            p2.setAlignment(Element.ALIGN_LEFT); 
+            
+            // Tabla con el contenido de los cuidados asociados al grupo diagnóstico
+            PdfPTable tabla2 = new PdfPTable(2);
+            tabla2.setWidthPercentage(100);
+            tabla2.setWidths(new int[]{3, 9});
+            
+            PdfPCell hcell;
+            hcell = new PdfPCell(new Phrase("Referencia", fuenteCabecera));
+            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tabla2.addCell(hcell);
+
+            hcell = new PdfPCell(new Phrase("Descripción", fuenteCabecera));
+            hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tabla2.addCell(hcell);
+            
+            List<Cuidado> cuidados = grupodiagnostico.getCuidados();
+            for (Cuidado cuidado : cuidados) {
+
+                PdfPCell cell;
+
+                cell = new PdfPCell(new Phrase(cuidado.getNombre()));
+                cell.setVerticalAlignment(Element.ALIGN_TOP);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                tabla2.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(cuidado.getDescripcion()));
+                cell.setPaddingLeft(5);
+                cell.setVerticalAlignment(Element.ALIGN_TOP);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                tabla2.addCell(cell);
+            }
+            
+            String centro = "\n\n" + "Guía de cuidados emitida el: " + Fecha.fechaHoraSP(new Date());
+            
+            Paragraph p3=new Paragraph(centro);
+            p3.setAlignment(Element.ALIGN_LEFT); 
+           
+            PdfWriter.getInstance(document, out);
+            
+            document.open();
+            
+            document.add(img);
+            document.add(p1);
+            document.add(tabla1);
+            document.add(p2);
+            document.add(tabla2);
+            document.add(p3);
+            
+            document.close();
+                
+        } catch (DocumentException ex) {
+            Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        return new ByteArrayInputStream(out.toByteArray());
+	}
 }
