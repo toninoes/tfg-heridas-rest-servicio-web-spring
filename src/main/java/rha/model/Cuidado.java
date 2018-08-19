@@ -26,14 +26,19 @@ public class Cuidado {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@NotBlank
+	@NotBlank(message = "Introduzca un nombre")
 	private String nombre;
 	
+	@NotBlank(message = "Introduzca una descripción")
 	private String descripcion;
 	
 	@ManyToOne
-	@JoinColumn(name="diagnostico_id", nullable = false)
-	private Diagnostico diagnostico;
+	@JoinColumn(name="grupodiagnostico_id", nullable = false)
+	private Grupodiagnostico grupodiagnostico;
+	
+	@ManyToOne
+	@JoinColumn(name="sanitario_id", nullable = false)
+	private Sanitario sanitario;
 
 	@Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,23 +48,15 @@ public class Cuidado {
 	public Cuidado() {
 		super();
 	}
-
-	public Cuidado(@NotBlank String nombre) {
-		super();
-		this.nombre = nombre;
-	}
-
-	public Cuidado(@NotBlank String nombre, Diagnostico diagnostico) {
-		super();
-		this.nombre = nombre;
-		this.diagnostico = diagnostico;
-	}
 	
-	public Cuidado(@NotBlank String nombre, Diagnostico diagnostico, String descripcion) {
+	public Cuidado(@NotBlank(message = "Introduzca un nombre") String nombre,
+			@NotBlank(message = "Introduzca una descripción") String descripcion, Grupodiagnostico grupodiagnostico,
+			Sanitario sanitario) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.diagnostico = diagnostico;
+		this.grupodiagnostico = grupodiagnostico;
+		this.sanitario = sanitario;
 	}
 
 	public String getNombre() {
@@ -70,12 +67,12 @@ public class Cuidado {
 		this.nombre = nombre;
 	}
 
-	public Diagnostico getDiagnostico() {
-		return diagnostico;
+	public Grupodiagnostico getGrupodiagnostico() {
+		return grupodiagnostico;
 	}
 
-	public void setDiagnostico(Diagnostico diagnostico) {
-		this.diagnostico = diagnostico;
+	public void setGrupodiagnostico(Grupodiagnostico grupodiagnostico) {
+		this.grupodiagnostico = grupodiagnostico;
 	}
 
 	public long getId() {
@@ -92,6 +89,14 @@ public class Cuidado {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public Sanitario getSanitario() {
+		return sanitario;
+	}
+
+	public void setSanitario(Sanitario sanitario) {
+		this.sanitario = sanitario;
 	}
 	
 

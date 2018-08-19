@@ -6,10 +6,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
-
-import rha.config.AlmacenamientoDocConfig;
-import rha.config.AlmacenamientoImgConfig;
 import org.springframework.core.SpringVersion;
+
+import rha.util.almacenamiento.config.AlmacenamientoDocConfig;
+import rha.util.almacenamiento.config.AlmacenamientoImgConfig;
 
 @SpringBootApplication
 @EnableCaching

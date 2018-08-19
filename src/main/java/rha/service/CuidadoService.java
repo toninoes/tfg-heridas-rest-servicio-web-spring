@@ -2,125 +2,76 @@ package rha.service;
 
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import rha.exception.AlmacenamientoFicheroNoEncontradoException;
+import rha.exception.ErrorInternoServidorException;
 import rha.exception.RecursoNoEncontradoException;
 import rha.model.Cuidado;
-import rha.model.Diagnostico;
+import rha.model.Sanitario;
 import rha.repository.CuidadoRepository;
-import rha.repository.DiagnosticoRepository;
-import rha.util.Fichero;
+import rha.repository.SanitarioRepository;
 
 
 @Service
 public class CuidadoService {
 
-	@Autowired
-    private AlmacenamientoDocService almacenamientoDocService;
 	
 	@Autowired
 	private CuidadoRepository cuidadoRepository;
 	
 	@Autowired
-	private DiagnosticoRepository diagnosticoRepository;
-	
+	private SanitarioRepository sanitarioRepository;
 
-    @ResponseBody
-    public ResponseEntity<Resource> descargarById(long id) {
-    	Cuidado cuidado = cuidadoRepository.findById(id)
-    			.orElseThrow(() -> new RecursoNoEncontradoException("Cuidado", "id", id));
-    	
-        Resource file = almacenamientoDocService.loadAsResource(cuidado.getNombre());
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_PDF);
-        return new ResponseEntity<>(file, httpHeaders, HttpStatus.OK);
-    }
-        
-    @ResponseBody
-    public ResponseEntity<Resource> descargarByNombre(String nombre) {
-    	Cuidado cuidado = cuidadoRepository.findByNombre(nombre)
-    			.orElseThrow(() -> new RecursoNoEncontradoException("Cuidado", "nombre", nombre));
-    	
-        Resource file = almacenamientoDocService.loadAsResource(cuidado.getNombre());
-        
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_PDF);
-        return new ResponseEntity<>(file, httpHeaders, HttpStatus.OK);
-    }
-    
-    public ResponseEntity<?> subir(MultipartFile pdf, long diagnosticoId, String descripcion) {
-    	if(Fichero.esPDF(pdf)) {
-			Diagnostico diagnostico = diagnosticoRepository.findById(diagnosticoId)
-		            .orElseThrow(() -> new RecursoNoEncontradoException("Diagnostico", "id", diagnosticoId));
-			
-			descripcion = eliminarDoblesComillas(descripcion);
-    		Cuidado cuidado = new Cuidado(pdf.getOriginalFilename(), diagnostico, descripcion);
-    	
-			cuidadoRepository.save(cuidado);
-    		
-        	almacenamientoDocService.store(pdf);
-        	
-        	return new ResponseEntity<Cuidado>(cuidado, HttpStatus.CREATED);
-    	}else {
-    		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-    	} 
-    }
-    
-    public ResponseEntity<?> subirsinDiagnostico(MultipartFile doc)  {
-    	if(Fichero.esPDF(doc)) {
-    		
-    		Cuidado cuidado = new Cuidado(doc.getOriginalFilename());
-    		cuidadoRepository.save(cuidado);
-    		String nuevoNombre = cuidado.getId() + "." + obtenerExtension(doc);
-    		cuidado.setNombre(nuevoNombre);    	
-			cuidadoRepository.save(cuidado);    		
-        	almacenamientoDocService.store(doc, nuevoNombre);
-        	
-        	return new ResponseEntity<Cuidado>(cuidado, HttpStatus.CREATED);
-    	}else {
-    		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-    	}
-    }
-    
-    public void borrar(@PathVariable String filename) {
-        almacenamientoDocService.delete(filename);
-    }
-    
-
-    @ExceptionHandler(AlmacenamientoFicheroNoEncontradoException.class)
-    public ResponseEntity<?> handleStorageFileNotFound(AlmacenamientoFicheroNoEncontradoException exc) {
-        return ResponseEntity.notFound().build();
-    }
-    
-    private String obtenerExtension (MultipartFile file) {
-    	return FilenameUtils.getExtension(file.getOriginalFilename());
-    }
-    
-    private String eliminarDoblesComillas(String string) {
-    	if (string.length() >= 2 && string.charAt(0) == '"' && string.charAt(string.length() - 1) == '"')
-    	{
-    	    string = string.substring(1, string.length() - 1);
-    	}
-    	
-    	return string;
-    }
-
-	public List<Cuidado> findByDiagnosticoId(long id) {
-		Diagnostico diagnostico = diagnosticoRepository.findById(id)
-	            .orElseThrow(() -> new RecursoNoEncontradoException("Diagnostico", "id", id));
-		
-		return cuidadoRepository.findByDiagnosticoOrderByIdDesc(diagnostico);
+	public List<Cuidado> findAll() {
+		return cuidadoRepository.findAll();
 	}
+	
+	public Cuidado findById(long id) {
+		return cuidadoRepository.findById(id)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Cuidado", "id", id));
+	}
+	
+	public ResponseEntity<Cuidado> create(Cuidado c) {
+		Sanitario sanitario = sanitarioRepository.findById(c.getSanitario().getId())
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Sanitario", "id", c.getSanitario().getId()));
+
+		c.setSanitario(sanitario);
+		
+		try {
+			return new ResponseEntity<Cuidado>(cuidadoRepository.save(c), HttpStatus.CREATED);
+		} catch (Exception e) {
+			throw new ErrorInternoServidorException("guardar", "Cuidado", c.getId(), e.getMessage());
+		}
+    }
+	
+	public ResponseEntity<Cuidado> update(long id, Cuidado c) {
+		Cuidado cuidado = cuidadoRepository.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Cuidado", "id", id));
+
+		try {
+			cuidado.setDescripcion(c.getDescripcion());
+			cuidado.setNombre(c.getNombre());
+			cuidado.setGrupodiagnostico(c.getGrupodiagnostico());
+			cuidado.setSanitario(c.getSanitario());
+			return new ResponseEntity<Cuidado>(cuidadoRepository.save(cuidado), HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ErrorInternoServidorException("actualizar", "Cuidado", id, e.getMessage());
+		}
+	}
+	
+	public ResponseEntity<?> delete(long id) {
+		Cuidado cuidado = cuidadoRepository.findById(id)
+	            .orElseThrow(() -> new RecursoNoEncontradoException("Cuidado", "id", id));
+
+	    try {
+	    	cuidadoRepository.delete(cuidado);
+		} catch (Exception e) {
+			throw new ErrorInternoServidorException("borrar", "Cuidado", id, e.getMessage());
+		}
+
+	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
 }

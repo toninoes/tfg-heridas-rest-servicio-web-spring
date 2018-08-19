@@ -25,6 +25,10 @@ public class Grupodiagnostico {
 	@OneToMany(mappedBy = "grupodiagnostico")
     private List<Diagnostico> diagnosticos;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "grupodiagnostico")
+    private List<Cuidado> cuidados;
+	
 	public Grupodiagnostico() {
 		super();
 	}
@@ -56,5 +60,12 @@ public class Grupodiagnostico {
 		this.diagnosticos = diagnosticos;
 	}
 	
+	public List<Cuidado> getCuidados() {
+		return cuidados;
+	}
+
+	public void setCuidados(List<Cuidado> cuidados) {
+		this.cuidados = cuidados;
+	}	
 
 }

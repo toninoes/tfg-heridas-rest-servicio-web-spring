@@ -7,14 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import rha.model.Cuidado;
-import rha.model.Diagnostico;
+import rha.model.Grupodiagnostico;
 
 @RepositoryRestResource(collectionResourceRel = "cuidados", path = "cuidados")
 public interface CuidadoRepository extends JpaRepository<Cuidado, Long> {
 
-	List<Cuidado> findByDiagnostico(Diagnostico diagnostico);
+	List<Cuidado> findByGrupodiagnostico(Grupodiagnostico grupodiagnostico);
 	
-	List<Cuidado> findByDiagnosticoOrderByIdDesc(Diagnostico diagnostico);
+	List<Cuidado> findByGrupodiagnosticoOrderByIdDesc(Grupodiagnostico grupodiagnostico);
 
 	Optional<Cuidado> findByNombre(String nombre);
 

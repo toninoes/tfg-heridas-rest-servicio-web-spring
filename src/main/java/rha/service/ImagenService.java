@@ -22,6 +22,7 @@ import rha.model.Imagen;
 import rha.repository.CuraRepository;
 import rha.repository.ImagenRepository;
 import rha.util.Fichero;
+import rha.util.almacenamiento.service.AlmacenamientoImgService;
 
 
 @Service
