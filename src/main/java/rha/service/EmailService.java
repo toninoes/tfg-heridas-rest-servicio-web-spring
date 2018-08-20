@@ -60,6 +60,27 @@ public class EmailService {
 		
 		javaMailSender.send(correo);		
 	}
+
+	public void enviarCorreoResetPassword(ActivacionUsuario activacionUsuario) {
+		SimpleMailMessage correo = new SimpleMailMessage();
+		correo.setSubject("Cambio de contraseña");
+		
+		String contenido = "Estimado " + activacionUsuario.getUser().getFullName() + "\n\n";
+		contenido += "Alguien ha solicitado recientemente un cambio de contraseña para tu cuenta de "
+				+ "RestHeridApp. Si fuiste tú, puedes definir una contraseña nueva aquí: \n\n";
+		contenido += protocolo + dominio + puerto;
+		contenido += "/resetpassword/" + activacionUsuario.getTokenActivacion() + "\n\n";
+		contenido += "Si no quieres cambiar tu contraseña o no has realizado esta solicitud, haz "
+				+ "caso omiso de este mensaje y bórralo.\n\n";
+		contenido += "Para mantener a salvo tu cuenta, te rogamos que no reenvíes este "
+				+ "mensaje a nadie.";
+		
+		correo.setText(contenido);
+		correo.setTo(activacionUsuario.getUser().getEmail());
+        correo.setFrom(remitente);
+		
+		javaMailSender.send(correo);
+	}
     
     
 }

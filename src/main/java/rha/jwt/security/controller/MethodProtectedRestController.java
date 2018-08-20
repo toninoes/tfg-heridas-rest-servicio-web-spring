@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
@@ -112,6 +113,7 @@ public class MethodProtectedRestController {
 	private ResponseEntity<JwtUser> registrar(Long centroId, User user) throws Exception {	
 		JwtUser jwtuser = null;
 		UserCentro userCentro = new UserCentro();
+		ActivacionUsuario activacionUsuario = null;
 		
 		if(centroId != null) {
 			Centro centro = centroRepository.findById(centroId)
@@ -158,7 +160,7 @@ public class MethodProtectedRestController {
 					false, rolesAdmin, user.getNacimiento(), user.getDni());
 			
 			admRep.save(admin);
-			ActivacionUsuario activacionUsuario = new ActivacionUsuario(admin);
+			activacionUsuario = new ActivacionUsuario(admin);
 			actUsrRep.save(activacionUsuario);
 			
 			if(centroId != null) {
@@ -177,7 +179,7 @@ public class MethodProtectedRestController {
 					false, rolesSanitario, user.getNacimiento(), user.getDni(), user.getColegiado());
 			
 			sanRep.save(sanitario);
-			ActivacionUsuario activacionUsuario = new ActivacionUsuario(sanitario);
+			activacionUsuario = new ActivacionUsuario(sanitario);
 			actUsrRep.save(activacionUsuario);
 			
 			if(centroId != null) {
@@ -198,7 +200,7 @@ public class MethodProtectedRestController {
 					false, rolesPaciente, user.getNacimiento(), user.getDni(), historia);
 			
 			pacRep.save(paciente).getId();
-			ActivacionUsuario activacionUsuario = new ActivacionUsuario(paciente);
+			activacionUsuario = new ActivacionUsuario(paciente);
 			actUsrRep.save(activacionUsuario);
 			
 			if(centroId != null) {
@@ -209,9 +211,9 @@ public class MethodProtectedRestController {
 			jwtuser = JwtUserFactory.create(paciente);
 		}
 		
-		// Enviar aqui el mail de activacion.
+		// Enviar aquí el mail de activacion.
 		logger.info("Enviando correo de activación a '{}'", user.getEmail());
-		//emailService.enviarCorreoActivacion(activacionUsuario);
+		emailService.enviarCorreoActivacion(activacionUsuario);
 		
 		return ResponseEntity.ok(jwtuser);
 	}
@@ -418,6 +420,22 @@ public class MethodProtectedRestController {
 			throw new RegistroException(e.getMessage());
 		} 		
 	}
+	
+	@PostMapping("resetpassword")
+	public ResponseEntity<?> resetpassword(@RequestBody User user) { //user sólo lleva el email
+		User usuario = usrRep.findByEmail(user.getEmail())
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "email", user.getEmail()));
+		
+		ActivacionUsuario activacionUsuario = new ActivacionUsuario(usuario);
+		actUsrRep.save(activacionUsuario);
+		
+		// Enviar aqui el mail de activacion.
+		logger.info("Enviando correo de cambio de contraseña a '{}'", usuario.getEmail());
+		emailService.enviarCorreoResetPassword(activacionUsuario);
+		
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
 	
 	
 	
