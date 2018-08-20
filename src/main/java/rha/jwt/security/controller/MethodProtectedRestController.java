@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -12,11 +11,11 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +30,7 @@ import rha.exception.RegistroException;
 import rha.jwt.model.security.ActivacionUsuario;
 import rha.jwt.model.security.Authority;
 import rha.jwt.model.security.AuthorityName;
+import rha.jwt.model.security.CambiarPassword;
 import rha.jwt.model.security.User;
 import rha.jwt.security.JwtUser;
 import rha.jwt.security.JwtUserFactory;
@@ -388,6 +388,36 @@ public class MethodProtectedRestController {
 		return historia;
 	}
 	
+	@PostMapping("cambiarpassword/{id}")
+	public ResponseEntity<User> cambiarpassword(@PathVariable(value = "id") Long id, 
+			@Valid @RequestBody CambiarPassword cp) throws Exception {	
+		
+		User usuario = usrRep.findById(id)
+				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
+
+		// la contraseña actual en BD encriptada
+		String password_actual_bd = usuario.getPassword(); 
+		
+		// Password que dice el usuario tener en texto plano
+		String password_actual_cliente = cp.getPassword(); 
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		
+		if (passwordEncoder.matches(password_actual_cliente, password_actual_bd)) {
+			// establece nueva password encriptándola en bbdd
+			usuario.setPassword(pass.encode(cp.getPassword_nueva()));
+		} else {
+			throw new RegistroException("La contraseña actual no coincide");
+		}	
+		
+		try {
+			usrRep.save(usuario);
+			return ResponseEntity.ok(usuario);
+		} catch (CampoUnicoException e) {
+			throw new CampoUnicoException(e.getNombreRecurso(), e.getNombreCampo() , e.getValorCampo());
+		} catch (RegistroException e) {
+			throw new RegistroException(e.getMessage());
+		} 		
+	}
 	
 	
 	

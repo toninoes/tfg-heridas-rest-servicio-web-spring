@@ -20,7 +20,7 @@ import rha.jwt.security.JwtTokenUtil;
 import rha.jwt.security.JwtUser;
 import rha.jwt.security.repository.ActivacionUsuarioRepository;
 import rha.jwt.security.repository.UserRepository;
-import rha.model.Centro;
+
 
 @RestController
 public class UserRestController {
@@ -67,6 +67,7 @@ public class UserRestController {
         	
         	if((activacionUsuario.getFechaExpiracion().getTime() - cal.getTime().getTime()) <= 0) {
         		resultado = "Ha pasado el tiempo para activar su cuenta. Contacte con su administrador.";
+        		actUsrRep.delete(activacionUsuario);
         	} else {
         		actUsrRep.delete(activacionUsuario);
         		user.setEnabled(true);
