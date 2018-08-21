@@ -32,10 +32,11 @@ public class WebMetodos {
 	@GetMapping("resetpassword/{activacionId}")
 	public String resetpasswordShowForm(Model model, @PathVariable String activacionId) {
 		String resultado = null;
+		String email = null;
 		
 		ActivacionUsuario activacionUsuario = actUsrRep.findByTokenActivacion(activacionId);
     	if(activacionUsuario == null) {
-    		resultado = "Token inválido.";
+    		resultado = "Token inválido. No es posible cambiar su contraseña";
     	} else {
     		User user = activacionUsuario.getUser();
     		Calendar cal = Calendar.getInstance();
@@ -44,17 +45,22 @@ public class WebMetodos {
         		resultado = "Ha pasado el tiempo para cambiar su contraseña.";
         		actUsrRep.delete(activacionUsuario);
         	} else {
+        		email = activacionUsuario.getUser().getEmail();
         		user.setEnabled(true);
         		usrRep.save(user);
         		resultado = "Bienvenido " + user.getFirstname() + ", establezca ahora su contraseña.";
         	}
     	}		
-		
+    			
 		model.addAttribute("resultado", resultado);
 		model.addAttribute("cambiarpassword", new CambiarPassword());
 		model.addAttribute("activacionId", activacionId);
+		model.addAttribute("email", email);
 		
-		return "resetpasswordform";
+		if(email == null)
+			return "resetpasswordresult";
+		else		
+			return "resetpasswordform";
 	}
 	
 	@PostMapping("resetpassword/{activacionId}")
@@ -65,7 +71,7 @@ public class WebMetodos {
 		if(cp.getPassword().equals(cp.getPassword_nueva())) {
 			ActivacionUsuario activacionUsuario = actUsrRep.findByTokenActivacion(activacionId);
 	    	if(activacionUsuario == null) {
-	    		resultado = "Token inválido.";
+	    		resultado = "Token inválido. No es posible cambiar su contraseña";
 	    	} else {
 	    		User user = activacionUsuario.getUser();
 	    		Calendar cal = Calendar.getInstance();

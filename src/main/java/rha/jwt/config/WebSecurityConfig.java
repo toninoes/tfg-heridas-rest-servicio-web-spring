@@ -115,7 +115,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/favicon.ico",
                 "/**/*.html",
                 "/**/*.css",
-                "/**/*.js"
+                "/**/*.png",
+                "/**/*.jpg",
+                "/**/*.js",
+                "/**/*.ico"
             )
 
             // Consola H2 Database (sólo en modo test. no permitir en producción)
