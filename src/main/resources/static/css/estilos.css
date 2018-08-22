@@ -1,36 +1,49 @@
-.wrapper {    
+.wrapper {
 	margin-top: 80px;
 	margin-bottom: 20px;
 }
 
 .form-signin {
-  max-width: 420px;
-  padding: 30px 38px 66px;
-  margin: 0 auto;
-  background-color: #eee;
-  border: 3px dotted rgba(0,0,0,0.1);  
-  }
+	max-width: 420px;
+	padding: 10px 30px 10px;
+	margin: 0 auto;
+	background-color: #FFEEC0;
+	border: 3px dotted #D1711A;
+	font-weight: bold;
+	text-align: center;
+}
 
 .form-signin-heading {
-  text-align:center;
-  margin-bottom: 30px;
+	text-align:center;
+	margin-bottom: 30px;
+	color: #D1711A;
 }
 
 .form-control {
-  position: relative;
-  font-size: 16px;
-  height: auto;
-  padding: 10px;
+	position: relative;
+	font-size: 16px;
+	height: auto;
+	padding: 10px;
 }
 
 input[type="text"] {
-  margin-bottom: 0px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+	margin-bottom: 0px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
 }
 
 input[type="password"] {
-  margin-bottom: 20px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+	margin-bottom: 20px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.btn-primary {
+	background-color: #D1711A !important;
+	border-color: #D1711A !important;
+}
+
+.btn-primary:hover {
+	background-color: #868b8f !important;
+	border-color: #FFEEC0 !important;
 }

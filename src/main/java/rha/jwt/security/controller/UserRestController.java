@@ -1,7 +1,5 @@
 package rha.jwt.security.controller;
 
-import java.util.Calendar;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import rha.jwt.model.security.ActivacionUsuario;
-import rha.jwt.model.security.User;
 import rha.jwt.security.JwtTokenUtil;
 import rha.jwt.security.JwtUser;
-import rha.jwt.security.repository.ActivacionUsuarioRepository;
-import rha.jwt.security.repository.UserRepository;
 
 
 @RestController
@@ -30,17 +23,11 @@ public class UserRestController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    
-    @Autowired
-    private ActivacionUsuarioRepository actUsrRep;
 
     @Autowired
     @Qualifier("jwtUserDetailsService")
     private UserDetailsService userDetailsService;
-    
-    @Autowired
-    private UserRepository userRepository;
-    
+        
     @GetMapping("ping")
     public ResponseEntity<?> ping() {
     	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -53,7 +40,7 @@ public class UserRestController {
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
         return user;
     }   
-    
+    /*
     @GetMapping("activacion/{activacionId}")
     public String activacionUsuario(@PathVariable String activacionId) {
     	String resultado = null;
@@ -78,4 +65,5 @@ public class UserRestController {
 
     	return resultado;
     }
+    */
 }

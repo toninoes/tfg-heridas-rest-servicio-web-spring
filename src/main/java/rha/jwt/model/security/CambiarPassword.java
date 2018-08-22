@@ -14,6 +14,8 @@ public class CambiarPassword {
     @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100")
 	protected String password_nueva;
 	
+	protected String email;
+	
 	public CambiarPassword() {
 		super();
 	}
@@ -22,6 +24,16 @@ public class CambiarPassword {
 		super();
 		this.password = password;
 		this.password_nueva = password_nueva;
+	}
+	
+	public CambiarPassword(
+			@NotNull(message = "Introduzca una contraseña") @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100") String password,
+			@NotNull(message = "Introduzca una contraseña nueva") @Size(min = 4, max = 100, message = "el tamaño tiene que estar entre 4 y 100") String password_nueva,
+			String email) {
+		super();
+		this.password = password;
+		this.password_nueva = password_nueva;
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -38,6 +50,14 @@ public class CambiarPassword {
 
 	public void setPassword_nueva(String password_nueva) {
 		this.password_nueva = password_nueva;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 	

@@ -27,6 +27,33 @@ public class WebMetodos {
 		
 	@Autowired
 	private PasswordEncoder pass;
+	
+	@GetMapping("activacion/{activacionId}")
+    public String activacionUsuario(Model model, @PathVariable String activacionId) {
+    	String resultado = null;
+    	
+    	ActivacionUsuario activacionUsuario = actUsrRep.findByTokenActivacion(activacionId);
+    	if(activacionUsuario == null) {
+    		resultado = "Token de activación inválido.";
+    	} else {
+    		User user = activacionUsuario.getUser();
+    		Calendar cal = Calendar.getInstance();
+        	
+        	if((activacionUsuario.getFechaExpiracion().getTime() - cal.getTime().getTime()) <= 0) {
+        		resultado = "Ha pasado el tiempo para activar su cuenta. Contacte con su administrador.";
+        		actUsrRep.delete(activacionUsuario);
+        	} else {
+        		actUsrRep.delete(activacionUsuario);
+        		user.setEnabled(true);
+        		usrRep.save(user);
+        		resultado = "Bienvenido " + user.getFirstname() + ", su cuenta ha quedado activada correctamente.";
+        	}
+    	}
+    	
+    	model.addAttribute("resultado", resultado);
+
+    	return "resultados";
+    }
     	
 		
 	@GetMapping("resetpassword/{activacionId}")
@@ -48,7 +75,6 @@ public class WebMetodos {
         		email = activacionUsuario.getUser().getEmail();
         		user.setEnabled(true);
         		usrRep.save(user);
-        		resultado = "Bienvenido " + user.getFirstname() + ", establezca ahora su contraseña.";
         	}
     	}		
     			
@@ -58,7 +84,7 @@ public class WebMetodos {
 		model.addAttribute("email", email);
 		
 		if(email == null)
-			return "resetpasswordresult";
+			return "resultados";
 		else		
 			return "resetpasswordform";
 	}
@@ -68,7 +94,8 @@ public class WebMetodos {
 			@ModelAttribute CambiarPassword cp) {
 		
 		String resultado = null;
-		if(cp.getPassword().equals(cp.getPassword_nueva())) {
+		if(cp.getPassword().equals(cp.getPassword_nueva()) && (cp.getPassword().length() >= 4)) {
+							
 			ActivacionUsuario activacionUsuario = actUsrRep.findByTokenActivacion(activacionId);
 	    	if(activacionUsuario == null) {
 	    		resultado = "Token inválido. No es posible cambiar su contraseña";
@@ -90,15 +117,19 @@ public class WebMetodos {
 	    	}
 	    	
 	    	model.addAttribute("resultado", resultado);
-	    	return "resetpasswordresult";
+	    	return "resultados";
 	    	
-		} else {
+		} else if (!cp.getPassword().equals(cp.getPassword_nueva())) {
+			
 			resultado = "Debes introducir dos veces la misma contraseña.";
+		} else {
+			resultado = "El tamaño de la contraseña tiene que estar entre 4 y 100.";	
 		}
 			
 		model.addAttribute("resultado", resultado);
 		model.addAttribute("cambiarpassword", new CambiarPassword());
 		model.addAttribute("activacionId", activacionId);
+		model.addAttribute("email", cp.getEmail());
 		
 		return "resetpasswordform";
 		
