@@ -17,7 +17,7 @@ import rha.jwt.security.repository.ActivacionUsuarioRepository;
 import rha.jwt.security.repository.UserRepository;
 
 @Controller
-public class WebMetodos {
+public class UserWebController {
 	
 	@Autowired
 	private ActivacionUsuarioRepository actUsrRep;

@@ -40,30 +40,5 @@ public class UserRestController {
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
         return user;
     }   
-    /*
-    @GetMapping("activacion/{activacionId}")
-    public String activacionUsuario(@PathVariable String activacionId) {
-    	String resultado = null;
-    	
-    	ActivacionUsuario activacionUsuario = actUsrRep.findByTokenActivacion(activacionId);
-    	if(activacionUsuario == null) {
-    		resultado = "Token de activación inválido.";
-    	} else {
-    		User user = activacionUsuario.getUser();
-    		Calendar cal = Calendar.getInstance();
-        	
-        	if((activacionUsuario.getFechaExpiracion().getTime() - cal.getTime().getTime()) <= 0) {
-        		resultado = "Ha pasado el tiempo para activar su cuenta. Contacte con su administrador.";
-        		actUsrRep.delete(activacionUsuario);
-        	} else {
-        		actUsrRep.delete(activacionUsuario);
-        		user.setEnabled(true);
-        		userRepository.save(user);
-        		resultado = "Bienvenido " + user.getFirstname() + ", su cuenta ha quedado activada correctamente.";
-        	}
-    	}
-
-    	return resultado;
-    }
-    */
+    
 }
