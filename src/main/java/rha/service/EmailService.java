@@ -46,13 +46,13 @@ public class EmailService {
 		correo.setSubject("Activación de usuario");
 		
 		String contenido = "Estimado " + activacionUsuario.getUser().getFullName() + "\n\n";
-		contenido += "Para finalizar tu registro es necesario que actives tu cuenta de usuario, "
-				+ "siguiendo el siguiente enlace o copiándolo en la barra de direcciones de tu "
-				+ "navegador.\n\n";
+		contenido += "Para finalizar su registro y definir su contraseña es necesario que active "
+				+ "su cuenta de usuario, siguiendo el siguiente enlace o copiándolo en la barra "
+				+ "de direcciones de su navegador.\n\n";
 		contenido += protocolo + dominio + puerto;
 		contenido += "/activacion/" + activacionUsuario.getTokenActivacion() + "\n\n";
-		contenido += "Tienes hasta el " + Fecha.fechaHoraSP(activacionUsuario.getFechaExpiracion()) +
-				" para activar tu cuenta"; 
+		contenido += "Tiene hasta el " + Fecha.fechaHoraSP(activacionUsuario.getFechaExpiracion()) +
+				" para activar su cuenta"; 
 		
 		correo.setText(contenido);
 		correo.setTo(activacionUsuario.getUser().getEmail());
@@ -66,13 +66,13 @@ public class EmailService {
 		correo.setSubject("Cambio de contraseña");
 		
 		String contenido = "Estimado " + activacionUsuario.getUser().getFullName() + "\n\n";
-		contenido += "Alguien ha solicitado recientemente un cambio de contraseña para tu cuenta de "
-				+ "RestHeridApp. Si fuiste tú, puedes definir una contraseña nueva aquí: \n\n";
+		contenido += "Alguien ha solicitado recientemente un cambio de contraseña para su cuenta de "
+				+ "RestHeridApp. Si ha sido usted, puede definir una contraseña nueva aquí: \n\n";
 		contenido += protocolo + dominio + puerto;
 		contenido += "/resetpassword/" + activacionUsuario.getTokenActivacion() + "\n\n";
-		contenido += "Si no quieres cambiar tu contraseña o no has realizado esta solicitud, haz "
-				+ "caso omiso de este mensaje y bórralo.\n\n";
-		contenido += "Para mantener a salvo tu cuenta, te rogamos que no reenvíes este "
+		contenido += "Si no quiere cambiar su contraseña o no ha realizado usted esta solicitud, haga "
+				+ "caso omiso de este mensaje y bórrelo.\n\n";
+		contenido += "Para mantener a salvo su cuenta, le rogamos que no reenvíe este "
 				+ "mensaje a nadie.";
 		
 		correo.setText(contenido);

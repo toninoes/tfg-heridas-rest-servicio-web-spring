@@ -27,10 +27,11 @@ public class WebMetodos {
 		
 	@Autowired
 	private PasswordEncoder pass;
-	
+    
 	@GetMapping("activacion/{activacionId}")
     public String activacionUsuario(Model model, @PathVariable String activacionId) {
     	String resultado = null;
+    	String email = null;
     	
     	ActivacionUsuario activacionUsuario = actUsrRep.findByTokenActivacion(activacionId);
     	if(activacionUsuario == null) {
@@ -43,18 +44,25 @@ public class WebMetodos {
         		resultado = "Ha pasado el tiempo para activar su cuenta. Contacte con su administrador.";
         		actUsrRep.delete(activacionUsuario);
         	} else {
-        		actUsrRep.delete(activacionUsuario);
+        		resultado = "Bienvenido " + user.getFirstname() + ", su cuenta ha quedado activada "
+        				+ "correctamente. Ahora debe definir su contraseña.";
+        		email = activacionUsuario.getUser().getEmail();
         		user.setEnabled(true);
         		usrRep.save(user);
-        		resultado = "Bienvenido " + user.getFirstname() + ", su cuenta ha quedado activada correctamente.";
         	}
     	}
     	
     	model.addAttribute("resultado", resultado);
-
-    	return "resultados";
+		model.addAttribute("cambiarpassword", new CambiarPassword());
+		model.addAttribute("activacionId", activacionId);
+		model.addAttribute("email", email);
+		
+		if(email == null)
+			return "resultados";
+		else		
+			return "setpasswordform";
     }
-    	
+	
 		
 	@GetMapping("resetpassword/{activacionId}")
 	public String resetpasswordShowForm(Model model, @PathVariable String activacionId) {
@@ -86,7 +94,7 @@ public class WebMetodos {
 		if(email == null)
 			return "resultados";
 		else		
-			return "resetpasswordform";
+			return "setpasswordform";
 	}
 	
 	@PostMapping("resetpassword/{activacionId}")
@@ -131,7 +139,7 @@ public class WebMetodos {
 		model.addAttribute("activacionId", activacionId);
 		model.addAttribute("email", cp.getEmail());
 		
-		return "resetpasswordform";
+		return "setpasswordform";
 		
     	
 	}

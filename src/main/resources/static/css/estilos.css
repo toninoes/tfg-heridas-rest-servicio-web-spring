@@ -5,7 +5,7 @@
 
 .form-signin {
 	max-width: 420px;
-	padding: 10px 30px 10px;
+	padding: 10px;
 	margin: 0 auto;
 	background-color: #FFEEC0;
 	border: 3px dotted #D1711A;
@@ -46,4 +46,9 @@ input[type="password"] {
 .btn-primary:hover {
 	background-color: #868b8f !important;
 	border-color: #FFEEC0 !important;
+}
+
+.texto-naranja {
+	text-align:center;
+	color: #D1711A;
 }
