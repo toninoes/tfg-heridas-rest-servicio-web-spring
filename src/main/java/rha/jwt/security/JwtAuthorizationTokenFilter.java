@@ -18,7 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger regLog = LoggerFactory.getLogger(this.getClass());
 
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
@@ -32,7 +32,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        logger.debug("procesando autenticación para '{}'", request.getRequestURL());
+        regLog.debug("procesando autenticación para '{}'", request.getRequestURL());
 
         final String requestHeader = request.getHeader(this.tokenHeader);
 
@@ -43,17 +43,17 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(authToken);
             } catch (IllegalArgumentException e) {
-                logger.error("Se produjo un error al obtener el nombre de usuario de token", e);
+                regLog.error("Se produjo un error al obtener el nombre de usuario de token", e);
             } catch (ExpiredJwtException e) {
-                logger.warn("el token ha expirado y ya no es válido", e);
+                regLog.warn("el token ha expirado y ya no es válido", e);
             }
         } else {
-            logger.warn("no se pudo encontrar la cadena portadora (Bearer), se ignorará el encabezado");
+            regLog.warn("no se pudo encontrar la cadena portadora (Bearer), se ignorará el encabezado");
         }
 
-        logger.debug("comprobación de autenticación para el usuario '{}'", username);
+        regLog.debug("comprobación de autenticación para el usuario '{}'", username);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            logger.debug("el contexto de seguridad era nulo, así que autorizando al usuario");
+            regLog.debug("el contexto de seguridad era nulo, así que autorizando al usuario");
 
             /*
              * No es obligatorio cargar los detalles de uso de la base de datos. También puede 
@@ -68,7 +68,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                logger.info("autorizado usuario '{}', estableciendo el contexto de seguridad", username);
+                regLog.info("autorizado usuario '{}', estableciendo el contexto de seguridad", username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

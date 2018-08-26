@@ -203,11 +203,9 @@ public class GenerarInformePDF {
         } catch (DocumentException ex) {
             Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
 		}
 
         return new ByteArrayInputStream(out.toByteArray());
@@ -323,11 +321,9 @@ public class GenerarInformePDF {
         } catch (DocumentException ex) {
             Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
 		}
 
         return new ByteArrayInputStream(out.toByteArray());

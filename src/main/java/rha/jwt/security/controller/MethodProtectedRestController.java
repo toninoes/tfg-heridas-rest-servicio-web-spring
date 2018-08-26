@@ -145,15 +145,15 @@ public class MethodProtectedRestController {
 		if(user.getColegiado() != null && usrRep.findByColegiado(user.getColegiado()).isPresent())
 			throw new CampoUnicoException("Usuario", "colegiado", user.getColegiado());
 		
-		Authority role_admin = authRep.findByName(AuthorityName.ROLE_ADMIN);
-		Authority role_sanitario = authRep.findByName(AuthorityName.ROLE_SANITARIO);
-		Authority role_paciente = authRep.findByName(AuthorityName.ROLE_PACIENTE);
+		Authority adminRol = authRep.findByName(AuthorityName.ROLE_ADMIN);
+		Authority sanitarioRol = authRep.findByName(AuthorityName.ROLE_SANITARIO);
+		Authority pacienteRol = authRep.findByName(AuthorityName.ROLE_PACIENTE);
 		
 		String password = user.getEmail().split("@")[0];
 		
 		if (user.getPermisos().get(0)) { // ADMIN
-			List<Authority> rolesAdmin = new ArrayList<Authority>();
-			rolesAdmin.add(role_admin);
+			List<Authority> rolesAdmin = new ArrayList<>();
+			rolesAdmin.add(adminRol);
 			
 			Administrador admin = new Administrador(user.getUsername(), pass.encode(password),
 					user.getFirstname(), user.getLastname(), user.getEmail(),
@@ -171,8 +171,8 @@ public class MethodProtectedRestController {
 			jwtuser = JwtUserFactory.create(admin);
 			
 		} else if (user.getPermisos().get(1)) { // SANITARIO
-			List<Authority> rolesSanitario = new ArrayList<Authority>();
-			rolesSanitario.add(role_sanitario);
+			List<Authority> rolesSanitario = new ArrayList<>();
+			rolesSanitario.add(sanitarioRol);
 			
 			Sanitario sanitario = new Sanitario(user.getUsername(), pass.encode(password),
 					user.getFirstname(), user.getLastname(), user.getEmail(),
@@ -190,8 +190,8 @@ public class MethodProtectedRestController {
 			jwtuser = JwtUserFactory.create(sanitario);
 			
 		} else if (user.getPermisos().get(2)) { // PACIENTE
-			List<Authority> rolesPaciente = new ArrayList<Authority>();
-			rolesPaciente.add(role_paciente);
+			List<Authority> rolesPaciente = new ArrayList<>();
+			rolesPaciente.add(pacienteRol);
 			
 			Long historia = asignarNumHistoria();
 			
@@ -328,9 +328,7 @@ public class MethodProtectedRestController {
 	 * @return boolean
 	 */
 	private boolean estaRegistrandoSoloPaciente(ArrayList<Boolean> permisos) {		
-		return (permisos.get(0) == false &&
-				permisos.get(1) == false &&
-				permisos.get(2) == true);
+		return (!permisos.get(0) && !permisos.get(1) && permisos.get(2));
 	}
 	
 	/**
@@ -340,9 +338,7 @@ public class MethodProtectedRestController {
 	 * @return boolean
 	 */
 	private boolean estaRegistrandoUserSinRoles(ArrayList<Boolean> permisos) {		
-		return (permisos.get(0) == false &&
-				permisos.get(1) == false &&
-				permisos.get(2) == false);
+		return (!permisos.get(0) && !permisos.get(1) && !permisos.get(2));
 	}
 	
 	/**
@@ -398,13 +394,13 @@ public class MethodProtectedRestController {
 				.orElseThrow(() -> new RecursoNoEncontradoException("Usuario", "id", id));
 
 		// la contraseña actual en BD encriptada
-		String password_actual_bd = usuario.getPassword(); 
+		String passwordActualBd = usuario.getPassword(); 
 		
 		// Password que dice el usuario tener en texto plano
-		String password_actual_cliente = cp.getPassword(); 
+		String passwordActualCliente = cp.getPassword(); 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		
-		if (passwordEncoder.matches(password_actual_cliente, password_actual_bd)) {
+		if (passwordEncoder.matches(passwordActualCliente, passwordActualBd)) {
 			// establece nueva password encriptándola en bbdd
 			usuario.setPassword(pass.encode(cp.getPassword_nueva()));
 		} else {

@@ -6,9 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import rha.exception.AlmacenamientoException;
 import rha.exception.AlmacenamientoFicheroNoEncontradoException;
+import rha.util.GenerarInformePDF;
 import rha.util.almacenamiento.config.AlmacenamientoDocConfig;
 
 import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import java.io.IOException;
@@ -123,8 +126,7 @@ public class AlmacenamientoDocService {
         try {
 			FileSystemUtils.deleteRecursively(rootLocationDOC.resolve(filename));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
 		}
     }
     

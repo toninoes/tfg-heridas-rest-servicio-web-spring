@@ -1,15 +1,19 @@
 package rha;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.SpringVersion;
-
+import rha.jwt.security.repository.UserRepository;
+import rha.repository.PacienteRepository;
 import rha.util.almacenamiento.config.AlmacenamientoDocConfig;
 import rha.util.almacenamiento.config.AlmacenamientoImgConfig;
+import rha.util.almacenamiento.service.AlmacenamientoImgService;
 
 @SpringBootApplication
 @EnableCaching
@@ -22,20 +26,20 @@ public class Application extends SpringBootServletInitializer {
 		SpringApplication.run(Application.class, args);
 	}
 	
-	/*
-	@Autowired 
+	
+	/*@Autowired 
 	private AuthorityRepository authRep;
 
 	@Autowired
-	private PasswordEncoder pass;
+	private PasswordEncoder pass;*/
 
 	@Bean
-    CommandLineRunner init(AlmacenamientoService almacenamientoService, 
+    CommandLineRunner init(AlmacenamientoImgService almacenamientoService, 
     		UserRepository userRepository, PacienteRepository pacienteRepository) {
         return (args) -> {
             almacenamientoService.init();
             
-            if(userRepository.findAll().isEmpty()) {
+            /*if(userRepository.findAll().isEmpty()) {
         		Authority rolAdmin = new Authority(AuthorityName.ROLE_ADMIN);
         		Authority rolSanitario = new Authority(AuthorityName.ROLE_SANITARIO);
         		Authority rolPaciente = new Authority(AuthorityName.ROLE_PACIENTE);
@@ -67,8 +71,9 @@ public class Application extends SpringBootServletInitializer {
         		admin.addAuthority(rolAdmin);
         		userRepository.save(admin);
         		JwtUserFactory.create(admin);     		
-        	}
+        	}*/
         };
     }
-	*/
+
+	
 }
