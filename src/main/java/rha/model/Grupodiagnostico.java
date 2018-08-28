@@ -34,7 +34,12 @@ public class Grupodiagnostico {
 	public Grupodiagnostico() {
 		super();
 	}
-	
+		
+	public Grupodiagnostico(@NotBlank(message = "Introduzca el nombre del grupo diagnóstico.") String nombre) {
+		super();
+		this.nombre = nombre;
+	}
+
 	public Grupodiagnostico(@NotBlank(message = "Introduzca el nombre del grupo diagnóstico.") String nombre,
 			List<Diagnostico> diagnosticos) {
 		super();

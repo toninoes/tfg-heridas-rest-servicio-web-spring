@@ -1,4 +1,4 @@
-package unitary.servicetest;
+package unitary;
 
 import static org.mockito.Mockito.when;
 
@@ -17,12 +17,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import rha.exception.RecursoNoEncontradoException;
 import rha.jwt.model.security.Authority;
-import rha.model.Administrador;
-import rha.repository.AdministradorRepository;
-import rha.service.AdministradorService;
+import rha.model.Paciente;
+import rha.repository.PacienteRepository;
+import rha.service.PacienteService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AdministradorServiceTest {
+public class PacienteServiceTest {
 
 	private static final Long ID = (long) 1;
 	private static final Long ID_NOEXISTE = (long) 2;
@@ -39,35 +39,36 @@ public class AdministradorServiceTest {
 	
 	@Mock
 	List<Authority> authoritiesMock;
+	private static final Long HISTORIA = (long) 1;
 	private static final Boolean NOENABLED = false;
 	
-	private Administrador p = new Administrador(USERNAME, PASSWORD, FIRSTNAME, LASTNAME, EMAIL, NOENABLED,
-			authoritiesMock, nacimientoMock, DNI);
+	private Paciente p = new Paciente(USERNAME, PASSWORD, FIRSTNAME, LASTNAME, EMAIL, NOENABLED,
+			authoritiesMock, nacimientoMock, DNI, HISTORIA);
 	
-	private Optional<Administrador> Administrador = Optional.of(p);
+	private Optional<Paciente> paciente = Optional.of(p);
 	
 	@Mock
-	private AdministradorRepository AdministradorRepositoryMock;
+	private PacienteRepository pacienteRepositoryMock;
 	
 	@InjectMocks
-	private AdministradorService service = new AdministradorService();
+	private PacienteService service = new PacienteService();
 	
 	@Before
     public void prepare() {
-		List<Administrador> listado = new ArrayList<>();
-		listado.add(Administrador.get());
+		List<Paciente> listado = new ArrayList<>();
+		listado.add(paciente.get());
 		
 		// getTodos
-		when(AdministradorRepositoryMock.findAll()).thenReturn(listado);
+		when(pacienteRepositoryMock.findAll()).thenReturn(listado);
 		
 		//getUno
-		when(AdministradorRepositoryMock.findById(ID)).thenReturn(Administrador);
+		when(pacienteRepositoryMock.findById(ID)).thenReturn(paciente);
 				
 	}
 	
 	@Test
     public void testTodos() {
-		List<Administrador> listado = service.findAll();
+		List<Paciente> listado = service.findAll();
 		
 		Assert.assertNotNull(listado);
         Assert.assertTrue(listado.size() > 0);
@@ -75,28 +76,30 @@ public class AdministradorServiceTest {
         Assert.assertEquals(listado.get(0).getPassword(), PASSWORD);
         Assert.assertEquals(listado.get(0).getFirstname(), FIRSTNAME);
         Assert.assertEquals(listado.get(0).getLastname(), LASTNAME);
+        Assert.assertEquals(listado.get(0).getHistoria(), HISTORIA);
 	}
 	
 	@Test
     public void testUno() {
-		Administrador unAdministrador = service.findById(ID);
+		Paciente unPaciente = service.findById(ID);
  
-        Assert.assertNotNull(unAdministrador);
-        Assert.assertEquals(unAdministrador.getUsername(), USERNAME);
-        Assert.assertEquals(unAdministrador.getPassword(), PASSWORD);
-        Assert.assertEquals(unAdministrador.getFirstname(), FIRSTNAME);
-        Assert.assertEquals(unAdministrador.getLastname(), LASTNAME);
+        Assert.assertNotNull(unPaciente);
+        Assert.assertEquals(unPaciente.getUsername(), USERNAME);
+        Assert.assertEquals(unPaciente.getPassword(), PASSWORD);
+        Assert.assertEquals(unPaciente.getFirstname(), FIRSTNAME);
+        Assert.assertEquals(unPaciente.getLastname(), LASTNAME);
+        Assert.assertEquals(unPaciente.getHistoria(), HISTORIA);
     }
 	
 	@Test(expected = RecursoNoEncontradoException.class)
     public void testUnoFalla() {
-        Administrador unAdministrador = service.findById(ID_NOEXISTE);
+        Paciente unPaciente = service.findById(ID_NOEXISTE);
  
-        Assert.assertNotNull(unAdministrador);
-        Assert.assertEquals(unAdministrador.getUsername(), USERNAME);
-        Assert.assertEquals(unAdministrador.getPassword(), PASSWORD);
-        Assert.assertEquals(unAdministrador.getFirstname(), FIRSTNAME);
-        Assert.assertEquals(unAdministrador.getLastname(), LASTNAME);
+        Assert.assertNotNull(unPaciente);
+        Assert.assertEquals(unPaciente.getUsername(), USERNAME);
+        Assert.assertEquals(unPaciente.getPassword(), PASSWORD);
+        Assert.assertEquals(unPaciente.getFirstname(), FIRSTNAME);
+        Assert.assertEquals(unPaciente.getLastname(), LASTNAME);
     }
 	
 }

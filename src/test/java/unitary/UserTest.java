@@ -1,4 +1,4 @@
-package unitary.modeltest;
+package unitary;
 
 import static org.junit.Assert.assertEquals;
 

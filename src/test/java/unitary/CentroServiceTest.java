@@ -1,4 +1,4 @@
-package unitary.servicetest;
+package unitary;
 
 import static org.mockito.Mockito.when;
 
