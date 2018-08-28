@@ -1,0 +1,53 @@
+
+# ===============================
+# = CONFIGURACIÓN DE H2
+# ===============================
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.url=jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+spring.datasource.username=sa
+spring.datasource.password=sa
+
+
+# ===============================
+# = JPA / HIBERNATE
+# ===============================
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+
+# ===============================
+# = CONFIGURACIÓN DE FICHEROS
+# ===============================
+spring.servlet.multipart.max-file-size=8MB
+spring.servlet.multipart.max-request-size=8MB
+
+# ===============================
+# = CONFIGURACION DE JWT
+# ===============================
+jwt.header=Authorization
+jwt.secret=mySecret
+
+# 1 semana en segundos: 7 d x 24 h/d x 60 min/h x 60 s/min = 604800 s
+jwt.expiration=604800
+jwt.route.authentication.path=/auth
+jwt.route.authentication.refresh=/refresh
+
+# ===============================
+# = CONFIGURACION DE CORREO
+# ===============================
+spring.mail.default-encoding=UTF-8
+spring.mail.host=smtp.gmail.com
+spring.mail.username=toninoes.dev@gmail.com
+spring.mail.password=tfg-2017-2018
+spring.mail.port=587
+spring.mail.protocol=smtp
+spring.mail.test-connection=false
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+# ===============================
+# = CONFIGURACION DE IMPLANTACION
+# ===============================
+protocolo=http://
+dominio=192.168.43.19
+puerto=:8080

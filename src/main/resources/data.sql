@@ -87,22 +87,3 @@ INSERT INTO `diagnosticos` VALUES
 	(37,'L98','Otros trastornos de la piel y del tejido subcutáneo',8);
 
 
---
--- AUTHORITY
---
-INSERT INTO `authority` VALUES
-	(1,'ROLE_ADMIN'),
-	(2,'ROLE_SANITARIO'),
-	(3,'ROLE_PACIENTE');
-
-
---
--- USER
---
-INSERT INTO `user` VALUES ('ad',1,'admin@user.es','','Antonio','2018-01-01 00:00:00.000000','Ruiz','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','admin@user.es','52929190A','1975-08-15 00:00:00.000000',NULL,NULL);
-
-
---
--- USER_AUTHORITY
---
-INSERT INTO `user_authority` VALUES (1,1);

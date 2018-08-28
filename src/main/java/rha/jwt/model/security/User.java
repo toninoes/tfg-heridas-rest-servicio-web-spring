@@ -152,6 +152,22 @@ public class User {
 		this.dni = dni;
 	}
 	
+	public User(@NotNull @Size(min = 4, max = 50) String username,
+			@NotNull @Size(min = 4, max = 100) String password, @NotNull @Size(min = 4, max = 50) String firstname,
+			@NotNull @Size(min = 4, max = 50) String lastname, @NotNull @Size(min = 4, max = 50) String email,
+			@NotNull Boolean enabled,  List<Authority> authorities, @NotNull Date nacimiento, @NotBlank String dni) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.enabled = enabled;
+		this.authorities = authorities;
+		this.nacimiento = nacimiento;
+		this.dni = dni;
+	}
+	
 	public long getId() {
         return id;
     }
