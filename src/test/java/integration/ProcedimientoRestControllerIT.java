@@ -33,8 +33,13 @@ public class ProcedimientoRestControllerIT {
 	
 	TestRestTemplate restTemplate = new TestRestTemplate();
 	HttpHeaders cabecera = new HttpHeaders();
-	private String token;
-	private long id;
+	
+	private static String URLSERVICIO	= "/api/procedimientos/";
+	private static String USERNAME		= "admin@user.es";
+	private static String PASSWORD		= "admin";
+	
+	private static String TOKEN;	// Token de autenticación
+	private static long ID;			// ID del objeto que se creará.
 	
 	
 	/*
@@ -47,22 +52,22 @@ public class ProcedimientoRestControllerIT {
 	 */
 	@Before
 	public void test1() { 
-		token = getToken(); //necesario para sucesivas peticiones
+		TOKEN = getToken(); //necesario para sucesivas peticiones
 
-		cabecera.add("Authorization", token);
+		cabecera.add("Authorization", TOKEN);
 		cabecera.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-		Procedimiento procedimiento = new Procedimiento("AAA", "BBB");
+		Procedimiento nuevo = new Procedimiento("AAA", "BBB");
 
-		HttpEntity<Procedimiento> entity = new HttpEntity<Procedimiento>(procedimiento, cabecera);
+		HttpEntity<Procedimiento> entidad = new HttpEntity<Procedimiento>(nuevo, cabecera);
 
-		ResponseEntity<Procedimiento> response = restTemplate.exchange(
-				crearUrlConPuerto("/api/procedimientos"),
-				HttpMethod.POST, entity, Procedimiento.class);
+		ResponseEntity<Procedimiento> respuesta = restTemplate.exchange(
+				crearUrlConPuerto(URLSERVICIO),
+				HttpMethod.POST, entidad, Procedimiento.class);
 		
-		id = response.getBody().getId(); //necesario para sucesivas peticiones
+		ID = respuesta.getBody().getId(); //necesario para sucesivas peticiones
 
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
+		assertThat(respuesta.getStatusCode(), equalTo(HttpStatus.CREATED));
 	}
 	
 	
@@ -73,17 +78,17 @@ public class ProcedimientoRestControllerIT {
 	 */
 	@Test
 	public void test2() {
-		cabecera.add("Authorization", token);
+		cabecera.add("Authorization", TOKEN);
 		cabecera.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 		
-		HttpEntity<String> entity = new HttpEntity<String>(null, cabecera);
+		HttpEntity<String> entidad = new HttpEntity<String>(null, cabecera);
 
-		ResponseEntity<Procedimiento> response = restTemplate.exchange(
-				crearUrlConPuerto("/api/procedimientos/" + id),
-				HttpMethod.GET, entity, Procedimiento.class);
+		ResponseEntity<Procedimiento> respuesta = restTemplate.exchange(
+				crearUrlConPuerto(URLSERVICIO + ID),
+				HttpMethod.GET, entidad, Procedimiento.class);
 
-		assertThat(response.getBody().getCodigo(), equalTo("AAA"));
-		assertThat(response.getBody().getNombre(), equalTo("BBB"));
+		assertThat(respuesta.getBody().getCodigo(), equalTo("AAA"));
+		assertThat(respuesta.getBody().getNombre(), equalTo("BBB"));
 	}
 	
 
@@ -94,18 +99,18 @@ public class ProcedimientoRestControllerIT {
 	 */
 	@Test
 	public void test3() { 
-		cabecera.add("Authorization", token);
+		cabecera.add("Authorization", TOKEN);
 		cabecera.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 		
-		Procedimiento procedimiento = new Procedimiento("XXX", "YYY");
+		Procedimiento editar = new Procedimiento("XXX", "YYY");
 
-		HttpEntity<Procedimiento> entity = new HttpEntity<Procedimiento>(procedimiento, cabecera);
+		HttpEntity<Procedimiento> entidad = new HttpEntity<Procedimiento>(editar, cabecera);
 
-		ResponseEntity<Procedimiento> response = restTemplate.exchange(
-				crearUrlConPuerto("/api/procedimientos/" + id),
-				HttpMethod.PUT, entity, Procedimiento.class);
+		ResponseEntity<Procedimiento> respuesta = restTemplate.exchange(
+				crearUrlConPuerto(URLSERVICIO + ID),
+				HttpMethod.PUT, entidad, Procedimiento.class);
 
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+		assertThat(respuesta.getStatusCode(), equalTo(HttpStatus.OK));
 	}
 	
 	
@@ -115,35 +120,35 @@ public class ProcedimientoRestControllerIT {
 	 */
 	@After
 	public void test4() {
-		cabecera.add("Authorization", token);
+		cabecera.add("Authorization", TOKEN);
 		cabecera.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-		HttpEntity<String> entity = new HttpEntity<String>(null, cabecera);
+		HttpEntity<String> entidad = new HttpEntity<String>(null, cabecera);
 
-		ResponseEntity<String> response = restTemplate.exchange(
-				crearUrlConPuerto("/api/procedimientos/" + id),
-				HttpMethod.DELETE, entity, String.class);
+		ResponseEntity<String> respuesta = restTemplate.exchange(
+				crearUrlConPuerto(URLSERVICIO + ID),
+				HttpMethod.DELETE, entidad, String.class);
 
-		assertThat(response.getStatusCode(), equalTo(HttpStatus.NO_CONTENT));
+		assertThat(respuesta.getStatusCode(), equalTo(HttpStatus.NO_CONTENT));
 	}	
 	
 	
-	private String crearUrlConPuerto(String uri) {
-		return "http://localhost:" + port + uri;
+	private String crearUrlConPuerto(String url) {
+		return "http://localhost:" + port + url;
 	}	
 	
 
 	private String getToken() {
-		Autenticar autenticar = new Autenticar("admin@user.es", "admin");
+		Autenticar autenticar = new Autenticar(USERNAME, PASSWORD);
 		cabecera.add("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-		HttpEntity<Autenticar> entity = new HttpEntity<Autenticar>(autenticar, cabecera);
+		HttpEntity<Autenticar> entidad = new HttpEntity<Autenticar>(autenticar, cabecera);
 
-		ResponseEntity<TokenResponse> response = restTemplate.exchange(
+		ResponseEntity<TokenResponse> respuesta = restTemplate.exchange(
 				crearUrlConPuerto("/auth"),
-				HttpMethod.POST, entity, TokenResponse.class);
+				HttpMethod.POST, entidad, TokenResponse.class);
 
-		return "Bearer " + response.getBody().getToken();
+		return "Bearer " + respuesta.getBody().getToken();
 	}
 
 }
