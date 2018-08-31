@@ -63,10 +63,9 @@ public class SalaRestControllerIT {
 		cabecera.add("Authorization", TOKEN);
 		cabecera.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 		
-		Centro fk = service.findById(1);
+		Centro centro = service.findById(1);
 
-		Sala nuevo = new Sala("AAA", fk);
-		nuevo.setCentro(fk);
+		Sala nuevo = new Sala("AAA", centro);
 
 		HttpEntity<Sala> entidad = new HttpEntity<Sala>(nuevo, cabecera);
 
@@ -96,6 +95,7 @@ public class SalaRestControllerIT {
 				crearUrlConPuerto(URLSERVICIO + ID),
 				HttpMethod.GET, entidad, Sala.class);
 
+		assertThat(respuesta.getStatusCode(), equalTo(HttpStatus.OK));
 		assertThat(respuesta.getBody().getNombre(), equalTo("AAA"));
 	}
 	
@@ -110,10 +110,9 @@ public class SalaRestControllerIT {
 		cabecera.add("Authorization", TOKEN);
 		cabecera.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 		
-		Centro fk = service.findById(2);
+		Centro centro = service.findById(2);
 		
-		Sala editar = new Sala("XXX", fk);
-		editar.setCentro(fk);
+		Sala editar = new Sala("XXX", centro);
 
 		HttpEntity<Sala> entidad = new HttpEntity<Sala>(editar, cabecera);
 
@@ -122,6 +121,7 @@ public class SalaRestControllerIT {
 				HttpMethod.PUT, entidad, Sala.class);
 
 		assertThat(respuesta.getStatusCode(), equalTo(HttpStatus.OK));
+		assertThat(respuesta.getBody().getNombre(), equalTo("XXX"));
 	}
 	
 	
@@ -141,6 +141,13 @@ public class SalaRestControllerIT {
 				HttpMethod.DELETE, entidad, String.class);
 
 		assertThat(respuesta.getStatusCode(), equalTo(HttpStatus.NO_CONTENT));
+		
+		// ...y comprobamos que efectivamente ya no existe
+		ResponseEntity<Sala> respuesta2 = restTemplate.exchange(
+				crearUrlConPuerto(URLSERVICIO + ID),
+				HttpMethod.GET, entidad, Sala.class);
+		
+		assertThat(respuesta2.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
 	}
 	
 	
