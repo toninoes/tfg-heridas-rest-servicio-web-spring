@@ -9,28 +9,35 @@ else
   printf "[ERROR] No se ha podido crear la base de datos\n"
 fi
 
-printf "[INFO] Necesario para el despliegue de RESTheridApp...\n"
-printf "[Tomcat] Indique directorio de Tomcat.\n"
-printf "[Tomcat] Por defecto [/var/lib/tomcat8/webapps]:\n"
-printf "[Tomcat] Pulsa ENTER para dejarlo por defecto."
 
-read dir
-
-if [ "$dir" == "" ]; then
-  dir="/var/lib/tomcat8/webapps"
+if mkdir /var/lib/tomcat8/RESTheridAppIMG -p; then
+  chown -R tomcat8:tomcat8 /var/lib/tomcat8/RESTheridAppIMG
+  printf "[RestHeridApp] Directorio de imágenes creado correctamente\n"
 fi
 
-printf "[INFO] Desplegando la aplicacion. Espere......\n"
-if mvn clean install -Ddir=$dir; then
-  printf "[OK] Desplegada correctamente\n"
+
+if cp tomcat-users.xml /var/lib/tomcat8/conf; then
+  chown -R root:tomcat8 /var/lib/tomcat8/conf/tomcat-users.xml
+  printf "[Tomcat] Fichero configuración copiado correctamente\n"
+fi
+
+
+if mvn clean package; then
+  printf "[OK] Creado paquete.war\n"
+  cp target/restheridapp.war /var/lib/tomcat8/webapps
+  chown -R tomcat8:tomcat8 /var/lib/tomcat8/webapps/restheridapp.war
 else
-  printf "[ERROR] Ha habido un problema en el despliegue.\n"
+  printf "[ERROR] Error al crear el paquete\n"
 fi
+
 
 printf "[INFO] Reiniciando Tomcat. Espere......\n"
 if service tomcat8 restart; then
   sleep 25
   printf "[OK] Tomcat reiniciado\n"
+  printf "Vaya a: http://localhost:8080/manager/html para administrar el servicio\n"
+  printf "USUARIO: tomcat  PASSWORD: tomcat\n"
+  printf "[INFO] Servicio en http://localhost:8080/restheridapp\n"
 else
   printf "[ERROR] Ha habido un problema al reiniciar Tomcat.\n"
 fi

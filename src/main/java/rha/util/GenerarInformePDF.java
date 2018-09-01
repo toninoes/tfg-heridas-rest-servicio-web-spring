@@ -34,15 +34,15 @@ public class GenerarInformePDF {
 
     public static ByteArrayInputStream informeProceso(Proceso proceso) {
 
-    	String IMG = "src/main/resources/logo.png";
+    	//String IMG = "logo.png";
     	Document document = new Document(PageSize.A4);
         document.setMargins(60, 30, 30, 30);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         
         try {
-        	Image img = Image.getInstance(IMG);
-        	img.setAbsolutePosition(60, 750);
-        	img.scalePercent(45);
+        	//Image img = Image.getInstance(IMG);
+        	//img.setAbsolutePosition(60, 750);
+        	//img.scalePercent(45);
         	            
         	// Título del documento
         	Font f=new Font(FontFamily.TIMES_ROMAN, 25.0f, Font.BOLD, BaseColor.BLUE);
@@ -191,7 +191,7 @@ public class GenerarInformePDF {
             
             document.open();
             
-            document.add(img);
+            //document.add(img);
             document.add(p1);
             document.add(tabla1);
             document.add(p2);
@@ -202,26 +202,26 @@ public class GenerarInformePDF {
             
         } catch (DocumentException ex) {
             Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException e) {
-        	Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
+        } /*catch (MalformedURLException e) {
+    		Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
 		} catch (IOException e) {
-			Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
-		}
+		Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
+		}*/
 
         return new ByteArrayInputStream(out.toByteArray());
     }
 
 	public static ByteArrayInputStream informeCuidado(Grupodiagnostico grupodiagnostico) {
 		
-		String IMG = "src/main/resources/logo.png";
+		//String IMG = "logo.png";
     	Document document = new Document(PageSize.A4);
         document.setMargins(60, 30, 30, 30);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         
         try {
-        	Image img = Image.getInstance(IMG);
-        	img.setAbsolutePosition(60, 750);
-        	img.scalePercent(45);
+        	//Image img = Image.getInstance(IMG);
+        	//img.setAbsolutePosition(60, 750);
+        	//img.scalePercent(45);
         	            
         	// Título del documento
         	Font f=new Font(FontFamily.TIMES_ROMAN, 25.0f, Font.BOLD, BaseColor.BLUE);
@@ -309,7 +309,7 @@ public class GenerarInformePDF {
             
             document.open();
             
-            document.add(img);
+            //document.add(img);
             document.add(p1);
             document.add(tabla1);
             document.add(p2);
@@ -320,11 +320,11 @@ public class GenerarInformePDF {
                 
         } catch (DocumentException ex) {
             Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException e) {
+        } /*catch (MalformedURLException e) {
         	Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
 		} catch (IOException e) {
 			Logger.getLogger(GenerarInformePDF.class.getName()).log(Level.SEVERE, null, e);
-		}
+		}*/
 
         return new ByteArrayInputStream(out.toByteArray());
 	}

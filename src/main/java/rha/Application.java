@@ -11,14 +11,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.SpringVersion;
 import rha.jwt.security.repository.UserRepository;
 import rha.repository.PacienteRepository;
-import rha.util.almacenamiento.config.AlmacenamientoDocConfig;
 import rha.util.almacenamiento.config.AlmacenamientoImgConfig;
 import rha.util.almacenamiento.service.AlmacenamientoImgService;
 
 @SpringBootApplication
 @EnableCaching
 @Configuration
-@EnableConfigurationProperties({AlmacenamientoImgConfig.class, AlmacenamientoDocConfig.class})
+@EnableConfigurationProperties({AlmacenamientoImgConfig.class})
 public class Application extends SpringBootServletInitializer {
 	
 	public static void main(String[] args) throws Exception {

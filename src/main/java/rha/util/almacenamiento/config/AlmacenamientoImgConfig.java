@@ -8,7 +8,9 @@ public class AlmacenamientoImgConfig {
     /**
      * Localización de los ficheros
      */
-    private final String LOCATION_IMG = "../RESTheridAppIMG";
+    //private final String LOCATION_IMG = "../RESTheridAppIMG";
+	//private String LOCATION_IMG = "src/main/resources/static/RESTheridAppIMG";
+	private String LOCATION_IMG = "RESTheridAppIMG";
     
     /**
      * Tamaño máximo ficheros

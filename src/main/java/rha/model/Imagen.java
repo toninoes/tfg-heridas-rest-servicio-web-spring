@@ -15,12 +15,15 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
 @Table(name = "imagenes")
-@JsonIgnoreProperties(value = {"creacion"}, allowGetters = true)
+@JsonIgnoreProperties(value = {"creacion", "actualizacion"}, allowGetters = true)
 public class Imagen {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +42,12 @@ public class Imagen {
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Date creacion;
+	
+	@Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    @JsonIgnore
+    private Date actualizacion;
 
 	public Imagen() {
 		super();
