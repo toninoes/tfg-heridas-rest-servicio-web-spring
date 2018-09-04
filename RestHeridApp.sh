@@ -29,13 +29,16 @@ else
   printf "[ERROR] Error al crear el paquete.\n"
 fi
 
+ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+echo "[INFO] IP pública: ${ip}"
+
 printf "[INFO] Reiniciando Tomcat. Espere......\n"
 if service tomcat8 restart; then
   sleep 25
   printf "[OK] Tomcat reiniciado\n"
-  printf "Vaya a http://localhost:8080/manager/html para administrar.\n"
+  printf "Vaya a http://${ip}:8080/manager/html para administrar.\n"
   printf "USUARIO: tomcat  PASSWORD: tomcat\n"
-  printf "[INFO] Servicio en http://localhost:8080/restheridapp\n"
+  printf "[INFO] Servicio en http://${ip}:8080/restheridapp\n"
 else
   printf "[ERROR] Ha habido un problema al reiniciar Tomcat.\n"
 fi
