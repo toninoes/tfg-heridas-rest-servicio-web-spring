@@ -30,7 +30,7 @@ else
 fi
 
 ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
-echo "[INFO] IP pública: ${ip}"
+echo "[INFO] IP: ${ip}"
 
 printf "[INFO] Reiniciando Tomcat. Espere......\n"
 if service tomcat8 restart; then

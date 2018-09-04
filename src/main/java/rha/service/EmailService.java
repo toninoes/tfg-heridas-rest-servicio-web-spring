@@ -20,16 +20,34 @@ public class EmailService {
     private String remitente;
 	
 	@Value("${protocolo}")
-	private String protocolo;
+	private String prot;
 	
 	@Value("${dominio}")
-	private String dominio;
+    private String url;
 	
 	@Value("${puerto}")
-	private String puerto;
+    private String port;
+	
+	@Value("${servicio}")
+    private String servicio;
 	
 	@Value("${jwt.expiration}")
     private Long expiration;
+	
+	
+	private String getBaseUrl() {
+		String baseUrl;
+		if(port.isEmpty() && servicio.isEmpty())
+            baseUrl = String.format("%s://%s/", prot, url);
+        else if(port.isEmpty() && !servicio.isEmpty())
+            baseUrl = String.format("%s://%s/%s/", prot, url, servicio);
+        else if(!port.isEmpty() && servicio.isEmpty())
+            baseUrl = String.format("%s://%s:%s/", prot, url, port);
+        else
+            baseUrl = String.format("%s://%s:%s/%s/", prot, url, port, servicio);
+		
+		return baseUrl;
+	}
 
     public void enviarEmailPersonalizado(final Mail mail){
         SimpleMailMessage correo = new SimpleMailMessage();
@@ -49,8 +67,8 @@ public class EmailService {
 		contenido += "Para finalizar su registro y definir su contraseña es necesario que active "
 				+ "su cuenta de usuario, siguiendo el siguiente enlace o copiándolo en la barra "
 				+ "de direcciones de su navegador.\n\n";
-		contenido += protocolo + dominio + puerto;
-		contenido += "/activacion/" + activacionUsuario.getTokenActivacion() + "\n\n";
+		contenido += getBaseUrl();
+		contenido += "activacion/" + activacionUsuario.getTokenActivacion() + "\n\n";
 		contenido += "Tiene hasta el " + Fecha.fechaHoraSP(activacionUsuario.getFechaExpiracion()) +
 				" para activar su cuenta"; 
 		
@@ -68,8 +86,8 @@ public class EmailService {
 		String contenido = "Estimado " + activacionUsuario.getUser().getFullName() + "\n\n";
 		contenido += "Alguien ha solicitado recientemente un cambio de contraseña para su cuenta de "
 				+ "RestHeridApp. Si ha sido usted, puede definir una contraseña nueva aquí: \n\n";
-		contenido += protocolo + dominio + puerto;
-		contenido += "/resetpassword/" + activacionUsuario.getTokenActivacion() + "\n\n";
+		contenido += getBaseUrl();
+		contenido += "resetpassword/" + activacionUsuario.getTokenActivacion() + "\n\n";
 		contenido += "Si no quiere cambiar su contraseña o no ha realizado usted esta solicitud, haga "
 				+ "caso omiso de este mensaje y bórrelo.\n\n";
 		contenido += "Para mantener a salvo su cuenta, le rogamos que no reenvíe este "
