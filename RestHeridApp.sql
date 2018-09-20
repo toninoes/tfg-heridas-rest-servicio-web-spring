@@ -24,7 +24,7 @@ USE `restheridapp`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Tabla `activacion_usuario`
+-- Table structure for table `activacion_usuario`
 --
 
 DROP TABLE IF EXISTS `activacion_usuario`;
@@ -42,7 +42,16 @@ CREATE TABLE `activacion_usuario` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Tabla `authority`
+-- Dumping data for table `activacion_usuario`
+--
+
+LOCK TABLES `activacion_usuario` WRITE;
+/*!40000 ALTER TABLE `activacion_usuario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `activacion_usuario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `authority`
 --
 
 DROP TABLE IF EXISTS `authority`;
@@ -56,20 +65,17 @@ CREATE TABLE `authority` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `authority`
+-- Dumping data for table `authority`
 --
 
 LOCK TABLES `authority` WRITE;
 /*!40000 ALTER TABLE `authority` DISABLE KEYS */;
-INSERT INTO `authority` VALUES
-	(1,'ROLE_ADMIN'),
-	(2,'ROLE_SANITARIO'),
-	(3,'ROLE_PACIENTE');
+INSERT INTO `authority` VALUES (1,'ROLE_ADMIN'),(2,'ROLE_SANITARIO'),(3,'ROLE_PACIENTE');
 /*!40000 ALTER TABLE `authority` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `centros`
+-- Table structure for table `centros`
 --
 
 DROP TABLE IF EXISTS `centros`;
@@ -86,21 +92,17 @@ CREATE TABLE `centros` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `centros`
+-- Dumping data for table `centros`
 --
 
 LOCK TABLES `centros` WRITE;
 /*!40000 ALTER TABLE `centros` DISABLE KEYS */;
-INSERT INTO `centros` VALUES
-	(1,'c/ Lope de Vega, 12. 11008 Cádiz','C.S. El Olivillo','956123456'),
-	(2,'c/ Avenida de la Bahía, s/n. 11007 Cádiz','C.S. Loreto-Puntales','956121212'),
-	(3,'Avda. Cayetano del Toro, 4. 11100 San Fernando (Cádiz)','C.S. La Ardila','951623458'),
-	(4,'c/ Doctor Cellier, s/n. 11100 San Fernando (Cádiz)','C.S. Rodriguez Arias','951741456');
+INSERT INTO `centros` VALUES (1,'c/ Lope de Vega, 12. 11008 Cádiz','C.S. El Olivillo','956123456'),(2,'c/ Avenida de la Bahía, s/n. 11007 Cádiz','C.S. Loreto-Puntales','956121212'),(3,'Avda. Cayetano del Toro, 4. 11100 San Fernando (Cádiz)','C.S. La Ardila','951623458'),(4,'c/ Doctor Cellier, s/n. 11100 San Fernando (Cádiz)','C.S. Rodriguez Arias','951741456');
 /*!40000 ALTER TABLE `centros` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `citas`
+-- Table structure for table `citas`
 --
 
 DROP TABLE IF EXISTS `citas`;
@@ -121,7 +123,16 @@ CREATE TABLE `citas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Tabla `cuidados`
+-- Dumping data for table `citas`
+--
+
+LOCK TABLES `citas` WRITE;
+/*!40000 ALTER TABLE `citas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `citas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cuidados`
 --
 
 DROP TABLE IF EXISTS `cuidados`;
@@ -143,7 +154,16 @@ CREATE TABLE `cuidados` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Tabla `curas`
+-- Dumping data for table `cuidados`
+--
+
+LOCK TABLES `cuidados` WRITE;
+/*!40000 ALTER TABLE `cuidados` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cuidados` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `curas`
 --
 
 DROP TABLE IF EXISTS `curas`;
@@ -168,7 +188,16 @@ CREATE TABLE `curas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Tabla `diagnosticos`
+-- Dumping data for table `curas`
+--
+
+LOCK TABLES `curas` WRITE;
+/*!40000 ALTER TABLE `curas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `curas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `diagnosticos`
 --
 
 DROP TABLE IF EXISTS `diagnosticos`;
@@ -187,54 +216,17 @@ CREATE TABLE `diagnosticos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `diagnosticos`
+-- Dumping data for table `diagnosticos`
 --
 
 LOCK TABLES `diagnosticos` WRITE;
 /*!40000 ALTER TABLE `diagnosticos` DISABLE KEYS */;
-INSERT INTO `diagnosticos` VALUES
-	(1,'L02.1','Absceso cutáneo',1),
-	(2,'L02.2','Forúnculo',1),
-	(3,'L02.3','Antrax',1),
-	(4,'L05','Quiste pilonidal con absceso',1),
-	(5,'L08','Otras infecciones locales de la piel y tejido subcutáneo',1),
-	(6,'T14.1','Heridas cutáneas',2),
-	(7,'T14.2','Cuerpos extraños',2),
-	(8,'T14.3','Traumatismos ungueales',3),
-	(9,'L60.1','Uña encarnada',3),
-	(10,'L60.2','Onicodistrofias',3),
-	(11,'L60.3','Onicomicosis',3),
-	(12,'L60.4','Otros trastornos de las uñas',3),
-	(13,'L72.1','Quiste epidérmico',4),
-	(14,'L72.2','Quiste tricodérmico',4),
-	(15,'L72.3','Otros quistes foliculares de la piel y del tejido subcutáneo',4),
-	(16,'L73.1','Foliculitis',5),
-	(17,'L73.2','Hidradenitis supurativa',5),
-	(18,'L73.3','Otros trastornos foliculares no especificados',5),
-	(19,'B07','Verrugas viricas',6),
-	(20,'B08.1','Molusco contagioso',6),
-	(21,'B08.2','Condilomas acuminados',6),
-	(22,'B09','Otras infecciones víricas de la piel',6),
-	(23,'D17.1','Lipoma',7),
-	(24,'D17.2','Fibrolipoma',7),
-	(25,'D18','Hemangiomas',7),
-	(26,'D22','Nevo melanocitico',7),
-	(27,'D23.1','Fibromas',7),
-	(28,'D23.2','Dermatofibromas',7),
-	(29,'D23.3','Neurofibromas',7),
-	(30,'D23.4','Otros tumores benignos no especificados',7),
-	(31,'L82','Queratosis seborreicas',8),
-	(32,'L84','Callos y callosidades',8),
-	(33,'L90','Fibrosis y afecciones cicatriciales de la piel',8),
-	(34,'L91','Cicatriz queloide',8),
-	(35,'L97','Úlcera de miembro inferior',8),
-	(36,'L98.1','Granuloma piogeno',8),
-	(37,'L98.2','Otros trastornos de la piel y del tejido subcutáneo',8);
+INSERT INTO `diagnosticos` VALUES (1,'L02.1','Absceso cutáneo',1),(2,'L02.2','Forúnculo',1),(3,'L02.3','Antrax',1),(4,'L05','Quiste pilonidal con absceso',1),(5,'L08','Otras infecciones locales de la piel y tejido subcutáneo',1),(6,'T14.1','Heridas cutáneas',2),(7,'T14.2','Cuerpos extraños',2),(8,'T14.3','Traumatismos ungueales',3),(9,'L60.1','Uña encarnada',3),(10,'L60.2','Onicodistrofias',3),(11,'L60.3','Onicomicosis',3),(12,'L60.4','Otros trastornos de las uñas',3),(13,'L72.1','Quiste epidérmico',4),(14,'L72.2','Quiste tricodérmico',4),(15,'L72.3','Otros quistes foliculares de la piel y del tejido subcutáneo',4),(16,'L73.1','Foliculitis',5),(17,'L73.2','Hidradenitis supurativa',5),(18,'L73.3','Otros trastornos foliculares no especificados',5),(19,'B07','Verrugas viricas',6),(20,'B08.1','Molusco contagioso',6),(21,'B08.2','Condilomas acuminados',6),(22,'B09','Otras infecciones víricas de la piel',6),(23,'D17.1','Lipoma',7),(24,'D17.2','Fibrolipoma',7),(25,'D18','Hemangiomas',7),(26,'D22','Nevo melanocitico',7),(27,'D23.1','Fibromas',7),(28,'D23.2','Dermatofibromas',7),(29,'D23.3','Neurofibromas',7),(30,'D23.4','Otros tumores benignos no especificados',7),(31,'L82','Queratosis seborreicas',8),(32,'L84','Callos y callosidades',8),(33,'L90','Fibrosis y afecciones cicatriciales de la piel',8),(34,'L91','Cicatriz queloide',8),(35,'L97','Úlcera de miembro inferior',8),(36,'L98.1','Granuloma piogeno',8),(37,'L98.2','Otros trastornos de la piel y del tejido subcutáneo',8);
 /*!40000 ALTER TABLE `diagnosticos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `grupodiagnostico`
+-- Table structure for table `grupodiagnostico`
 --
 
 DROP TABLE IF EXISTS `grupodiagnostico`;
@@ -249,47 +241,17 @@ CREATE TABLE `grupodiagnostico` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `grupodiagnostico`
+-- Dumping data for table `grupodiagnostico`
 --
 
 LOCK TABLES `grupodiagnostico` WRITE;
 /*!40000 ALTER TABLE `grupodiagnostico` DISABLE KEYS */;
-INSERT INTO `grupodiagnostico` VALUES
-	(1,'Infecciones locales de la piel y del tejido subcutáneo'),
-	(2,'Traumatismos cutáneos'),
-	(3,'Trastornos/traumatismos de las uñas'),
-	(4,'Quistes foliculares de la piel y del tejido subcutáneo'),
-	(5,'Otros trastornos foliculares'),
-	(6,'Infecciones virales caracterizadas por lesiones de la piel y de las membranas mucosas'),
-	(7,'Tumores benignos de la piel'),
-	(8,'Otras enfermedades de la piel');
+INSERT INTO `grupodiagnostico` VALUES (1,'Infecciones locales de la piel y del tejido subcutáneo'),(6,'Infecciones virales caracterizadas por lesiones de la piel y de las membranas mucosas'),(8,'Otras enfermedades de la piel'),(5,'Otros trastornos foliculares'),(4,'Quistes foliculares de la piel y del tejido subcutáneo'),(3,'Trastornos/traumatismos de las uñas'),(2,'Traumatismos cutáneos'),(7,'Tumores benignos de la piel');
 /*!40000 ALTER TABLE `grupodiagnostico` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `hibernate_sequence`
---
-
-DROP TABLE IF EXISTS `hibernate_sequence`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hibernate_sequence` (
-  `next_val` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Datos `hibernate_sequence`
---
-
-LOCK TABLES `hibernate_sequence` WRITE;
-/*!40000 ALTER TABLE `hibernate_sequence` DISABLE KEYS */;
-INSERT INTO `hibernate_sequence` VALUES (1),(1),(1),(1);
-/*!40000 ALTER TABLE `hibernate_sequence` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Tabla `imagenes`
+-- Table structure for table `imagenes`
 --
 
 DROP TABLE IF EXISTS `imagenes`;
@@ -309,36 +271,16 @@ CREATE TABLE `imagenes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Tabla `pacientes`
+-- Dumping data for table `imagenes`
 --
 
-DROP TABLE IF EXISTS `pacientes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pacientes` (
-  `id` bigint(20) NOT NULL,
-  `actualizacion` datetime(6) NOT NULL,
-  `apellidos` varchar(255) DEFAULT NULL,
-  `creacion` datetime(6) NOT NULL,
-  `dni` varchar(9) DEFAULT NULL,
-  `nacimiento` datetime(6) NOT NULL,
-  `nombre` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_hol387x0ourgruynyqewdhv37` (`dni`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Datos `pacientes`
---
-
-LOCK TABLES `pacientes` WRITE;
-/*!40000 ALTER TABLE `pacientes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pacientes` ENABLE KEYS */;
+LOCK TABLES `imagenes` WRITE;
+/*!40000 ALTER TABLE `imagenes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `imagenes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `procedimientos`
+-- Table structure for table `procedimientos`
 --
 
 DROP TABLE IF EXISTS `procedimientos`;
@@ -354,43 +296,17 @@ CREATE TABLE `procedimientos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `procedimientos`
+-- Dumping data for table `procedimientos`
 --
 
 LOCK TABLES `procedimientos` WRITE;
 /*!40000 ALTER TABLE `procedimientos` DISABLE KEYS */;
-INSERT INTO `procedimientos` VALUES
-	(1,'86.01','Aspiración de piel y tejido subcutáneo'),
-	(2,'86.04','Incisión con drenaje de piel y tejido subcutáneo'),
-	(3,'86.05','Incisión con extracción de cuerpo extraño de piel y tejido subcutáneo'),
-	(4,'86.11','Biopsia de piel y tejido subcutáneo'),
-	(5,'86.2.0','Exéresis de la lesión'),
-	(6,'86.2.1','Escisión o destrucción de lesión'),
-	(7,'86.21','Extirpación de quiste o seno pilonidal'),
-	(8,'86.22','Desbridamiento escisional de herida, infección o quemadura'),
-	(9,'86.23','Extracción de uña, lecho de uña o pliegue de uña'),
-	(10,'86.24','Quimiocirugía de piel'),
-	(11,'86.25','Abrasión dérmica'),
-	(12,'86.27','Desbridamiento de uña, base de uña o pliegue de uña'),
-	(13,'86.5','Sutura u otro cierre de piel y tejido subcutáneo'),
-	(14,'91.62','E.M. Muestra de piel y otro tegumento cultivo'),
-	(15,'92.01','Desbridamiento cortante'),
-	(16,'92.02','Desbridamiento quirúrgico'),
-	(17,'92.03','Escisión fusiforme'),
-	(18,'92.04','Escisión tangencial'),
-	(19,'92.05','Drenaje de hematoma subungueal'),
-	(20,'92.06','Reimplantación de lámina ungueal'),
-	(21,'92.07','Matricectomía mecánica (parcial/total)'),
-	(22,'92.08','Matricectomía química (parcial/total)'),
-	(23,'92.09','Matricectomía eléctrica (parcial/total)'),
-	(24,'92.10','Avulsión química de uña'),
-	(25,'98.2','Extracción sin incisión de otro cuerpo extraño'),
-	(26,'100','Otros procedimientos');
+INSERT INTO `procedimientos` VALUES (1,'86.01','Aspiración de piel y tejido subcutáneo'),(2,'86.04','Incisión con drenaje de piel y tejido subcutáneo'),(3,'86.05','Incisión con extracción de cuerpo extraño de piel y tejido subcutáneo'),(4,'86.11','Biopsia de piel y tejido subcutáneo'),(5,'86.2.0','Exéresis de la lesión'),(6,'86.2.1','Escisión o destrucción de lesión'),(7,'86.21','Extirpación de quiste o seno pilonidal'),(8,'86.22','Desbridamiento escisional de herida, infección o quemadura'),(9,'86.23','Extracción de uña, lecho de uña o pliegue de uña'),(10,'86.24','Quimiocirugía de piel'),(11,'86.25','Abrasión dérmica'),(12,'86.27','Desbridamiento de uña, base de uña o pliegue de uña'),(13,'86.5','Sutura u otro cierre de piel y tejido subcutáneo'),(14,'91.62','E.M. Muestra de piel y otro tegumento cultivo'),(15,'92.01','Desbridamiento cortante'),(16,'92.02','Desbridamiento quirúrgico'),(17,'92.03','Escisión fusiforme'),(18,'92.04','Escisión tangencial'),(19,'92.05','Drenaje de hematoma subungueal'),(20,'92.06','Reimplantación de lámina ungueal'),(21,'92.07','Matricectomía mecánica (parcial/total)'),(22,'92.08','Matricectomía química (parcial/total)'),(23,'92.09','Matricectomía eléctrica (parcial/total)'),(24,'92.10','Avulsión química de uña'),(25,'98.2','Extracción sin incisión de otro cuerpo extraño'),(26,'100','Otros procedimientos');
 /*!40000 ALTER TABLE `procedimientos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `procesos`
+-- Table structure for table `procesos`
 --
 
 DROP TABLE IF EXISTS `procesos`;
@@ -405,8 +321,6 @@ CREATE TABLE `procesos` (
   `diagnostico_id` bigint(20) NOT NULL,
   `paciente_id` bigint(20) NOT NULL,
   `procedimiento_id` bigint(20) NOT NULL,
-  `diagnostico` varchar(255) DEFAULT NULL,
-  `tipo` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKk7hof5qavalmmpq2l28pceiq0` (`diagnostico_id`),
   KEY `FKih6c6mkyggfe41w60d83jx74q` (`paciente_id`),
@@ -418,7 +332,16 @@ CREATE TABLE `procesos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Tabla `sala_configs`
+-- Dumping data for table `procesos`
+--
+
+LOCK TABLES `procesos` WRITE;
+/*!40000 ALTER TABLE `procesos` DISABLE KEYS */;
+/*!40000 ALTER TABLE `procesos` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sala_configs`
 --
 
 DROP TABLE IF EXISTS `sala_configs`;
@@ -445,26 +368,17 @@ CREATE TABLE `sala_configs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `sala_configs`
+-- Dumping data for table `sala_configs`
 --
 
 LOCK TABLES `sala_configs` WRITE;
 /*!40000 ALTER TABLE `sala_configs` DISABLE KEYS */;
-INSERT INTO `sala_configs` VALUES
-	(3,20,'\0',15,'','','','',45,'\0','',14,15),
-	(4,5,'\0',10,'\0','\0','\0','\0',0,'','\0',12,35),
-	(5,20,'\0',9,'','','','',0,'\0','',1,10),
-	(6,15,'\0',9,'','','','',30,'\0','',13,20),
-	(7,5,'\0',10,'\0','\0','\0','\0',0,'','\0',10,45),
-	(8,10,'\0',16,'','','','',0,'\0','',3,40),
-	(9,15,'\0',10,'','','','',0,'\0','',15,20),
-	(10,25,'\0',16,'','','','',0,'\0','',16,15),
-	(11,9,'\0',20,'','\0','','\0',30,'\0','\0',17,50);
+INSERT INTO `sala_configs` VALUES (3,20,'\0',15,'','','','',45,'\0','',14,15),(4,5,'\0',10,'\0','\0','\0','\0',0,'','\0',12,35),(5,20,'\0',9,'','','','',0,'\0','',1,10),(6,15,'\0',9,'','','','',30,'\0','',13,20),(7,5,'\0',10,'\0','\0','\0','\0',0,'','\0',10,45),(8,10,'\0',16,'','','','',0,'\0','',3,40),(9,15,'\0',10,'','','','',0,'\0','',15,20),(10,25,'\0',16,'','','','',0,'\0','',16,15),(11,9,'\0',20,'','\0','','\0',30,'\0','\0',17,50);
 /*!40000 ALTER TABLE `sala_configs` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `salas`
+-- Table structure for table `salas`
 --
 
 DROP TABLE IF EXISTS `salas`;
@@ -481,26 +395,17 @@ CREATE TABLE `salas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `salas`
+-- Dumping data for table `salas`
 --
 
 LOCK TABLES `salas` WRITE;
 /*!40000 ALTER TABLE `salas` DISABLE KEYS */;
-INSERT INTO `salas` VALUES
-	(1,'Sala de Curas (L-V; mañana)',2),
-	(3,'Cirugía Menor (L-V; Tardes)',2),
-	(10,'Sala Intervenciones (S; mañana)',4),
-	(12,'Cirugía Menor (Sábados M)',2),
-	(13,'Sala de Curas (L-V; mañana)',4),
-	(14,'Sala 2 (L-V; tardes)',3),
-	(15,'Sala 1 (mañanas)',1),
-	(16,'Sala 1 (tardes)',1),
-	(17,'Sala de enfermería',2);
+INSERT INTO `salas` VALUES (1,'Sala de Curas (L-V; mañana)',2),(3,'Cirugía Menor (L-V; Tardes)',2),(10,'Sala Intervenciones (S; mañana)',4),(12,'Cirugía Menor (Sábados M)',2),(13,'Sala de Curas (L-V; mañana)',4),(14,'Sala 2 (L-V; tardes)',3),(15,'Sala 1 (mañanas)',1),(16,'Sala 1 (tardes)',1),(17,'Sala de enfermería',2);
 /*!40000 ALTER TABLE `salas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `user`
+-- Table structure for table `user`
 --
 
 DROP TABLE IF EXISTS `user`;
@@ -535,15 +440,12 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES
-	('ad',1,'admin@user.es','','ANTONIO','2018-01-01 00:00:00.000000','RUIZ RONDÁN','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','admin@user.es','52929190A','1975-08-14 01:00:00.000000',NULL,NULL),
-	('sa',2,'sanitario@user.es','','ANTONIO','2018-01-01 00:00:00.000000','RUIZ RONDÁN','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','sanitario@user.es','52929190B','1975-08-14 01:00:00.000000',NULL,1),
-	('pa',3,'enfermo@user.es','','ANTONIO','2018-01-01 00:00:00.000000','RUIZ RONDÁN','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','enfermo@user.es','52929190C','1975-08-14 01:00:00.000000',1,NULL);
+INSERT INTO `user` VALUES ('ad',1,'admin@user.es','','ANTONIO','2018-01-01 00:00:00.000000','RUIZ RONDÁN','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','admin@user.es','52929190A','1975-08-14 01:00:00.000000',NULL,NULL),('sa',2,'sanitario@user.es','','ANTONIO','2018-01-01 00:00:00.000000','RUIZ RONDÁN','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','sanitario@user.es','52929190B','1975-08-14 01:00:00.000000',NULL,1),('pa',3,'enfermo@user.es','','ANTONIO','2018-01-01 00:00:00.000000','RUIZ RONDÁN','$2a$10$IETtrezVDbKnLPcGV4lPEeyba4oDBkjiqUoeknajTvVrToS/.Z05e','enfermo@user.es','52929190C','1975-08-14 01:00:00.000000',1,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `user_authority`
+-- Table structure for table `user_authority`
 --
 
 DROP TABLE IF EXISTS `user_authority`;
@@ -560,7 +462,7 @@ CREATE TABLE `user_authority` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `user_authority`
+-- Dumping data for table `user_authority`
 --
 
 LOCK TABLES `user_authority` WRITE;
@@ -570,7 +472,7 @@ INSERT INTO `user_authority` VALUES (1,1),(2,2),(3,3);
 UNLOCK TABLES;
 
 --
--- Tabla `user_centro`
+-- Table structure for table `user_centro`
 --
 
 DROP TABLE IF EXISTS `user_centro`;
@@ -591,20 +493,17 @@ CREATE TABLE `user_centro` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Datos `user_centro`
+-- Dumping data for table `user_centro`
 --
 
 LOCK TABLES `user_centro` WRITE;
 /*!40000 ALTER TABLE `user_centro` DISABLE KEYS */;
-INSERT INTO `user_centro` VALUES
-	(1,NULL,'2018-08-09 15:35:58.439000',1,1),
-	(2,NULL,'2018-08-22 18:28:33.071000',1,2),
-	(3,NULL,'2018-08-22 18:28:33.071000',1,3);
+INSERT INTO `user_centro` VALUES (1,NULL,'2018-08-09 15:35:58.439000',1,1),(2,NULL,'2018-08-22 18:28:33.071000',1,2),(3,NULL,'2018-08-22 18:28:33.071000',1,3);
 /*!40000 ALTER TABLE `user_centro` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Tabla `valoraciones`
+-- Table structure for table `valoraciones`
 --
 
 DROP TABLE IF EXISTS `valoraciones`;
@@ -622,7 +521,16 @@ CREATE TABLE `valoraciones` (
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `valoraciones`
+--
+
+LOCK TABLES `valoraciones` WRITE;
+/*!40000 ALTER TABLE `valoraciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `valoraciones` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -630,3 +538,5 @@ CREATE TABLE `valoraciones` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-09-20 12:29:41
