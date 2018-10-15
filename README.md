@@ -14,7 +14,15 @@ Servicio web para el seguimiento de heridas en consultas de enfermería.
 - JSON Web Token
 - iText
 
+### Modelo Conceptual de clases
+
+Éste es el modelo conceptual que contempla la aplicación:
+
+![Modelo Conceptual](https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/DiagramaConceptualDeClasesUML.png)
+
 ### Diagrama ER
+
+A continuación la estructura física de datos que utilizará el sistema:
 
 ![Diagrama ER](https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/eer.png)
 
