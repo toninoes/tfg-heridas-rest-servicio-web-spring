@@ -122,13 +122,13 @@ A partir de ahí podremos acceder con nuestro usuario de administración creado 
 
 Vemos cómo se carga el panel de administración de la aplicación para el usuario admin@user.es que tiene rol de administrador:
 
-![InicioApp](https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/inicioapp.png)
+<img src="https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/inicioapp.png" width="90%">
 
 Puede verse cómo utilizar el servicio utilizando Postman, incluyendo el token en la cabecera de la petición (tras autenticación) en las siguientes dos imágenes.
 
 #### Autenticación con Postman
 
-![Postman1](https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/postman1.png)
+<img src="https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/postman1.png" width="90%">
 
 Podemos ver resaltado el token devuelto por el servidor que deberá incluirse en las sucesivas peticiones en la cabecera.
 
@@ -136,4 +136,4 @@ Podemos ver resaltado el token devuelto por el servidor que deberá incluirse en
 
 Podemos ver una petición GET dnde se pide el centro identificado con el Id = 1. Vemos cómo incluimos el token en la cabecera de la petición.
 
-![Postman2](https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/postman2.png)
+<img src="https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/postman2.png" width="90%">
