@@ -113,7 +113,7 @@ GRANT ALL ON `restheridapp`.* TO 'USUARIO_NUEVO'@'localhost' IDENTIFIED BY 'CLAV
 ```
 
 ### Pruebas de implantación
-Tras su ejecución y si todo ha ido bien, la aplicación se encontrará correctamente instalada. Podremos ejecutar ahora la App Android ([https://github.com/toninoes/tfg-heridas-rest-cliente-android]) o utilizar un cliente rest como **Postman**.
+Tras su ejecución y si todo ha ido bien, la aplicación se encontrará correctamente instalada. Podremos ejecutar ahora la [App Android](https://github.com/toninoes/tfg-heridas-rest-cliente-android "App Android") o utilizar un cliente rest como **Postman**.
 
 A partir de ahí podremos acceder con nuestro usuario de administración creado por defecto **admin@user.es** y cuya contraseña es **admin**. Posteriormente podrá cambiarse su contraseña.
 
