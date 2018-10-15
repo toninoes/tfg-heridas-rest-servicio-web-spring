@@ -3,7 +3,6 @@
               xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
               version="1.0">
 
-
   <role rolename="manager-gui"/>
   <role rolename="manager-script"/>
   <user username="tomcat" password="tomcat" roles="manager-gui, manager-script"/>
