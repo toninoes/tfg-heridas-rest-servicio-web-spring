@@ -14,7 +14,7 @@ Servicio web para el seguimiento de heridas en consultas de enfermería.
 - JSON Web Token
 - iText
 
-### Modelo Conceptual de clases
+### Modelo conceptual de clases
 
 Éste es el modelo conceptual que contempla la aplicación:
 
