@@ -3,10 +3,6 @@ Servicio web para el seguimiento de heridas en consultas de enfermería.
 
 ## Organización
 
-### Autor del proyecto
-
-- Antonio Ruiz Rondán.
-
 ### Herramientas-Tecnologías utilizadas
 
 - Java SE Development Kit 8
@@ -24,7 +20,6 @@ Servicio web para el seguimiento de heridas en consultas de enfermería.
 
 ## Manual de instalación y explotación
 Las instrucciones de instalación y explotación del sistema se detallan a continuación.
-
 
 ### Requisitos previos
 Los requerimientos que el sistema debe tener para el correcto funcionamiento. Entre paréntesis las versiones sobre las que se ha trabajado:
