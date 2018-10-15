@@ -18,7 +18,7 @@ Servicio web para el seguimiento de heridas en consultas de enfermería.
 
 Éste es el modelo conceptual que contempla la aplicación:
 
-<img src="https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/DiagramaConceptualDeClasesUML.png" width="100">
+<img src="https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/DiagramaConceptualDeClasesUML.png" width="50%">
 
 ### Diagrama ER
 
