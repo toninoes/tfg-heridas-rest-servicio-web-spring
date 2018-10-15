@@ -120,3 +120,13 @@ A partir de ahí podremos acceder con nuestro usuario de administración creado 
 Vemos cómo se carga el panel de administración de la aplicación para el usuario admin@user.es que tiene rol de administrador:
 
 ![InicioApp](https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/inicioapp.png)
+
+Puede verse como utilizar el servicio utilizando Postman, incluyendo el token en la cabecera de la petición (tras autenticación) en las siguientes dos imágenes.
+
+#### Autenticación con Postman
+
+![Postman1](https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/postman1.png)
+
+#### Petición con Postman incluyendo token en la cabecera de la petición
+
+![Postman2](https://github.com/toninoes/tfg-heridas-rest-servicio-web-spring/blob/master/src/main/resources/static/images/postman2.png)
